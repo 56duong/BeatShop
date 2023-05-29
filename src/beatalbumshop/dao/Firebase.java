@@ -12,14 +12,15 @@ public class Firebase {
     public static Firestore getFirestore(String projectId) {
         //Initialize on your own server
         try {
-            // Use the application default credentials
-            InputStream serviceAccount = new FileInputStream("src/beatalbumshop/config/serviceAccountKey.json");
-            GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
-            FirebaseOptions options = new FirebaseOptions.Builder()
-                    .setCredentials(credentials)
-                    .build();
-            
             if(FirebaseApp.getApps().isEmpty()) {
+                // Use the application default credentials
+                InputStream serviceAccount = new FileInputStream("src/beatalbumshop/config/serviceAccountKey.json");
+                GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
+                FirebaseOptions options = new FirebaseOptions.Builder()
+                        .setCredentials(credentials)
+                        .setStorageBucket("beat-75a88.appspot.com")
+                        .build();
+                
                 FirebaseApp.initializeApp(options);
             }
             

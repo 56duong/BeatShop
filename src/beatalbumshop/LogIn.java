@@ -330,9 +330,11 @@ public class LogIn extends javax.swing.JFrame {
                             
                             if(LoggedInUser.isAdmin() || LoggedInUser.isStaff()) {
                                 new MainAdmin().setVisible(true);
+                                break;
                             }
                             else {
                                 new Main().setVisible(true);
+                                break;
                             }
                             
 //                            long role = user.getLong("role");

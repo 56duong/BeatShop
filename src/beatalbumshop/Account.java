@@ -27,43 +27,35 @@ public class Account extends javax.swing.JPanel {
     private void initComponents() {
 
         myLabel1 = new beatalbumshop.componment.MyLabel();
-        jLabel1 = new javax.swing.JLabel();
 
         setMaximumSize(new java.awt.Dimension(1030, 658));
         setMinimumSize(new java.awt.Dimension(1030, 658));
         setPreferredSize(new java.awt.Dimension(1030, 658));
 
-        myLabel1.setText("account");
-
-        jLabel1.setText("jLabel1");
+        myLabel1.setBackground(null);
+        myLabel1.setText("ACCOUNT");
+        myLabel1.setFont(new java.awt.Font("Open Sans", 0, 24)); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(430, 430, 430)
+                .addGap(442, 442, 442)
                 .addComponent(myLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(541, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(479, 479, 479))
+                .addContainerGap(474, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(229, 229, 229)
-                .addComponent(jLabel1)
-                .addGap(70, 70, 70)
+                .addGap(307, 307, 307)
                 .addComponent(myLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(320, Short.MAX_VALUE))
+                .addContainerGap(318, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
     private beatalbumshop.componment.MyLabel myLabel1;
     // End of variables declaration//GEN-END:variables
 }

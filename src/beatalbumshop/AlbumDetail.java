@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package beatalbumshop;
 
 import beatalbumshop.componment.MyLabel;
@@ -13,7 +9,11 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.net.URL;
 import java.util.HashMap;
+import javax.imageio.ImageIO;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -26,7 +26,16 @@ public class AlbumDetail extends javax.swing.JPanel {
         
         AlbumSpotify albumSpotify = albumDAO.getDetailByID(id + "");
         
-        lblImage.setIcon(ImageResizing.ImageResizing("src/beatalbumshop/resources/images/albums/" + albumSpotify.getAlbumID() + ".png", 300, 300));
+//        lblImage.setIcon(ImageResizing.ImageResizing("src/beatalbumshop/resources/images/albums/" + albumSpotify.getAlbumID() + ".png", 300, 300));
+        try {
+            URL url = new URL("https://firebasestorage.googleapis.com/v0/b/beat-75a88.appspot.com/o/albums%2F" + albumSpotify.getAlbumID() + ".png?alt=media");
+            Image image = ImageIO.read(url);
+            lblImage.setIcon(ImageResizing.ImageResizing(image, 300, 300));
+        } catch(Exception ex) {
+            lblImage.setIcon(null);
+            ex.printStackTrace();
+        }
+
         lblName.setText(albumSpotify.getAlbumName());
         lblArtist.setText(albumSpotify.getArtist());
         lblReleaseDate.setText(albumSpotify.getReleaseDate());

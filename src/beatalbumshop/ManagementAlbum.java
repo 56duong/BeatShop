@@ -7,10 +7,14 @@ import beatalbumshop.model.Album;
 import beatalbumshop.utils.ClearComponent;
 import beatalbumshop.utils.ImageResizing;
 import beatalbumshop.utils.Validator;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import javax.imageio.ImageIO;
@@ -113,7 +117,15 @@ public class ManagementAlbum extends javax.swing.JPanel {
         txtPrice.setText(album.getAlbumPrice() + "");
         txtInStock.setText(album.getInStock() + "");
         
-        lblImage.setIcon(ImageResizing.ImageResizing("src/beatalbumshop/resources/images/albums/" + album.getAlbumID() + ".png", lblImage.getWidth() - 1, lblImage.getHeight()));
+//        lblImage.setIcon(ImageResizing.ImageResizing("src/beatalbumshop/resources/images/albums/" + album.getAlbumID() + ".png", lblImage.getWidth() - 1, lblImage.getHeight()));
+        try {
+            URL url = new URL("https://firebasestorage.googleapis.com/v0/b/beat-75a88.appspot.com/o/albums%2F" + album.getAlbumID() + ".png?alt=media");
+            Image image = ImageIO.read(url);
+            lblImage.setIcon(ImageResizing.ImageResizing(image, lblImage.getWidth() - 1, lblImage.getHeight()));
+        } catch(Exception ex) {
+            lblImage.setIcon(null);
+            ex.printStackTrace();
+        }
     }
     
     
@@ -322,7 +334,8 @@ public class ManagementAlbum extends javax.swing.JPanel {
         errors.add(Validator.allowNumber((JTextField)txtInStock, "In Stock", inStock, false));
         errors.add(Validator.allowDouble((JTextField)txtPrice, "Price", price, false));
         errors.add((!Validator.isNotNull((JTextField)txtName, name)) ? "Vui lòng nhập Name\n" : "");
-
+        if(albumImage == null) errors.add("Vui lòng chọn ảnh\n");
+        
         Collections.reverse(errors);
         String e = "";
         for(String s : errors) e += s;
@@ -347,12 +360,23 @@ public class ManagementAlbum extends javax.swing.JPanel {
 
         // save image to file
         if(albumImage != null) {
+//            try {
+//                File destFile = new File("src/beatalbumshop/resources/images/albums/" + id + ".png");
+//                ImageIO.write(albumImage, "png", destFile);
+//            } catch (IOException ex) {
+//                //them that bai
+//                MyDialog.display(1, "Có lỗi xảy ra.");
+//                return;
+//            }
+
             try {
-                File destFile = new File("src/beatalbumshop/resources/images/albums/" + id + ".png");
-                ImageIO.write(albumImage, "png", destFile);
-            } catch (IOException ex) {
-                //them that bai
+                ByteArrayOutputStream os = new ByteArrayOutputStream();
+                ImageIO.write(albumImage, "png", os);                          
+                InputStream is = new ByteArrayInputStream(os.toByteArray());
+                albumDAO.uploadImage(id, is);
+            } catch (Exception ex) {
                 MyDialog.display(1, "Có lỗi xảy ra.");
+                ex.printStackTrace();
                 return;
             }
         }
@@ -412,12 +436,22 @@ public class ManagementAlbum extends javax.swing.JPanel {
 
         // save image to file
         if(albumImage != null) {
+//            try {
+//                File destFile = new File("src/beatalbumshop/resources/images/albums/" + id + ".png");
+//                ImageIO.write(albumImage, "png", destFile);
+//            } catch (IOException ex) {
+//                //them that bai
+//                MyDialog.display(1, "Có lỗi xảy ra.");
+//                return;
+//            }
             try {
-                File destFile = new File("src/beatalbumshop/resources/images/albums/" + id + ".png");
-                ImageIO.write(albumImage, "png", destFile);
-            } catch (IOException ex) {
-                //them that bai
+                ByteArrayOutputStream os = new ByteArrayOutputStream();
+                ImageIO.write(albumImage, "png", os);                          
+                InputStream is = new ByteArrayInputStream(os.toByteArray());
+                albumDAO.uploadImage(id, is);
+            } catch (Exception ex) {
                 MyDialog.display(1, "Có lỗi xảy ra.");
+                ex.printStackTrace();
                 return;
             }
         }
@@ -439,13 +473,18 @@ public class ManagementAlbum extends javax.swing.JPanel {
         //delete
         String id = tblAlbum.getValueAt(tblAlbum.getSelectedRow(), 0).toString();
         //delete image
-        File imageFile = new File("src/beatalbumshop/resources/images/albums/" + id + ".png");
-        if (imageFile.exists()) {
-            if (!imageFile.delete()) {
-                //delete that bai
-                MyDialog.display(1, "Có lỗi xảy ra.");
-                return;
-            }
+//        File imageFile = new File("src/beatalbumshop/resources/images/albums/" + id + ".png");
+//        if (imageFile.exists()) {
+//            if (!imageFile.delete()) {
+//                //delete that bai
+//                MyDialog.display(1, "Có lỗi xảy ra.");
+//                return;
+//            }
+//        }
+        boolean success = albumDAO.deleteImage(Long.parseLong(id));
+        if(!success) {
+            MyDialog.display(1, "Có lỗi xảy ra.");
+            return;
         }
         
         boolean result = albumDAO.deleteByID(id);

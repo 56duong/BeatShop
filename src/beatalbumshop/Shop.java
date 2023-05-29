@@ -11,9 +11,12 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.net.URL;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -44,7 +47,16 @@ public class Shop extends javax.swing.JPanel {
         pnl.setSize(new Dimension(227, 300));
         pnl.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        pnl.add(new JLabel(ImageResizing.ImageResizing("src/beatalbumshop/resources/images/albums/" + album.getAlbumID() + ".png", 227, 227)));
+        JLabel lblImage = new JLabel();
+        try {
+            URL url = new URL("https://firebasestorage.googleapis.com/v0/b/beat-75a88.appspot.com/o/albums%2F" + album.getAlbumID() + ".png?alt=media");
+            Image image = ImageIO.read(url);
+            lblImage.setIcon(ImageResizing.ImageResizing(image, 227, 227));
+        } catch(Exception ex) {
+            lblImage.setIcon(null);
+            ex.printStackTrace();
+        }
+        pnl.add(lblImage);
 
         MyLabel lblName = new MyLabel("<html>" + album.getAlbumName() + "</html>");
         lblName.setPreferredSize(new Dimension(227, 50));

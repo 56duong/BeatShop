@@ -4,6 +4,7 @@ import beatalbumshop.config.Account;
 import beatalbumshop.model.Album;
 import beatalbumshop.model.AlbumSpotify;
 import com.google.api.core.ApiFuture;
+import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
@@ -11,13 +12,19 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.WriteResult;
+import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.Bucket;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
+import com.google.firebase.cloud.StorageClient;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class AlbumDAOImpl implements AlbumDAO {
     String projectId = Account.FIREBASE_PROJECT_ID;
@@ -194,6 +201,80 @@ public class AlbumDAOImpl implements AlbumDAO {
         }
         
         return null;
+    }
+
+    
+    
+    @Override
+    public boolean uploadImage(long id, InputStream image) {
+        try {
+            FirebaseApp fireApp;
+            
+            if(FirebaseApp.getApps().isEmpty()) {
+                InputStream serviceAccount = new FileInputStream("src/beatalbumshop/config/serviceAccountKey.json");
+                GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
+                FirebaseOptions options = new FirebaseOptions.Builder()
+                            .setCredentials(credentials)
+                            .setStorageBucket("beat-75a88.appspot.com")
+                            .build();
+
+                fireApp = FirebaseApp.initializeApp(options);
+            }
+            else {
+                fireApp = FirebaseApp.getInstance();
+            }
+
+            StorageClient storageClient = StorageClient.getInstance(fireApp);
+            String blobString = "albums/" + id + ".png";        
+
+            storageClient.bucket().create(blobString, image, "image/png", Bucket.BlobWriteOption.userProject(projectId));
+            
+            return true;
+        }
+        catch(Exception ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
+    
+    
+    @Override
+    public boolean deleteImage(long id) {
+        try {
+            FirebaseApp fireApp;
+            
+            if(FirebaseApp.getApps().isEmpty()) {
+                InputStream serviceAccount = new FileInputStream("src/beatalbumshop/config/serviceAccountKey.json");
+                GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
+                FirebaseOptions options = new FirebaseOptions.Builder()
+                            .setCredentials(credentials)
+                            .setStorageBucket("beat-75a88.appspot.com")
+                            .build();
+
+                fireApp = FirebaseApp.initializeApp(options);
+            }
+            else {
+                fireApp = FirebaseApp.getInstance();
+            }
+
+            StorageClient storageClient = StorageClient.getInstance(fireApp);
+
+            String imageFileName = "albums/" + id + ".png";   
+            Blob blob = storageClient.bucket().get(imageFileName);
+
+            if (blob != null) {
+                // Delete the image
+                blob.delete();
+                
+                return true;
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        
+        return false;
     }
     
 }

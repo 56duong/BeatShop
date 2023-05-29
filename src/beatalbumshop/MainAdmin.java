@@ -25,7 +25,8 @@ public class MainAdmin extends javax.swing.JFrame {
         pnlTabContent.setLayout(new CardLayout());
         pnlTabContent.add(new ManagementAlbum(), "album");
         pnlTabContent.add(new ManagementUser(), "user");
-        pnlTabContent.add(new AboutUs(), "order");
+        pnlTabContent.add(new ManagementOrder(), "order");
+        pnlTabContent.add(new Account(), "account");
         
         btnMenuList = new JButton[] {btnAlbum, btnUser, btnOrder, btnLogIn};
         for(JButton btn : btnMenuList) {

@@ -26,30 +26,48 @@ public class AboutUs extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        myLabel1 = new beatalbumshop.componment.MyLabel();
+        pnlMain = new javax.swing.JPanel();
+        lblAboutUs = new beatalbumshop.componment.MyLabel();
 
-        myLabel1.setText("myLabel1");
+        setMaximumSize(new java.awt.Dimension(1030, 658));
+        setMinimumSize(new java.awt.Dimension(1030, 658));
+
+        pnlMain.setBackground(new java.awt.Color(255, 255, 255));
+
+        lblAboutUs.setText("<html>Vào năm 2022, ba sinh viên chuyên ngành phát triển phần mềm tại FPT Polytechnic đã gặp nhau và trở thành bạn thân. Họ cảm thấy mệt mỏi với lịch học và quyết định tổ chức một buổi gặp mặt, sau đó chơi game và nghe nhạc cùng nhau. Họ nhận ra rằng âm nhạc giúp họ gắn kết hơn và bắt đầu sáng tạo âm nhạc riêng. Sau đó, vào tháng 5 năm 2023, họ thành lập công ty quản lý ứng dụng âm nhạc với mục tiêu kinh doanh bán album. Công ty mong muốn mang đến trải nghiệm âm nhạc tốt nhất và kết nối mọi người thông qua việc bán album. Mặc dù gặp nhiều khó khăn khi khởi nghiệp, nhưng với sự quyết tâm và nỗ lực không ngừng, công ty đã và đang phát triển với tham vọng trở thành một trong những thương hiệu hàng đầu trong lĩnh vực bán album.</html>");
+
+        javax.swing.GroupLayout pnlMainLayout = new javax.swing.GroupLayout(pnlMain);
+        pnlMain.setLayout(pnlMainLayout);
+        pnlMainLayout.setHorizontalGroup(
+            pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlMainLayout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addComponent(lblAboutUs, javax.swing.GroupLayout.PREFERRED_SIZE, 930, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(50, Short.MAX_VALUE))
+        );
+        pnlMainLayout.setVerticalGroup(
+            pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlMainLayout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addComponent(lblAboutUs, javax.swing.GroupLayout.PREFERRED_SIZE, 331, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(277, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(122, 122, 122)
-                .addComponent(myLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(207, Short.MAX_VALUE))
+            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(94, 94, 94)
-                .addComponent(myLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(183, Short.MAX_VALUE))
+            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private beatalbumshop.componment.MyLabel myLabel1;
+    private beatalbumshop.componment.MyLabel lblAboutUs;
+    private javax.swing.JPanel pnlMain;
     // End of variables declaration//GEN-END:variables
 }
