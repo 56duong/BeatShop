@@ -1,21 +1,142 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package beatalbumshop;
 
-/**
- *
- * @author PC
- */
+import beatalbumshop.componment.MyDialog;
+import beatalbumshop.dao.UserDAO;
+import beatalbumshop.dao.UserDAOImpl;
+import beatalbumshop.model.User;
+import beatalbumshop.utils.ClearComponent;
+import beatalbumshop.utils.Validator;
+import java.awt.Rectangle;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+
 public class ManagementUser extends javax.swing.JPanel {
 
-    /**
-     * Creates new form ManagementUser
-     */
+    ArrayList<User> lUser = new ArrayList<>(); //List User
+    DefaultTableModel model;
+    UserDAO userDAO = new UserDAOImpl();
+    int index = -1;
+
     public ManagementUser() {
         initComponents();
+        txtDateCreated.setEnabled(false);
+
+        //table
+        //tao model
+        model = new DefaultTableModel();
+
+        // Set the table model to the tblAlbum table
+        tblUser.setModel(model);
+
+        //disable table editing
+        tblUser.setDefaultEditor(Object.class, null);
+
+        //table header
+        String[] colNames = {"User ID", "Email", "Password", "Date Created", "Role"};
+        model.setColumnIdentifiers(colNames);
+
+        //column width
+        tblUser.getColumnModel().getColumn(0).setPreferredWidth(20);
+        tblUser.getColumnModel().getColumn(1).setPreferredWidth(100);
+        tblUser.getColumnModel().getColumn(2).setPreferredWidth(80);
+        tblUser.getColumnModel().getColumn(3).setPreferredWidth(80);
+        tblUser.getColumnModel().getColumn(3).setPreferredWidth(80);
+
+        //table data
+        fillToTable();
+
+        tblUser.requestFocus();
     }
+
+    public void clearForm() {
+        index = -1;
+        tblUser.getSelectionModel().clearSelection(); //bo chon tren table
+        ClearComponent.clear( lblUserID, txtEmail, txtPassword, txtDateCreated, rdoAdmin, rdoUser, rdoStaff);
+    }
+
+    public void selectRow(int i) {
+        if (i >= 0 && tblUser.getRowCount() > 0) {
+            index = i;
+            tblUser.setRowSelectionInterval(index, index);
+            showDetail();
+            //scroll toi dong duoc chon
+            tblUser.scrollRectToVisible(new Rectangle(tblUser.getCellRect(index, 0, true)));
+        }
+    }
+
+    public Integer findUserIndex(int userID) {
+        for (User user : lUser) {
+            if ((user.getUserID() + "").equalsIgnoreCase(userID + "")) {
+                return lUser.indexOf(user);
+            }
+        }
+        return -1;
+    }
+
+    public void showDetail() {
+        
+        User user = new User();
+
+        //lay ID trong cot dau tien cua hang duoc chon
+        String id = tblUser.getValueAt(tblUser.getSelectedRow(), 0).toString();
+
+        //tim album co ID trong lAlbum
+        user = lUser.get(findUserIndex(Integer.parseInt(id)));
+
+        //do du lieu tu Album album len form
+        lblUserID.setText(user.getUserID() + "");
+        txtEmail.setText(user.getEmail());
+        txtPassword.setText(user.getPassword());
+        txtDateCreated.setText(user.getDateCreated());
+        long role = user.getRole();
+        if (role == 0) {
+            rdoUser.setSelected(true);
+        } else if (role == 1) {
+            rdoStaff.setSelected(true);
+        } else if (role == 2){
+            rdoAdmin.setSelected(true);
+        }
+
+        //lblImage.setIcon(ImageResizing.ImageResizing("src/beatalbumshop/resources/images/users/" + user.getUsername() + ".png", lblImage.getWidth() - 1, lblImage.getHeight()));
+    }
+
+    public void fillToTable() {
+        lUser = (ArrayList<User>) userDAO.getAll();
+
+        model.setRowCount(0); //clear rows in the table
+        
+        //them tung dong vao
+        if (lUser != null) {
+            for (User user : lUser) {
+                String role;
+                if (user.getRole() == 0){
+                    role = "User";
+                } else if (user.getRole() == 1){
+                    role = "Staff";
+                } else
+                    role = "Admin";
+                
+                model.addRow(new Object[]{user.getUserID(), user.getEmail(), user.getPassword(), user.getDateCreated(), role});
+            }
+        }
+    }
+    
+    public boolean checkUser() {
+        if (lUser != null) {
+            for (User user : lUser) {
+                if (user.getEmail().equalsIgnoreCase(txtEmail.getText())) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -26,19 +147,395 @@ public class ManagementUser extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        pnlTabContent = new javax.swing.JPanel();
+        rdoAdmin = new beatalbumshop.componment.MyRadioButton();
+        rdoUser = new beatalbumshop.componment.MyRadioButton();
+        lblEmail = new beatalbumshop.componment.MyLabel();
+        txtEmail = new beatalbumshop.componment.MyTextField();
+        lblPassword = new beatalbumshop.componment.MyLabel();
+        txtPassword = new beatalbumshop.componment.MyTextField();
+        btnNew = new beatalbumshop.componment.MyButton();
+        btnAdd = new beatalbumshop.componment.MyButton();
+        btnUpdate = new beatalbumshop.componment.MyButton();
+        btnDelete = new beatalbumshop.componment.MyButton();
+        lblRole = new beatalbumshop.componment.MyLabel();
+        lblDateCreated = new beatalbumshop.componment.MyLabel();
+        txtDateCreated = new beatalbumshop.componment.MyTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblUser = new beatalbumshop.componment.MyTable();
+        rdoStaff = new beatalbumshop.componment.MyRadioButton();
+        lblID2 = new beatalbumshop.componment.MyLabel();
+        lblUserID = new beatalbumshop.componment.MyLabel();
+
+        pnlTabContent.setBackground(new java.awt.Color(255, 255, 255));
+        pnlTabContent.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 1, new java.awt.Color(0, 0, 0)));
+
+        buttonGroup1.add(rdoAdmin);
+        rdoAdmin.setText("Admin");
+        rdoAdmin.setFocusPainted(false);
+
+        buttonGroup1.add(rdoUser);
+        rdoUser.setText("User");
+        rdoUser.setFocusPainted(false);
+
+        lblEmail.setForeground(new java.awt.Color(80, 80, 80));
+        lblEmail.setText("Email:");
+
+        txtEmail.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3)));
+        txtEmail.setFont(new java.awt.Font("Open Sans", 0, 14)); // NOI18N
+
+        lblPassword.setForeground(new java.awt.Color(80, 80, 80));
+        lblPassword.setText("Password:");
+
+        txtPassword.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3)));
+        txtPassword.setFont(new java.awt.Font("Open Sans", 0, 14)); // NOI18N
+
+        btnNew.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnNew.setText("New");
+        btnNew.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnNew.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNewActionPerformed(evt);
+            }
+        });
+
+        btnAdd.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnAdd.setText("Add");
+        btnAdd.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
+
+        btnUpdate.setBackground(new java.awt.Color(0, 162, 47));
+        btnUpdate.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 162, 47)));
+        btnUpdate.setForeground(new java.awt.Color(255, 255, 255));
+        btnUpdate.setText("Update");
+        btnUpdate.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+
+        btnDelete.setBackground(new java.awt.Color(215, 46, 46));
+        btnDelete.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(215, 46, 46)));
+        btnDelete.setForeground(new java.awt.Color(255, 255, 255));
+        btnDelete.setText("Delete");
+        btnDelete.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
+        lblRole.setForeground(new java.awt.Color(80, 80, 80));
+        lblRole.setText("Role:");
+
+        lblDateCreated.setForeground(new java.awt.Color(80, 80, 80));
+        lblDateCreated.setText("Date Created:");
+
+        txtDateCreated.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3)));
+        txtDateCreated.setFont(new java.awt.Font("Open Sans", 0, 14)); // NOI18N
+
+        tblUser.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tblUserMousePressed(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblUser);
+
+        buttonGroup1.add(rdoStaff);
+        rdoStaff.setText("Staff");
+        rdoStaff.setFocusPainted(false);
+        rdoStaff.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+
+        lblID2.setForeground(new java.awt.Color(80, 80, 80));
+        lblID2.setText("ID");
+
+        javax.swing.GroupLayout pnlTabContentLayout = new javax.swing.GroupLayout(pnlTabContent);
+        pnlTabContent.setLayout(pnlTabContentLayout);
+        pnlTabContentLayout.setHorizontalGroup(
+            pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlTabContentLayout.createSequentialGroup()
+                .addContainerGap(30, Short.MAX_VALUE)
+                .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 970, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnlTabContentLayout.createSequentialGroup()
+                        .addComponent(lblRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(85, 85, 85)
+                        .addComponent(rdoAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(rdoUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(rdoStaff, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlTabContentLayout.createSequentialGroup()
+                        .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(pnlTabContentLayout.createSequentialGroup()
+                                    .addComponent(lblDateCreated, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(txtDateCreated, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(pnlTabContentLayout.createSequentialGroup()
+                                    .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(lblEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(lblPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGap(44, 44, 44)
+                                    .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtPassword, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(lblUserID, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(lblID2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(50, 50, 50)
+                        .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnNew, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(30, 30, 30))
+        );
+        pnlTabContentLayout.setVerticalGroup(
+            pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlTabContentLayout.createSequentialGroup()
+                .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(pnlTabContentLayout.createSequentialGroup()
+                        .addGap(33, 33, 33)
+                        .addComponent(btnNew, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20)
+                        .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(pnlTabContentLayout.createSequentialGroup()
+                                .addComponent(btnAdd, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                                .addGap(101, 101, 101))
+                            .addGroup(pnlTabContentLayout.createSequentialGroup()
+                                .addGap(51, 51, 51)
+                                .addComponent(btnUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                                .addGap(20, 20, 20)
+                                .addComponent(btnDelete, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE))))
+                    .addGroup(pnlTabContentLayout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lblID2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblUserID, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(20, 20, 20)
+                        .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(20, 20, 20)
+                        .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblDateCreated, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtDateCreated, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(20, 20, 20)
+                .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rdoAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rdoUser, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rdoStaff, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(50, 50, 50)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(pnlTabContent, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(pnlTabContent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
+        clearForm();
+        txtEmail.requestFocus();
+    }//GEN-LAST:event_btnNewActionPerformed
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        // Lấy thời gian hiện tại
+        Date currentTime = new Date();
+
+        // Định dạng chuỗi ngày, tháng, năm, giờ, phút, giây
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        String datecreated = dateFormat.format(currentTime); // chuyển ngày thành string
+
+        String email = txtEmail.getText();
+        String password = txtPassword.getText();
+        int role;
+        if (rdoUser.isSelected()) {
+            role = 0;
+        } else if (rdoStaff.isSelected()) {
+            role = 1;
+        } else {
+            role = 2;
+        }
+
+        //validate
+        ArrayList<String> errors = new ArrayList<>();
+
+//        errors.add(Validator.allowNumber((JTextField)txtPassword, "In Stock", inStock, false));
+//        errors.add(Validator.allowDouble((JTextField)txtEmail, "Price", price, false));
+        errors.add((!Validator.isNotNull((JTextField) txtEmail, email)) ? "Vui lòng nhập Email\n" : "");
+        errors.add((!Validator.isNotNull((JTextField) txtPassword, password)) ? "Vui lòng nhập Password\n" : "");
+        if (!rdoAdmin.isSelected() && !rdoUser.isSelected() && !rdoStaff.isSelected()){
+            errors.add("Vui lòng chọn Role\n");
+        }
+        if (!checkUser()) {
+            errors.add("Email đã tồn tại\n");
+        }
+        
+        //Collections.reverse(errors);
+        String e = "";
+        for (String s : errors) {
+            e += s;
+        }
+
+        //co loi
+        if (!e.isEmpty()) {
+            MyDialog.display(1, e);
+            return;
+        }
+
+        //add
+        //get max id
+        int rowCount = tblUser.getRowCount();
+        int max = 0;
+        for (int i = 0; i < rowCount; i++) {
+            Object value = tblUser.getValueAt(i, 0);
+            if (Integer.parseInt(value.toString()) > max) {
+                max = Integer.parseInt(value.toString());
+            }
+        }
+        int id = max + 1;
+
+        boolean result = userDAO.add(new User(id, email, password, datecreated, role));
+
+        if (result) {
+            //them thanh cong
+            fillToTable();
+            selectRow(findUserIndex(id));
+        } else {
+            //them that bai
+            MyDialog.display(1, "Có lỗi xảy ra.");
+        }
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+
+        String email = txtEmail.getText();
+        String password = txtPassword.getText();
+        String datecreated = txtDateCreated.getText();
+        int role;
+        if (rdoUser.isSelected()) {
+            role = 0;
+        } else if (rdoStaff.isSelected()) {
+            role = 1;
+        } else {
+            role = 2;
+        }
+
+        //validate
+        ArrayList<String> errors = new ArrayList<>();
+
+        errors.add((!Validator.isNotNull((JTextField) txtEmail, email)) ? "Vui lòng nhập Email\n" : "");
+        
+        errors.add((!Validator.isNotNull((JTextField) txtPassword, password)) ? "Vui lòng nhập Password\n" : "");
+
+        Collections.reverse(errors);
+        
+        String e = "";
+        for (String s : errors) {
+            e += s;
+        }
+
+        //co loi
+        if (!e.isEmpty()) {
+            MyDialog.display(1, e);
+            return;
+        }
+
+        //add
+        //get max id
+        int id = Integer.parseInt(tblUser.getValueAt(tblUser.getSelectedRow(), 0).toString());
+
+        boolean result = userDAO.add(new User(id, email, password, datecreated, role));
+
+        if (result) {
+            //them thanh cong
+            fillToTable();
+            selectRow(findUserIndex(id));
+        } else {
+            //them that bai
+            MyDialog.display(1, "Có lỗi xảy ra.");
+        }
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        //delete
+        String id = tblUser.getValueAt(tblUser.getSelectedRow(), 0).toString();
+        //delete image
+        File imageFile = new File("src/beatalbumshop/resources/images/users/" + id + ".png");
+        if (imageFile.exists()) {
+            if (!imageFile.delete()) {
+                //delete that bai
+                MyDialog.display(1, "Có lỗi xảy ra.");
+                return;
+            }
+        }
+
+        boolean result = userDAO.deleteByID(id);
+
+        if (result) {
+            //delete thanh cong
+            fillToTable();
+
+            //xoa 1 dong cuoi
+            if (lUser.size() == 0) {
+                clearForm();
+            } //xoa dong cuoi
+            else if (index == lUser.size()) {
+                selectRow(index - 1);
+            } else {
+                selectRow(index);
+            }
+        } else {
+            //delete that bai
+            MyDialog.display(1, "Có lỗi xảy ra.");
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void tblUserMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblUserMousePressed
+        selectRow(tblUser.getSelectedRow());
+    }//GEN-LAST:event_tblUserMousePressed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private beatalbumshop.componment.MyButton btnAdd;
+    private beatalbumshop.componment.MyButton btnDelete;
+    private beatalbumshop.componment.MyButton btnNew;
+    private beatalbumshop.componment.MyButton btnUpdate;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private beatalbumshop.componment.MyLabel lblDateCreated;
+    private beatalbumshop.componment.MyLabel lblEmail;
+    private beatalbumshop.componment.MyLabel lblID2;
+    private beatalbumshop.componment.MyLabel lblPassword;
+    private beatalbumshop.componment.MyLabel lblRole;
+    private beatalbumshop.componment.MyLabel lblUserID;
+    private javax.swing.JPanel pnlTabContent;
+    private beatalbumshop.componment.MyRadioButton rdoAdmin;
+    private beatalbumshop.componment.MyRadioButton rdoStaff;
+    private beatalbumshop.componment.MyRadioButton rdoUser;
+    private beatalbumshop.componment.MyTable tblUser;
+    private beatalbumshop.componment.MyTextField txtDateCreated;
+    private beatalbumshop.componment.MyTextField txtEmail;
+    private beatalbumshop.componment.MyTextField txtPassword;
     // End of variables declaration//GEN-END:variables
 }

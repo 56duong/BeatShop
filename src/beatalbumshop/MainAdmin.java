@@ -1,5 +1,7 @@
 package beatalbumshop;
 
+import beatalbumshop.componment.MyDialog;
+import beatalbumshop.model.LoggedInUser;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -22,9 +24,8 @@ public class MainAdmin extends javax.swing.JFrame {
         // tab
         pnlTabContent.setLayout(new CardLayout());
         pnlTabContent.add(new ManagementAlbum(), "album");
-        pnlTabContent.add(new AboutUs(), "user");
+        pnlTabContent.add(new ManagementUser(), "user");
         pnlTabContent.add(new AboutUs(), "order");
-        pnlTabContent.add(new LogIn(), "login");
         
         btnMenuList = new JButton[] {btnAlbum, btnUser, btnOrder, btnLogIn};
         for(JButton btn : btnMenuList) {
@@ -44,6 +45,11 @@ public class MainAdmin extends javax.swing.JFrame {
                     c.show(pnlTabContent, name);
                 }
             });
+        }
+        
+        // Check login
+        if (LoggedInUser.isLoggedIn() && (LoggedInUser.isAdmin() || LoggedInUser.isStaff())) {
+            btnLogIn.setText("Account");
         }
     }
 
@@ -194,7 +200,15 @@ public class MainAdmin extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainAdmin().setVisible(true);
+                // Check login
+                if (!LoggedInUser.isAdmin()) {
+                    new LogIn().setVisible(true);
+                    MyDialog.display(1, "Bạn phải đăng nhập đúng role để có thể tiếp tục truy cập chức năng này");
+                }
+                else {
+                    new MainAdmin().setVisible(true);
+                }
+                
             }
         });
     }

@@ -5,6 +5,7 @@ import beatalbumshop.dao.AlbumDAO;
 import beatalbumshop.dao.AlbumDAOImpl;
 import beatalbumshop.model.Album;
 import beatalbumshop.utils.ImageResizing;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -67,7 +68,11 @@ public class Shop extends javax.swing.JPanel {
             JPanel s = (JPanel) e.getSource();
             int id = Integer.parseInt(s.getName());
             
-            new AlbumDetail(id).setVisible(true);
+//            new AlbumDetail(id).setVisible(true);
+            JPanel pnlTabContent = (JPanel) getParent();
+            pnlTabContent.add(new AlbumDetail(id), "albumdetailpanel");
+            CardLayout c = (CardLayout) pnlTabContent.getLayout();
+            c.show(pnlTabContent, "albumdetailpanel");
         }
     };
     

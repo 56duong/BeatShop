@@ -1,9 +1,6 @@
 package beatalbumshop;
 
-import beatalbumshop.AboutUs;
-import beatalbumshop.Home;
-import beatalbumshop.LogIn;
-import beatalbumshop.Shop;
+import beatalbumshop.model.LoggedInUser;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -28,7 +25,7 @@ public class Main extends javax.swing.JFrame {
         pnlTabContent.add(new Home(), "home");
         pnlTabContent.add(new Shop(), "shop");
         pnlTabContent.add(new AboutUs(), "aboutus");
-        pnlTabContent.add(new LogIn(), "login");
+        pnlTabContent.add(new Account(), "account");
         
         btnMenuList = new JButton[] {btnHome, btnShop, btnAboutUs, btnLogIn};
         for(JButton btn : btnMenuList) {
@@ -44,10 +41,20 @@ public class Main extends javax.swing.JFrame {
                     
                     // show tab
                     String name = e.getActionCommand().toLowerCase().replaceAll(" ", "");
+                    if(name.equalsIgnoreCase("login")) {
+                        dispose();
+                        new LogIn().setVisible(true);
+                    }
+                    
                     CardLayout c = (CardLayout) pnlTabContent.getLayout();
                     c.show(pnlTabContent, name);
                 }
             });
+        }
+        
+        // Check login
+        if (LoggedInUser.isLoggedIn()) {
+            btnLogIn.setText("Account");
         }
     }
 
