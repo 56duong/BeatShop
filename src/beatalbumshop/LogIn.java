@@ -309,6 +309,7 @@ public class LogIn extends javax.swing.JFrame {
                     LoggedInUser.setCurrentLoggedIn(user);
                     
                     new MainAdmin().setVisible(true);
+                    dispose();
                 }
             }
 //            // kiem tra ton tai
