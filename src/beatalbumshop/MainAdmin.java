@@ -49,8 +49,13 @@ public class MainAdmin extends javax.swing.JFrame {
         }
         
         // Check login
-        if (LoggedInUser.isLoggedIn() && (LoggedInUser.isAdmin() || LoggedInUser.isStaff())) {
+        if (LoggedInUser.isLoggedIn()) {
             btnLogIn.setText("Account");
+        }
+        
+        //check admin or staff
+        if(LoggedInUser.isStaff()) {
+            btnUser.setVisible(false);
         }
     }
 
@@ -93,6 +98,7 @@ public class MainAdmin extends javax.swing.JFrame {
         pnlSideBar.setPreferredSize(new java.awt.Dimension(250, 658));
 
         btnAlbum.setBackground(null);
+        btnAlbum.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 10, 0));
         btnAlbum.setText("Album");
         btnAlbum.setFont(new java.awt.Font("Open Sans", 0, 18)); // NOI18N
         btnAlbum.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -100,6 +106,7 @@ public class MainAdmin extends javax.swing.JFrame {
         btnAlbum.setMargin(new java.awt.Insets(2, 20, 3, 14));
 
         btnUser.setBackground(null);
+        btnUser.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 10, 0));
         btnUser.setText("User");
         btnUser.setFont(new java.awt.Font("Open Sans", 0, 18)); // NOI18N
         btnUser.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -107,6 +114,7 @@ public class MainAdmin extends javax.swing.JFrame {
         btnUser.setMargin(new java.awt.Insets(2, 20, 3, 14));
 
         btnOrder.setBackground(null);
+        btnOrder.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 10, 0));
         btnOrder.setText("Order");
         btnOrder.setFont(new java.awt.Font("Open Sans", 0, 18)); // NOI18N
         btnOrder.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -114,6 +122,7 @@ public class MainAdmin extends javax.swing.JFrame {
         btnOrder.setMargin(new java.awt.Insets(2, 20, 3, 14));
 
         btnLogIn.setBackground(null);
+        btnLogIn.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 10, 0));
         btnLogIn.setText("Log In");
         btnLogIn.setFont(new java.awt.Font("Open Sans", 0, 18)); // NOI18N
         btnLogIn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -134,13 +143,13 @@ public class MainAdmin extends javax.swing.JFrame {
             .addGroup(pnlSideBarLayout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addComponent(btnAlbum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
+                .addGap(0, 0, 0)
                 .addComponent(btnUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
+                .addGap(0, 0, 0)
                 .addComponent(btnOrder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
+                .addGap(0, 0, 0)
                 .addComponent(btnLogIn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(475, Short.MAX_VALUE))
+                .addContainerGap(453, Short.MAX_VALUE))
         );
 
         pnlMain.add(pnlSideBar, java.awt.BorderLayout.LINE_START);
@@ -152,7 +161,7 @@ public class MainAdmin extends javax.swing.JFrame {
         pnlTabContent.setLayout(pnlTabContentLayout);
         pnlTabContentLayout.setHorizontalGroup(
             pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1029, Short.MAX_VALUE)
+            .addGap(0, 1030, Short.MAX_VALUE)
         );
         pnlTabContentLayout.setVerticalGroup(
             pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -209,7 +218,6 @@ public class MainAdmin extends javax.swing.JFrame {
                 else {
                     new MainAdmin().setVisible(true);
                 }
-                
             }
         });
     }

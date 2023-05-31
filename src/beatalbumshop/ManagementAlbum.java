@@ -6,8 +6,8 @@ import beatalbumshop.dao.AlbumDAOImpl;
 import beatalbumshop.model.Album;
 import beatalbumshop.model.Track;
 import beatalbumshop.utils.ClearComponent;
-import beatalbumshop.utils.ImageFeatures;
-import beatalbumshop.utils.ImageResizing;
+import beatalbumshop.utils.ImageHelper;
+import beatalbumshop.utils.TimeHelper;
 import beatalbumshop.utils.Validator;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -88,7 +88,7 @@ public class ManagementAlbum extends javax.swing.JPanel {
             showDetail();
             //scroll toi dong duoc chon
             tblAlbum.scrollRectToVisible(new Rectangle(tblAlbum.getCellRect(index, 0, true)));
-            albumImage = ImageFeatures.IconToBufferedImage(lblImage.getIcon());
+            albumImage = ImageHelper.IconToBufferedImage(lblImage.getIcon());
         }
     } 
     
@@ -117,10 +117,8 @@ public class ManagementAlbum extends javax.swing.JPanel {
         //them tung dong vao
         if(lTrack != null) {
             for(Track track : lTrack) {
-                long duration = track.getDurationMS();
-                long minutes = (duration / 1000) / 60;
-                long seconds = (duration / 1000) % 60;
-                trackModel.addRow(new Object[] {track.getTrackID(), track.getTrackName(), minutes + ":" + seconds});
+                String duration = TimeHelper.msToMinute(track.getDurationMS() + "");
+                trackModel.addRow(new Object[] {track.getTrackID(), track.getTrackName(), duration});
             }
         }
     }
@@ -160,7 +158,7 @@ public class ManagementAlbum extends javax.swing.JPanel {
         try {
             URL url = new URL("https://firebasestorage.googleapis.com/v0/b/beat-75a88.appspot.com/o/albums%2F" + album.getAlbumID() + ".png?alt=media");
             Image image = ImageIO.read(url);
-            lblImage.setIcon(ImageResizing.ImageResizing(image, lblImage.getWidth() - 1, lblImage.getHeight()));
+            lblImage.setIcon(ImageHelper.resizing(image, lblImage.getWidth() - 1, lblImage.getHeight()));
         } catch(Exception ex) {
             lblImage.setIcon(null);
             ex.printStackTrace();
@@ -419,9 +417,11 @@ public class ManagementAlbum extends javax.swing.JPanel {
         }
           
         //add
-        // save image to file
+        // save image to firebase
         if(albumImage != null) {
             try {
+                //resize image to 200x200
+                albumImage = ImageHelper.IconToBufferedImage(ImageHelper.resizing(albumImage, 200, 200));
                 ByteArrayOutputStream os = new ByteArrayOutputStream();
                 ImageIO.write(albumImage, "png", os);                          
                 InputStream is = new ByteArrayInputStream(os.toByteArray());
@@ -453,7 +453,7 @@ public class ManagementAlbum extends javax.swing.JPanel {
             File selectedFile = fileChooser.getSelectedFile();
             try {
                 albumImage = ImageIO.read(selectedFile);
-                lblImage.setIcon(ImageResizing.ImageResizing(albumImage, lblImage.getWidth() - 1, lblImage.getHeight()));
+                lblImage.setIcon(ImageHelper.resizing(albumImage, lblImage.getWidth() - 1, lblImage.getHeight()));
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -510,15 +510,12 @@ public class ManagementAlbum extends javax.swing.JPanel {
         fillToTrack(album.getlTrack());
         
         try {
+            //display image from url to jlabel
             URL url = new URL(album.getImage());
             Image image = ImageIO.read(url);
-            lblImage.setIcon(ImageResizing.ImageResizing(image, lblImage.getWidth() - 1, lblImage.getHeight()));
+            lblImage.setIcon(ImageHelper.resizing(image, lblImage.getWidth() - 1, lblImage.getHeight()));
 //            albumImage = album.getImage();
-            BufferedImage bimage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-            Graphics2D bGr = bimage.createGraphics();
-            bGr.drawImage(image, 0, 0, null);
-            bGr.dispose();
-            albumImage = bimage;
+            albumImage = ImageHelper.ImageToBufferedImage(image);
         } catch(Exception ex) {
             lblImage.setIcon(null);
             ex.printStackTrace();

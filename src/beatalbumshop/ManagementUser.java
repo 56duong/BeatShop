@@ -5,6 +5,7 @@ import beatalbumshop.dao.UserDAO;
 import beatalbumshop.dao.UserDAOImpl;
 import beatalbumshop.model.User;
 import beatalbumshop.utils.ClearComponent;
+import beatalbumshop.utils.TimeHelper;
 import beatalbumshop.utils.Validator;
 import java.awt.Rectangle;
 import java.io.File;
@@ -53,12 +54,16 @@ public class ManagementUser extends javax.swing.JPanel {
         tblUser.requestFocus();
     }
 
+    
+    
     public void clearForm() {
         index = -1;
         tblUser.getSelectionModel().clearSelection(); //bo chon tren table
-        ClearComponent.clear( lblUserID, txtEmail, txtPassword, txtDateCreated, rdoAdmin, rdoUser, rdoStaff);
+        ClearComponent.clear(lblUserID, txtEmail, txtPassword, txtDateCreated, rdoAdmin, rdoStaff, rdoStaff);
     }
 
+    
+    
     public void selectRow(int i) {
         if (i >= 0 && tblUser.getRowCount() > 0) {
             index = i;
@@ -69,15 +74,19 @@ public class ManagementUser extends javax.swing.JPanel {
         }
     }
 
+    
+    
     public Integer findUserIndex(int userID) {
         for (User user : lUser) {
-            if ((user.getUserID() + "").equalsIgnoreCase(userID + "")) {
+            if ((user.getID()+ "").equalsIgnoreCase(userID + "")) {
                 return lUser.indexOf(user);
             }
         }
         return -1;
     }
 
+    
+    
     public void showDetail() {
         
         User user = new User();
@@ -88,23 +97,27 @@ public class ManagementUser extends javax.swing.JPanel {
         //tim album co ID trong lAlbum
         user = lUser.get(findUserIndex(Integer.parseInt(id)));
 
-        //do du lieu tu Album album len form
-        lblUserID.setText(user.getUserID() + "");
+        //do du lieu tu User user len form
+        lblUserID.setText(user.getID() + "");
         txtEmail.setText(user.getEmail());
         txtPassword.setText(user.getPassword());
         txtDateCreated.setText(user.getDateCreated());
         long role = user.getRole();
         if (role == 0) {
-            rdoUser.setSelected(true);
-        } else if (role == 1) {
             rdoStaff.setSelected(true);
-        } else if (role == 2){
+        }
+        else if (role == 1) {
             rdoAdmin.setSelected(true);
+        }
+        else {
+            buttonGroup1.clearSelection();
         }
 
         //lblImage.setIcon(ImageResizing.ImageResizing("src/beatalbumshop/resources/images/users/" + user.getUsername() + ".png", lblImage.getWidth() - 1, lblImage.getHeight()));
     }
 
+    
+    
     public void fillToTable() {
         lUser = (ArrayList<User>) userDAO.getAll();
 
@@ -113,18 +126,20 @@ public class ManagementUser extends javax.swing.JPanel {
         //them tung dong vao
         if (lUser != null) {
             for (User user : lUser) {
-                String role;
+                String role = "";
                 if (user.getRole() == 0){
-                    role = "User";
-                } else if (user.getRole() == 1){
                     role = "Staff";
-                } else
+                }
+                else if (user.getRole() == 1){
                     role = "Admin";
+                }
                 
-                model.addRow(new Object[]{user.getUserID(), user.getEmail(), user.getPassword(), user.getDateCreated(), role});
+                model.addRow(new Object[]{user.getID(), user.getEmail(), user.getPassword(), user.getDateCreated(), role});
             }
         }
     }
+    
+    
     
     public boolean checkUser() {
         if (lUser != null) {
@@ -138,6 +153,7 @@ public class ManagementUser extends javax.swing.JPanel {
     }
 
 
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -150,7 +166,7 @@ public class ManagementUser extends javax.swing.JPanel {
         buttonGroup1 = new javax.swing.ButtonGroup();
         pnlTabContent = new javax.swing.JPanel();
         rdoAdmin = new beatalbumshop.componment.MyRadioButton();
-        rdoUser = new beatalbumshop.componment.MyRadioButton();
+        rdoStaff = new beatalbumshop.componment.MyRadioButton();
         lblEmail = new beatalbumshop.componment.MyLabel();
         txtEmail = new beatalbumshop.componment.MyTextField();
         lblPassword = new beatalbumshop.componment.MyLabel();
@@ -164,20 +180,18 @@ public class ManagementUser extends javax.swing.JPanel {
         txtDateCreated = new beatalbumshop.componment.MyTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblUser = new beatalbumshop.componment.MyTable();
-        rdoStaff = new beatalbumshop.componment.MyRadioButton();
         lblID2 = new beatalbumshop.componment.MyLabel();
         lblUserID = new beatalbumshop.componment.MyLabel();
 
         pnlTabContent.setBackground(new java.awt.Color(255, 255, 255));
-        pnlTabContent.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 1, new java.awt.Color(0, 0, 0)));
 
         buttonGroup1.add(rdoAdmin);
         rdoAdmin.setText("Admin");
         rdoAdmin.setFocusPainted(false);
 
-        buttonGroup1.add(rdoUser);
-        rdoUser.setText("User");
-        rdoUser.setFocusPainted(false);
+        buttonGroup1.add(rdoStaff);
+        rdoStaff.setText("Staff");
+        rdoStaff.setFocusPainted(false);
 
         lblEmail.setForeground(new java.awt.Color(80, 80, 80));
         lblEmail.setText("Email:");
@@ -209,9 +223,7 @@ public class ManagementUser extends javax.swing.JPanel {
             }
         });
 
-        btnUpdate.setBackground(new java.awt.Color(0, 162, 47));
-        btnUpdate.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 162, 47)));
-        btnUpdate.setForeground(new java.awt.Color(255, 255, 255));
+        btnUpdate.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnUpdate.setText("Update");
         btnUpdate.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
@@ -247,11 +259,6 @@ public class ManagementUser extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(tblUser);
 
-        buttonGroup1.add(rdoStaff);
-        rdoStaff.setText("Staff");
-        rdoStaff.setFocusPainted(false);
-        rdoStaff.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-
         lblID2.setForeground(new java.awt.Color(80, 80, 80));
         lblID2.setText("ID");
 
@@ -264,81 +271,73 @@ public class ManagementUser extends javax.swing.JPanel {
                 .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 970, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlTabContentLayout.createSequentialGroup()
-                        .addComponent(lblRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(85, 85, 85)
-                        .addComponent(rdoAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(rdoUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(rdoStaff, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pnlTabContentLayout.createSequentialGroup()
-                        .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(pnlTabContentLayout.createSequentialGroup()
-                                    .addComponent(lblDateCreated, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(txtDateCreated, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGroup(pnlTabContentLayout.createSequentialGroup()
-                                    .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(lblEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(lblPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGap(44, 44, 44)
-                                    .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(txtPassword, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(lblUserID, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addComponent(lblID2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(pnlTabContentLayout.createSequentialGroup()
+                                .addComponent(lblRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 93, Short.MAX_VALUE)
+                                .addComponent(rdoAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(63, 63, 63)
+                                .addComponent(rdoStaff, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(pnlTabContentLayout.createSequentialGroup()
+                                        .addComponent(lblDateCreated, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(txtDateCreated, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(pnlTabContentLayout.createSequentialGroup()
+                                        .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(lblEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(lblPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(44, 44, 44)
+                                        .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
+                                            .addComponent(txtPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
+                                            .addComponent(lblUserID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addComponent(lblID2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(50, 50, 50)
                         .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnNew, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(30, 30, 30))
         );
         pnlTabContentLayout.setVerticalGroup(
             pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlTabContentLayout.createSequentialGroup()
-                .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(20, 20, 20)
+                .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlTabContentLayout.createSequentialGroup()
-                        .addGap(33, 33, 33)
-                        .addComponent(btnNew, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20)
-                        .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(pnlTabContentLayout.createSequentialGroup()
-                                .addComponent(btnAdd, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
-                                .addGap(101, 101, 101))
-                            .addGroup(pnlTabContentLayout.createSequentialGroup()
-                                .addGap(51, 51, 51)
-                                .addComponent(btnUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
-                                .addGap(20, 20, 20)
-                                .addComponent(btnDelete, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE))))
+                        .addGap(95, 95, 95)
+                        .addComponent(lblPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(524, 524, 524))
                     .addGroup(pnlTabContentLayout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                             .addComponent(lblID2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblUserID, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblUserID, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnNew, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                             .addComponent(lblEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(20, 20, 20)
-                        .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(20, 20, 20)
+                            .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(15, 15, 15)
                         .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblDateCreated, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtDateCreated, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(20, 20, 20)
-                .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(rdoAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(rdoUser, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(rdoStaff, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(50, 50, 50)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29))
+                            .addComponent(txtDateCreated, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(15, 15, 15)
+                        .addGroup(pnlTabContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(rdoAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(rdoStaff, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(40, 40, 40)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -353,49 +352,34 @@ public class ManagementUser extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
-        clearForm();
-        txtEmail.requestFocus();
-    }//GEN-LAST:event_btnNewActionPerformed
-
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        // Lấy thời gian hiện tại
-        Date currentTime = new Date();
-
-        // Định dạng chuỗi ngày, tháng, năm, giờ, phút, giây
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        String datecreated = dateFormat.format(currentTime); // chuyển ngày thành string
-
+        String dateCreated = TimeHelper.getCurrentDateTime();
         String email = txtEmail.getText();
         String password = txtPassword.getText();
-        int role;
-        if (rdoUser.isSelected()) {
+        int role = 0;
+        if (rdoStaff.isSelected()) {
             role = 0;
-        } else if (rdoStaff.isSelected()) {
+        }
+        else if (rdoAdmin.isSelected()) {
             role = 1;
-        } else {
-            role = 2;
         }
 
         //validate
         ArrayList<String> errors = new ArrayList<>();
 
-//        errors.add(Validator.allowNumber((JTextField)txtPassword, "In Stock", inStock, false));
-//        errors.add(Validator.allowDouble((JTextField)txtEmail, "Price", price, false));
-        errors.add((!Validator.isNotNull((JTextField) txtEmail, email)) ? "Vui lòng nhập Email\n" : "");
-        errors.add((!Validator.isNotNull((JTextField) txtPassword, password)) ? "Vui lòng nhập Password\n" : "");
-        if (!rdoAdmin.isSelected() && !rdoUser.isSelected() && !rdoStaff.isSelected()){
+        if (!rdoAdmin.isSelected() && !rdoStaff.isSelected()){
             errors.add("Vui lòng chọn Role\n");
         }
+        errors.add((!Validator.isNotNull((JTextField) txtPassword, password)) ? "Vui lòng nhập Password\n" : "");
+        errors.add((!Validator.isNotNull((JTextField) txtEmail, email)) ? "Vui lòng nhập Email\n" : "");
+        
         if (!checkUser()) {
             errors.add("Email đã tồn tại\n");
         }
         
-        //Collections.reverse(errors);
+        Collections.reverse(errors);
         String e = "";
-        for (String s : errors) {
-            e += s;
-        }
+        for (String s : errors) e += s;
 
         //co loi
         if (!e.isEmpty()) {
@@ -415,7 +399,7 @@ public class ManagementUser extends javax.swing.JPanel {
         }
         int id = max + 1;
 
-        boolean result = userDAO.add(new User(id, email, password, datecreated, role));
+        boolean result = userDAO.add(new User(role, id, email, password));
 
         if (result) {
             //them thanh cong
@@ -428,24 +412,19 @@ public class ManagementUser extends javax.swing.JPanel {
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-
         String email = txtEmail.getText();
         String password = txtPassword.getText();
-        String datecreated = txtDateCreated.getText();
-        int role;
-        if (rdoUser.isSelected()) {
+        int role = 0;
+        if (rdoStaff.isSelected()) {
             role = 0;
-        } else if (rdoStaff.isSelected()) {
+        } else if (rdoAdmin.isSelected()) {
             role = 1;
-        } else {
-            role = 2;
         }
 
         //validate
         ArrayList<String> errors = new ArrayList<>();
 
         errors.add((!Validator.isNotNull((JTextField) txtEmail, email)) ? "Vui lòng nhập Email\n" : "");
-        
         errors.add((!Validator.isNotNull((JTextField) txtPassword, password)) ? "Vui lòng nhập Password\n" : "");
 
         Collections.reverse(errors);
@@ -465,7 +444,8 @@ public class ManagementUser extends javax.swing.JPanel {
         //get max id
         int id = Integer.parseInt(tblUser.getValueAt(tblUser.getSelectedRow(), 0).toString());
 
-        boolean result = userDAO.add(new User(id, email, password, datecreated, role));
+        // update == add de len
+        boolean result = userDAO.add(new User(role, id, email, password));
 
         if (result) {
             //them thanh cong
@@ -480,15 +460,15 @@ public class ManagementUser extends javax.swing.JPanel {
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         //delete
         String id = tblUser.getValueAt(tblUser.getSelectedRow(), 0).toString();
-        //delete image
-        File imageFile = new File("src/beatalbumshop/resources/images/users/" + id + ".png");
-        if (imageFile.exists()) {
-            if (!imageFile.delete()) {
-                //delete that bai
-                MyDialog.display(1, "Có lỗi xảy ra.");
-                return;
-            }
-        }
+//        //delete image
+//        File imageFile = new File("src/beatalbumshop/resources/images/users/" + id + ".png");
+//        if (imageFile.exists()) {
+//            if (!imageFile.delete()) {
+//                //delete that bai
+//                MyDialog.display(1, "Có lỗi xảy ra.");
+//                return;
+//            }
+//        }
 
         boolean result = userDAO.deleteByID(id);
 
@@ -515,6 +495,11 @@ public class ManagementUser extends javax.swing.JPanel {
         selectRow(tblUser.getSelectedRow());
     }//GEN-LAST:event_tblUserMousePressed
 
+    private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
+        clearForm();
+        txtEmail.requestFocus();
+    }//GEN-LAST:event_btnNewActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private beatalbumshop.componment.MyButton btnAdd;
@@ -532,7 +517,6 @@ public class ManagementUser extends javax.swing.JPanel {
     private javax.swing.JPanel pnlTabContent;
     private beatalbumshop.componment.MyRadioButton rdoAdmin;
     private beatalbumshop.componment.MyRadioButton rdoStaff;
-    private beatalbumshop.componment.MyRadioButton rdoUser;
     private beatalbumshop.componment.MyTable tblUser;
     private beatalbumshop.componment.MyTextField txtDateCreated;
     private beatalbumshop.componment.MyTextField txtEmail;

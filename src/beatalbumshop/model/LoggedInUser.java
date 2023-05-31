@@ -1,33 +1,41 @@
 package beatalbumshop.model;
 
 public class LoggedInUser {
-    private static User currentUser;
+    private static Object currentLoggedIn;
 
-    public static User getCurrentUser() {
-        return currentUser;
+    public static Object getCurrentUser() {
+        if(currentLoggedIn instanceof Customer) return (Customer)currentLoggedIn;
+        else if(currentLoggedIn instanceof User) return (User)currentLoggedIn;
+        
+        return null;
     }
 
-    public static void setCurrentUser(User user) {
-        currentUser = user;
+    public static void setCurrentLoggedIn(Customer customer) {
+        currentLoggedIn = customer;
+    }
+    
+    public static void setCurrentLoggedIn(User user) {
+        currentLoggedIn = user;
     }
 
     public static boolean isLoggedIn() {
-        return currentUser != null;
+        return currentLoggedIn != null;
     }
 
-    public static boolean isUser() {
-        return isLoggedIn() && currentUser.getRole() == 0;
+    public static boolean isCustomer() {
+        return isLoggedIn() && currentLoggedIn instanceof Customer;
     }
-    
+
     public static boolean isStaff() {
-        return isLoggedIn() && currentUser.getRole() == 1;
+        return isLoggedIn() && currentLoggedIn instanceof User && ((User)currentLoggedIn).getRole() == 0;
     }
-    
+
     public static boolean isAdmin() {
-        return isLoggedIn() && currentUser.getRole() == 2;
+        return isLoggedIn() && currentLoggedIn instanceof User && ((User)currentLoggedIn).getRole() == 1;
     }
 
     public static void logOut() {
-        currentUser = null;
+        currentLoggedIn = null;
     }
+    
 }

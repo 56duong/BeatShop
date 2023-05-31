@@ -1,12 +1,14 @@
 package beatalbumshop;
 
+import beatalbumshop.componment.MyDialog;
 import beatalbumshop.componment.MyLabel;
 import beatalbumshop.dao.AlbumDAO;
 import beatalbumshop.dao.AlbumDAOImpl;
 import beatalbumshop.model.Album;
-import beatalbumshop.model.AlbumSpotify;
+import beatalbumshop.model.LoggedInUser;
 import beatalbumshop.model.Track;
-import beatalbumshop.utils.ImageResizing;
+import beatalbumshop.utils.ImageHelper;
+import beatalbumshop.utils.TimeHelper;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
@@ -16,6 +18,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.imageio.ImageIO;
+import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -33,32 +36,31 @@ public class AlbumDetail extends javax.swing.JPanel {
         try {
             URL url = new URL("https://firebasestorage.googleapis.com/v0/b/beat-75a88.appspot.com/o/albums%2F" + album.getAlbumID() + ".png?alt=media");
             Image image = ImageIO.read(url);
-            lblImage.setIcon(ImageResizing.ImageResizing(image, 300, 300));
+            lblImage.setIcon(ImageHelper.resizing(image, 300, 300));
         } catch(Exception ex) {
             lblImage.setIcon(null);
             ex.printStackTrace();
         }
 
-        lblName.setText(album.getAlbumName());
+        lblName.setText("<html>" + album.getAlbumName() + "</html>");
         lblArtist.setText(album.getArtist());
         lblReleaseDate.setText(album.getReleaseDate());
         lblPrice.setText("$" + album.getPrice());
         
-        pnlTrackList.setLayout(new GridLayout(0, 1, 0, 0));
+//        pnlTrackList.setLayout(new GridLayout(0, 1, 0, 0));
+        pnlTrackList.setLayout(new BoxLayout(pnlTrackList, BoxLayout.Y_AXIS));
         pnlTrackList.setBorder(new EmptyBorder(0, 20, 0, 20));
 
         ArrayList<Track> lTrack = new ArrayList<>();
         lTrack = album.getlTrack();
         for (Track track : lTrack) {
             JPanel pnl = new JPanel(new BorderLayout());
-            pnl.setPreferredSize(new Dimension(365, 40));
+            pnl.setPreferredSize(new Dimension(545, 40));
+            pnl.setMaximumSize(new Dimension(545, 40));
             pnl.setBackground(null);
-            pnl.add(new MyLabel(track.getTrackName()), BorderLayout.WEST);
-            long duration = track.getDurationMS();
-            long minutes = (duration / 1000) / 60;
-            long seconds = (duration / 1000) % 60;
-            String durationString = minutes + ":" + seconds;
-            pnl.add(new MyLabel(durationString), BorderLayout.EAST);
+            pnl.add(new MyLabel("<html>" + track.getTrackName() + "</html>"), BorderLayout.WEST);
+            String duration = TimeHelper.msToMinute(track.getDurationMS() + "");
+            pnl.add(new MyLabel(duration), BorderLayout.EAST);
             pnlTrackList.add(pnl);
         }
     }
@@ -81,7 +83,7 @@ public class AlbumDetail extends javax.swing.JPanel {
         lblPrice = new beatalbumshop.componment.MyLabel();
         myScrollPane1 = new beatalbumshop.componment.MyScrollPane();
         pnlTrackList = new javax.swing.JPanel();
-        myButton1 = new beatalbumshop.componment.MyButton();
+        btnBuyNow = new beatalbumshop.componment.MyButton();
         btnClose = new beatalbumshop.componment.MyButton();
 
         pnlMain.setBackground(new java.awt.Color(255, 255, 255));
@@ -105,7 +107,6 @@ public class AlbumDetail extends javax.swing.JPanel {
 
         pnlTrackList.setBackground(new java.awt.Color(255, 255, 255));
         pnlTrackList.setMaximumSize(new java.awt.Dimension(408, 414));
-        pnlTrackList.setMinimumSize(new java.awt.Dimension(408, 414));
 
         javax.swing.GroupLayout pnlTrackListLayout = new javax.swing.GroupLayout(pnlTrackList);
         pnlTrackList.setLayout(pnlTrackListLayout);
@@ -120,10 +121,15 @@ public class AlbumDetail extends javax.swing.JPanel {
 
         myScrollPane1.setViewportView(pnlTrackList);
 
-        myButton1.setBackground(new java.awt.Color(0, 162, 47));
-        myButton1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 162, 47)));
-        myButton1.setForeground(new java.awt.Color(255, 255, 255));
-        myButton1.setText("Buy Now");
+        btnBuyNow.setBackground(new java.awt.Color(0, 162, 47));
+        btnBuyNow.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 162, 47)));
+        btnBuyNow.setForeground(new java.awt.Color(255, 255, 255));
+        btnBuyNow.setText("Buy Now");
+        btnBuyNow.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuyNowActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlContentLayout = new javax.swing.GroupLayout(pnlContent);
         pnlContent.setLayout(pnlContentLayout);
@@ -132,15 +138,15 @@ public class AlbumDetail extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlContentLayout.createSequentialGroup()
                 .addContainerGap(54, Short.MAX_VALUE)
                 .addGroup(pnlContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(myButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBuyNow, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlContentLayout.createSequentialGroup()
                         .addGroup(pnlContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblReleaseDate, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(pnlContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(lblImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(lblName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(lblArtist, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(lblArtist, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblName, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(30, 30, 30)
                         .addComponent(myScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 596, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(50, 50, 50))
@@ -154,7 +160,7 @@ public class AlbumDetail extends javax.swing.JPanel {
                     .addGroup(pnlContentLayout.createSequentialGroup()
                         .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblName, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
                         .addComponent(lblArtist, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
@@ -162,8 +168,8 @@ public class AlbumDetail extends javax.swing.JPanel {
                         .addGap(0, 0, 0)
                         .addComponent(lblPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(30, 30, 30)
-                .addComponent(myButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(134, Short.MAX_VALUE))
+                .addComponent(btnBuyNow, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(74, Short.MAX_VALUE))
         );
 
         btnClose.setBackground(null);
@@ -211,15 +217,25 @@ public class AlbumDetail extends javax.swing.JPanel {
         c.show(pnlTabContent, "shop");
     }//GEN-LAST:event_btnCloseActionPerformed
 
+    private void btnBuyNowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuyNowActionPerformed
+        if (!LoggedInUser.isLoggedIn() || !LoggedInUser.isCustomer()) {
+            new LogIn2().setVisible(true);
+            MyDialog.display(1, "Bạn phải đăng nhập trước khi sử dụng tính năng này");
+        }
+        else {
+            System.out.println("ok");
+        }
+    }//GEN-LAST:event_btnBuyNowActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private beatalbumshop.componment.MyButton btnBuyNow;
     private beatalbumshop.componment.MyButton btnClose;
     private beatalbumshop.componment.MyLabel lblArtist;
     private beatalbumshop.componment.MyLabel lblImage;
     private beatalbumshop.componment.MyLabel lblName;
     private beatalbumshop.componment.MyLabel lblPrice;
     private beatalbumshop.componment.MyLabel lblReleaseDate;
-    private beatalbumshop.componment.MyButton myButton1;
     private beatalbumshop.componment.MyScrollPane myScrollPane1;
     private javax.swing.JPanel pnlContent;
     private javax.swing.JPanel pnlMain;

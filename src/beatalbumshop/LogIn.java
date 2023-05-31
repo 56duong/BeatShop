@@ -1,42 +1,53 @@
 package beatalbumshop;
 
-import beatalbumshop.config.Account;
+import beatalbumshop.componment.MyDialog;
+import beatalbumshop.dao.CustomerDAO;
+import beatalbumshop.dao.CustomerDAOImpl;
 import beatalbumshop.dao.Firebase;
+import beatalbumshop.dao.UserDAO;
+import beatalbumshop.dao.UserDAOImpl;
+import beatalbumshop.model.Customer;
 import beatalbumshop.model.LoggedInUser;
 import beatalbumshop.model.User;
 import com.google.api.core.ApiFuture;
-import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.Query;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
-import com.google.firebase.cloud.FirestoreClient;
+import com.google.cloud.firestore.WriteResult;
 import java.awt.Color;
+import java.awt.Window;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.List;
+import java.awt.geom.RoundRectangle2D;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.BorderFactory;
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 public class LogIn extends javax.swing.JFrame {
-
-    private static FirebaseApp firebaseApp;
-    private static Firestore firestore;
+    UserDAO userDAO = new UserDAOImpl();
+    CustomerDAO customerDAO = new CustomerDAOImpl();
 
     public LogIn() {
         initComponents();
-        this.setLocationRelativeTo(null);
+        setLocationRelativeTo(null);
         
+        //rounded frame
+        setShape(new RoundRectangle2D.Double(0, 0, 1280, 720, 20, 20));
+        setSize(1280, 720);
+        setLocationRelativeTo(null);
         
         addPlaceholderText(txtEmail, "Email");
         addPlaceholderText(txtPassword, "Password");
+        
+        txtEmail.requestFocus();
     }
+    
+    
+    
     private void addPlaceholderText(JTextField textField, String placeholderText) {
         // Save the default foreground color of the text field
         Color defaultColor = textField.getForeground();
@@ -63,69 +74,32 @@ public class LogIn extends javax.swing.JFrame {
             }
         });
     }
-    public static void initializeFirebaseApp() {
-        if (firebaseApp == null) {
-            try {
-                InputStream serviceAccount = new FileInputStream("src/beatalbumshop/config/serviceAccountKey.json");
-                GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
-                FirebaseOptions options = new FirebaseOptions.Builder()
-                          .setCredentials(credentials)
-                          .build();
-                firebaseApp = FirebaseApp.initializeApp(options);
-                firestore = FirestoreClient.getFirestore(firebaseApp);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
+    
+    
 
     public static boolean isValidEmail(String email) {
         String emailRegex = "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}$";
         return email.matches(emailRegex);
     }
 
-    public String validateFormLogin(String email, String password) {
+
+        
+    public String validateFormSigup(String email, String password) {
         // Kiểm tra tính hợp lệ của email
         if (email.isEmpty()) {
             txtEmail.requestFocus();
-            return "Email is required";
+            return "Vui lòng nhập Email";
         } else if (!isValidEmail(email)) {
             txtEmail.requestFocus();
-            return "Invalid email format";
+            return "Email sai định dạng";
+
         }
 
         if (password.isEmpty()) {
             txtPassword.requestFocus();
-            return "Password is required";
+            return "Vui lòng nhập Pasword";
         }
-
         return null; // Trả về null nếu form hợp lệ
-    }
-
-    // connect firebase
-    public static boolean isUsernameValid(String email, String password) {
-//        initializeFirebaseApp();
-
-        Firestore firestore = (Firestore) Firebase.getFirestore(Account.FIREBASE_PROJECT_ID);
-        CollectionReference colRef = firestore.collection("users");
-        
-        try {
-            QuerySnapshot querySnapshot = colRef.get().get();
-            List<QueryDocumentSnapshot> users = querySnapshot.getDocuments();
-
-            for (QueryDocumentSnapshot user : users) {
-                String usernameFromFirestore = user.getString("email");
-                String passwordFromFirestore = user.getString("password");
-
-                if (usernameFromFirestore.equals(email) && passwordFromFirestore.equals(password)) {
-                    return true;
-                }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        return false;
     }
 
     /**
@@ -137,53 +111,75 @@ public class LogIn extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        pnlSigninForm = new javax.swing.JPanel();
-        txtEmail = new javax.swing.JTextField();
+        pnlMain = new javax.swing.JPanel();
+        windowTitleBar1 = new beatalbumshop.componment.WindowTitleBar();
+        pnlContent = new javax.swing.JPanel();
+        pnlForm = new javax.swing.JPanel();
         lblTitle = new javax.swing.JLabel();
-        lblCreateAccount = new javax.swing.JLabel();
+        txtEmail = new javax.swing.JTextField();
         txtPassword = new javax.swing.JPasswordField();
+        btnLogIn = new beatalbumshop.componment.MyButton();
+        lblSignUp = new javax.swing.JLabel();
+        lblContinueAs = new javax.swing.JLabel();
         lblForgotPassword = new javax.swing.JLabel();
-        lblAguest = new javax.swing.JLabel();
-        btnLogin = new beatalbumshop.componment.MyButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(1280, 720));
+        setUndecorated(true);
 
-        pnlSigninForm.setBackground(new java.awt.Color(255, 255, 255));
-        pnlSigninForm.setPreferredSize(new java.awt.Dimension(441, 600));
+        pnlMain.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        pnlMain.setLayout(new java.awt.BorderLayout());
+
+        windowTitleBar1.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+        pnlMain.add(windowTitleBar1, java.awt.BorderLayout.PAGE_START);
+
+        pnlContent.setBackground(new java.awt.Color(255, 255, 255));
+
+        pnlForm.setBackground(new java.awt.Color(255, 255, 255));
+
+        lblTitle.setFont(new java.awt.Font("Open Sans", 1, 36)); // NOI18N
+        lblTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTitle.setText("Log In");
 
         txtEmail.setFont(new java.awt.Font("Open Sans", 0, 16)); // NOI18N
         txtEmail.setForeground(new java.awt.Color(82, 82, 82));
         txtEmail.setText("Email");
-        txtEmail.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.black));
+        txtEmail.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
         txtEmail.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtEmail.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtEmailActionPerformed(evt);
-            }
-        });
-
-        lblTitle.setFont(new java.awt.Font("Open Sans", 1, 36)); // NOI18N
-        lblTitle.setText("Log in");
-
-        lblCreateAccount.setBackground(new java.awt.Color(255, 255, 255));
-        lblCreateAccount.setFont(new java.awt.Font("Open Sans", 1, 14)); // NOI18N
-        lblCreateAccount.setText("CREATE ACCOUNT");
-        lblCreateAccount.setBorder(BorderFactory.createMatteBorder(0,0,1,0, Color.BLACK));
-        lblCreateAccount.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        lblCreateAccount.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblCreateAccountMouseClicked(evt);
-            }
-        });
 
         txtPassword.setFont(new java.awt.Font("Open Sans", 0, 16)); // NOI18N
         txtPassword.setForeground(new java.awt.Color(82, 82, 82));
         txtPassword.setText("jPasswordField1");
         txtPassword.setBorder(BorderFactory.createMatteBorder(0,0,1,0, Color.GRAY));
-        txtPassword.setPreferredSize(new java.awt.Dimension(64, 26));
-        txtPassword.addActionListener(new java.awt.event.ActionListener() {
+
+        btnLogIn.setBackground(new java.awt.Color(0, 0, 0));
+        btnLogIn.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnLogIn.setForeground(new java.awt.Color(255, 255, 255));
+        btnLogIn.setText("Log in");
+        btnLogIn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtPasswordActionPerformed(evt);
+                btnLogInActionPerformed(evt);
+            }
+        });
+
+        lblSignUp.setFont(new java.awt.Font("Open Sans", 1, 14)); // NOI18N
+        lblSignUp.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblSignUp.setText("CREATE AN ACCOUNT");
+        lblSignUp.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+        lblSignUp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblSignUp.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblSignUpMouseClicked(evt);
+            }
+        });
+
+        lblContinueAs.setFont(new java.awt.Font("Open Sans", 1, 14)); // NOI18N
+        lblContinueAs.setText("CONTINUE AS A GUEST");
+        lblContinueAs.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+        lblContinueAs.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblContinueAs.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblContinueAsMouseClicked(evt);
             }
         });
 
@@ -198,172 +194,142 @@ public class LogIn extends javax.swing.JFrame {
             }
         });
 
-        lblAguest.setBackground(new java.awt.Color(255, 255, 255));
-        lblAguest.setFont(new java.awt.Font("Open Sans", 1, 14)); // NOI18N
-        lblAguest.setText("CONTINUE AS A GUEST");
-        lblAguest.setBorder(BorderFactory.createMatteBorder(0,0,1,0, Color.gray));
-        lblAguest.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        lblAguest.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblAguestMouseClicked(evt);
-            }
-        });
-
-        btnLogin.setBackground(new java.awt.Color(0, 0, 0));
-        btnLogin.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        btnLogin.setForeground(new java.awt.Color(255, 255, 255));
-        btnLogin.setText("Log in");
-        btnLogin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLoginActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout pnlSigninFormLayout = new javax.swing.GroupLayout(pnlSigninForm);
-        pnlSigninForm.setLayout(pnlSigninFormLayout);
-        pnlSigninFormLayout.setHorizontalGroup(
-            pnlSigninFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlSigninFormLayout.createSequentialGroup()
-                .addGroup(pnlSigninFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlSigninFormLayout.createSequentialGroup()
-                        .addGap(40, 40, 40)
-                        .addGroup(pnlSigninFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtPassword, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
-                            .addComponent(txtEmail, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblForgotPassword, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnLogin, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(pnlSigninFormLayout.createSequentialGroup()
-                        .addGap(140, 140, 140)
-                        .addComponent(lblAguest)))
-                .addContainerGap(39, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlSigninFormLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(pnlSigninFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlSigninFormLayout.createSequentialGroup()
-                        .addComponent(lblTitle)
-                        .addGap(166, 166, 166))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlSigninFormLayout.createSequentialGroup()
-                        .addComponent(lblCreateAccount)
-                        .addGap(155, 155, 155))))
+        javax.swing.GroupLayout pnlFormLayout = new javax.swing.GroupLayout(pnlForm);
+        pnlForm.setLayout(pnlFormLayout);
+        pnlFormLayout.setHorizontalGroup(
+            pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlFormLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlFormLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(lblForgotPassword))
+                    .addGroup(pnlFormLayout.createSequentialGroup()
+                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                            .addComponent(lblTitle)
+                            .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblSignUp)
+                            .addComponent(lblContinueAs))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(btnLogIn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
-        pnlSigninFormLayout.setVerticalGroup(
-            pnlSigninFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlSigninFormLayout.createSequentialGroup()
-                .addContainerGap(84, Short.MAX_VALUE)
-                .addComponent(lblTitle)
-                .addGap(60, 60, 60)
-                .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(60, 60, 60)
-                .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(lblForgotPassword)
-                .addGap(63, 63, 63)
-                .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(72, 72, 72)
-                .addComponent(lblCreateAccount)
+        pnlFormLayout.setVerticalGroup(
+            pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlFormLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(lblTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(50, 50, 50)
+                .addComponent(txtEmail)
+                .addGap(30, 30, 30)
+                .addComponent(txtPassword)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lblAguest)
-                .addGap(53, 53, 53))
+                .addComponent(lblForgotPassword)
+                .addGap(57, 57, 57)
+                .addComponent(btnLogIn, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                .addGap(50, 50, 50)
+                .addComponent(lblSignUp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(10, 10, 10)
+                .addComponent(lblContinueAs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(20, 20, 20))
         );
+
+        javax.swing.GroupLayout pnlContentLayout = new javax.swing.GroupLayout(pnlContent);
+        pnlContent.setLayout(pnlContentLayout);
+        pnlContentLayout.setHorizontalGroup(
+            pnlContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlContentLayout.createSequentialGroup()
+                .addGap(433, 433, 433)
+                .addComponent(pnlForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(433, Short.MAX_VALUE))
+        );
+        pnlContentLayout.setVerticalGroup(
+            pnlContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlContentLayout.createSequentialGroup()
+                .addContainerGap(103, Short.MAX_VALUE)
+                .addComponent(pnlForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(105, 105, 105))
+        );
+
+        pnlMain.add(pnlContent, java.awt.BorderLayout.CENTER);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(pnlSigninForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, 1280, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlSigninForm, javax.swing.GroupLayout.DEFAULT_SIZE, 622, Short.MAX_VALUE)
+            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailActionPerformed
+    private void lblContinueAsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblContinueAsMouseClicked
+        Window[] windows = Window.getWindows();
+        if(windows.length <= 1) {
+            dispose();
+            new Main().setVisible(true);
+        }
+    }//GEN-LAST:event_lblContinueAsMouseClicked
 
-    }//GEN-LAST:event_txtEmailActionPerformed
-
-    private void lblCreateAccountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblCreateAccountMouseClicked
+    private void lblSignUpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblSignUpMouseClicked
         dispose();
-        new SignUp().setVisible(true);
-    }//GEN-LAST:event_lblCreateAccountMouseClicked
+        new LogIn2().setVisible(true);
+    }//GEN-LAST:event_lblSignUpMouseClicked
+
+    private void btnLogInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogInActionPerformed
+        String email = txtEmail.getText();
+        String password = new String(txtPassword.getPassword());
+        String errorMessage = validateFormSigup(email, password);
+        
+        // co loi
+        if (errorMessage != null) {
+            MyDialog.display(1, errorMessage);
+        }
+        else {
+            if (customerDAO.checkExitByEmail(email) && userDAO.checkExitByEmail(email)) {
+                MyDialog.display(1, "Email này chưa đăng ký");
+            }
+            else {
+                if(customerDAO.authentication(email, password) != null) {
+                    Customer customer = customerDAO.authentication(email, password);
+                    LoggedInUser.setCurrentLoggedIn(customer);
+
+                    //open 
+                    Window[] windows = Window.getWindows();
+                    if(windows.length <= 1) new Main().setVisible(true);
+                    dispose();
+                }
+                else if(userDAO.authentication(email, password) != null) {
+                    User user = userDAO.authentication(email, password);
+                    LoggedInUser.setCurrentLoggedIn(user);
+                    
+                    new MainAdmin().setVisible(true);
+                }
+            }
+//            // kiem tra ton tai
+//            if (customerDAO.checkExitByEmail(email) && userDAO.checkExitByEmail(email)) {
+//                Firestore db = Firebase.getFirestore("beat-75a88");
+//                CollectionReference colRef = db.collection("customers");
+////                customerDAO.add(new Customer(null, getMaxID(colRef, "customerID"), email, password));
+//                dispose();
+//                new LogIn2().setVisible(true);
+//                MyDialog.display(0, "Đăng ký thành công!");
+//            }
+//            else {
+//                txtEmail.requestFocus();
+//                MyDialog.display(1, "Email đã tồn tại vui lòng thử lại");
+//            }
+        }
+    }//GEN-LAST:event_btnLogInActionPerformed
 
     private void lblForgotPasswordMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblForgotPasswordMousePressed
 
     }//GEN-LAST:event_lblForgotPasswordMousePressed
-
-    private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtPasswordActionPerformed
-
-    private void lblAguestMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblAguestMouseClicked
-        dispose();
-        new Main().setVisible(true);
-    }//GEN-LAST:event_lblAguestMouseClicked
-
-    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        System.out.println("1");
-        String email = txtEmail.getText();
-        String pass = new String(txtPassword.getPassword());
-        String errorMessage = validateFormLogin(email, pass);
-        if (errorMessage == null) {
-            boolean isValidCredentials = isUsernameValid(email, pass);
-            if (isValidCredentials) {
-                try {
-                    // dang nhap thanh cong
-                    dispose();
-                    
-                    Firestore firestore = (Firestore) Firebase.getFirestore(Account.FIREBASE_PROJECT_ID);
-                    CollectionReference colRef = firestore.collection("users");
-                    
-                    Query query = colRef.whereEqualTo("email", email);
-
-                    ApiFuture<QuerySnapshot> querySnapshot = query.get();
-                    List<QueryDocumentSnapshot> users = querySnapshot.get().getDocuments();
-                    if (users.size() > 0) {
-                        for (QueryDocumentSnapshot user : users) {
-                            User u = new User(user.getLong("userID"), user.getString("email"),user.getString("password"),user.getString("dateCreated") ,user.getLong("role"));
-                            LoggedInUser.setCurrentUser(u);
-                            
-                            if(LoggedInUser.isAdmin() || LoggedInUser.isStaff()) {
-                                new MainAdmin().setVisible(true);
-                                break;
-                            }
-                            else {
-                                new Main().setVisible(true);
-                                break;
-                            }
-                            
-//                            long role = user.getLong("role");
-//                            if (role == 0) {
-////                                JOptionPane.showMessageDialog(this, "Khách hàng");
-//                                new Main().setVisible(true);
-//                            } else if (role == 1) {
-////                                JOptionPane.showMessageDialog(this, "Staff");
-//                                new MainAdmin().setVisible(true);
-//                            }
-//                            else if (role == 2) {
-////                                JOptionPane.showMessageDialog(this, "Admin");
-//                                new MainAdmin().setVisible(true);
-//                            }
-                        }
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Không tìm thấy người dùng.");
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            } else {
-                JOptionPane.showMessageDialog(this, "Wrong account or password!");
-                txtEmail.requestFocus();
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, errorMessage, "Login Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }//GEN-LAST:event_btnLoginActionPerformed
 
     /**
      * @param args the command line arguments
@@ -402,13 +368,16 @@ public class LogIn extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private beatalbumshop.componment.MyButton btnLogin;
-    private javax.swing.JLabel lblAguest;
-    private javax.swing.JLabel lblCreateAccount;
+    private beatalbumshop.componment.MyButton btnLogIn;
+    private javax.swing.JLabel lblContinueAs;
     private javax.swing.JLabel lblForgotPassword;
+    private javax.swing.JLabel lblSignUp;
     private javax.swing.JLabel lblTitle;
-    private javax.swing.JPanel pnlSigninForm;
+    private javax.swing.JPanel pnlContent;
+    private javax.swing.JPanel pnlForm;
+    private javax.swing.JPanel pnlMain;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JPasswordField txtPassword;
+    private beatalbumshop.componment.WindowTitleBar windowTitleBar1;
     // End of variables declaration//GEN-END:variables
 }

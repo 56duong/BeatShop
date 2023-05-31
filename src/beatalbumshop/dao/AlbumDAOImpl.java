@@ -2,7 +2,6 @@ package beatalbumshop.dao;
 
 import beatalbumshop.config.Account;
 import beatalbumshop.model.Album;
-import beatalbumshop.model.AlbumSpotify;
 import beatalbumshop.model.Track;
 import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
@@ -18,7 +17,6 @@ import com.google.cloud.storage.Bucket;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.StorageClient;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import java.io.FileInputStream;
@@ -62,10 +60,8 @@ public class AlbumDAOImpl implements AlbumDAO {
             
             for (QueryDocumentSnapshot album : albums) {
                 DocumentSnapshot albumSnapshot = album;
-
                 // Convert the document snapshot to a custom class
                 Album albumData = albumSnapshot.toObject(Album.class);
-
                 // Extract the lTrack field from the custom class
                 ArrayList<Track> lTrack = albumData.getlTrack();
 
@@ -163,7 +159,7 @@ public class AlbumDAOImpl implements AlbumDAO {
     
     
     @Override
-    public AlbumSpotify getDetailByID(String albumID) {
+    public Album getDetailByID(String albumID) {
 //        try {
 //            // Set up API credentials
 //            String clientId = Account.SPOTIFY_CLIENT_ID;
@@ -331,7 +327,7 @@ public class AlbumDAOImpl implements AlbumDAO {
 
                 // Extract album information
                 //get 64x64 image
-                String albumImage = albumResponse.getAsJsonArray("images").get(2).getAsJsonObject().get("url").getAsString();
+                String albumImage = albumResponse.getAsJsonArray("images").get(1).getAsJsonObject().get("url").getAsString();
                 String albumName = albumResponse.get("name").getAsString();
                 String artistName = albumResponse.getAsJsonArray("artists")
                         .get(0).getAsJsonObject().get("name").getAsString();

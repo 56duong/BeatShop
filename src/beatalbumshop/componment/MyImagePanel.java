@@ -1,6 +1,6 @@
 package beatalbumshop.componment;
 
-import beatalbumshop.utils.ImageResizing;
+import beatalbumshop.utils.ImageHelper;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -11,7 +11,7 @@ public class MyImagePanel extends JPanel {
 
     public MyImagePanel(String img, int w, int h) {
 //        this(new ImageIcon(new ImageIcon(img).getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH)).getImage(), w, h);
-        this(ImageResizing.ImageResizing(img, w, h).getImage(), w, h);
+        this(ImageHelper.resizing(img, w, h).getImage(), w, h);
     }
 
     public MyImagePanel(Image img, int w, int h) {
@@ -34,10 +34,10 @@ public class MyImagePanel extends JPanel {
     }
 
     public void setImg(Image img) {
-        this.img = ImageResizing.ImageResizing(img, this.getWidth(), this.getHeight()).getImage();
+        this.img = ImageHelper.resizing(img, this.getWidth(), this.getHeight()).getImage();
     }
     
     public void setImg(String img) {
-        this.img = ImageResizing.ImageResizing(img, this.getWidth(), this.getHeight()).getImage();
+        this.img = ImageHelper.resizing(img, this.getWidth(), this.getHeight()).getImage();
     }
 }

@@ -4,7 +4,7 @@ import beatalbumshop.componment.MyLabel;
 import beatalbumshop.dao.AlbumDAO;
 import beatalbumshop.dao.AlbumDAOImpl;
 import beatalbumshop.model.Album;
-import beatalbumshop.utils.ImageResizing;
+import beatalbumshop.utils.ImageHelper;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -51,7 +51,7 @@ public class Shop extends javax.swing.JPanel {
         try {
             URL url = new URL("https://firebasestorage.googleapis.com/v0/b/beat-75a88.appspot.com/o/albums%2F" + album.getAlbumID() + ".png?alt=media");
             Image image = ImageIO.read(url);
-            lblImage.setIcon(ImageResizing.ImageResizing(image, 227, 227));
+            lblImage.setIcon(ImageHelper.resizing(image, 227, 227));
         } catch(Exception ex) {
             lblImage.setIcon(null);
             ex.printStackTrace();
