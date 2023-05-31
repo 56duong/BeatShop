@@ -219,7 +219,7 @@ public class AlbumDetail extends javax.swing.JPanel {
 
     private void btnBuyNowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuyNowActionPerformed
         if (!LoggedInUser.isLoggedIn() || !LoggedInUser.isCustomer()) {
-            new LogIn2().setVisible(true);
+            new LogIn().setVisible(true);
             MyDialog.display(1, "Bạn phải đăng nhập trước khi sử dụng tính năng này");
         }
         else {
