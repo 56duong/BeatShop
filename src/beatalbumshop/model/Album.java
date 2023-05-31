@@ -1,32 +1,35 @@
 package beatalbumshop.model;
 
+import java.util.ArrayList;
+
 public class Album {
-    private long albumID;
+    private String albumID;
     private String albumName;
-    private Double albumPrice;
+    private String artist;
+    private String releaseDate;
+    private ArrayList<Track> lTrack;
+    private Double price;
     private long inStock;
+    private String image;
 
     public Album() {
     }
 
-    public Album(long albumID, String albumName, Double albumPrice, long inStock) {
+    public Album(String albumID, String albumName, String artist, String releaseDate, ArrayList<Track> lTrack, Double price, long inStock) {
         this.albumID = albumID;
         this.albumName = albumName;
-        this.albumPrice = albumPrice;
-        this.inStock = inStock;
-    }
-    
-    public Album(String albumName, Double albumPrice, long inStock) {
-        this.albumName = albumName;
-        this.albumPrice = albumPrice;
+        this.artist = artist;
+        this.releaseDate = releaseDate;
+        this.lTrack = lTrack;
+        this.price = price;
         this.inStock = inStock;
     }
 
-    public long getAlbumID() {
+    public String getAlbumID() {
         return albumID;
     }
 
-    public void setAlbumID(long albumID) {
+    public void setAlbumID(String albumID) {
         this.albumID = albumID;
     }
 
@@ -38,12 +41,36 @@ public class Album {
         this.albumName = albumName;
     }
 
-    public Double getAlbumPrice() {
-        return albumPrice;
+    public String getArtist() {
+        return artist;
     }
 
-    public void setAlbumPrice(Double albumPrice) {
-        this.albumPrice = albumPrice;
+    public void setArtist(String artist) {
+        this.artist = artist;
+    }
+
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public ArrayList<Track> getlTrack() {
+        return lTrack;
+    }
+
+    public void setlTrack(ArrayList<Track> lTrack) {
+        this.lTrack = lTrack;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
     public long getInStock() {
@@ -53,4 +80,13 @@ public class Album {
     public void setInStock(long inStock) {
         this.inStock = inStock;
     }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
 }

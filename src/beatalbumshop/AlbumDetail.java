@@ -3,7 +3,9 @@ package beatalbumshop;
 import beatalbumshop.componment.MyLabel;
 import beatalbumshop.dao.AlbumDAO;
 import beatalbumshop.dao.AlbumDAOImpl;
+import beatalbumshop.model.Album;
 import beatalbumshop.model.AlbumSpotify;
+import beatalbumshop.model.Track;
 import beatalbumshop.utils.ImageResizing;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -11,6 +13,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import javax.imageio.ImageIO;
 import javax.swing.JLabel;
@@ -21,14 +24,14 @@ public class AlbumDetail extends javax.swing.JPanel {
 
     AlbumDAO albumDAO = new AlbumDAOImpl();
     
-    public AlbumDetail(int id) {
+    public AlbumDetail(String id) {
         initComponents();
         
-        AlbumSpotify albumSpotify = albumDAO.getDetailByID(id + "");
+        Album album = albumDAO.getByID(id + "");
         
 //        lblImage.setIcon(ImageResizing.ImageResizing("src/beatalbumshop/resources/images/albums/" + albumSpotify.getAlbumID() + ".png", 300, 300));
         try {
-            URL url = new URL("https://firebasestorage.googleapis.com/v0/b/beat-75a88.appspot.com/o/albums%2F" + albumSpotify.getAlbumID() + ".png?alt=media");
+            URL url = new URL("https://firebasestorage.googleapis.com/v0/b/beat-75a88.appspot.com/o/albums%2F" + album.getAlbumID() + ".png?alt=media");
             Image image = ImageIO.read(url);
             lblImage.setIcon(ImageResizing.ImageResizing(image, 300, 300));
         } catch(Exception ex) {
@@ -36,21 +39,26 @@ public class AlbumDetail extends javax.swing.JPanel {
             ex.printStackTrace();
         }
 
-        lblName.setText(albumSpotify.getAlbumName());
-        lblArtist.setText(albumSpotify.getArtist());
-        lblReleaseDate.setText(albumSpotify.getReleaseDate());
-        lblPrice.setText("$" + albumSpotify.getAlbumPrice() + "");
+        lblName.setText(album.getAlbumName());
+        lblArtist.setText(album.getArtist());
+        lblReleaseDate.setText(album.getReleaseDate());
+        lblPrice.setText("$" + album.getPrice());
         
         pnlTrackList.setLayout(new GridLayout(0, 1, 0, 0));
         pnlTrackList.setBorder(new EmptyBorder(0, 20, 0, 20));
 
-        HashMap<String, String> mTracks = albumSpotify.getmTracks();
-        for (String i : mTracks.keySet()) {
+        ArrayList<Track> lTrack = new ArrayList<>();
+        lTrack = album.getlTrack();
+        for (Track track : lTrack) {
             JPanel pnl = new JPanel(new BorderLayout());
             pnl.setPreferredSize(new Dimension(365, 40));
             pnl.setBackground(null);
-            pnl.add(new MyLabel(i), BorderLayout.WEST);
-            pnl.add(new MyLabel(mTracks.get(i)), BorderLayout.EAST);
+            pnl.add(new MyLabel(track.getTrackName()), BorderLayout.WEST);
+            long duration = track.getDurationMS();
+            long minutes = (duration / 1000) / 60;
+            long seconds = (duration / 1000) % 60;
+            String durationString = minutes + ":" + seconds;
+            pnl.add(new MyLabel(durationString), BorderLayout.EAST);
             pnlTrackList.add(pnl);
         }
     }

@@ -62,11 +62,15 @@ public class Shop extends javax.swing.JPanel {
         lblName.setPreferredSize(new Dimension(227, 50));
         lblName.setFont(new Font("Open Sans", 0, 18));
         pnl.add(lblName);
+        
+        MyLabel lblArtist = new MyLabel("<html>" + album.getArtist()+ "</html>");
+        lblArtist.setFont(new Font("Open Sans", 0, 14));
+        pnl.add(lblArtist);
 
-        MyLabel lblPrice = new MyLabel("$" + album.getAlbumPrice());
+        MyLabel lblPrice = new MyLabel("$" + album.getPrice());
         lblPrice.setFont(new Font("Open Sans", 0, 14));
         pnl.add(lblPrice);
-
+        
         pnl.setName(album.getAlbumID() + "");
         pnl.addMouseListener(showInfo);
 
@@ -78,7 +82,7 @@ public class Shop extends javax.swing.JPanel {
     MouseAdapter showInfo = new MouseAdapter() {
         public void mouseClicked(MouseEvent e) {
             JPanel s = (JPanel) e.getSource();
-            int id = Integer.parseInt(s.getName());
+            String id = s.getName();
             
 //            new AlbumDetail(id).setVisible(true);
             JPanel pnlTabContent = (JPanel) getParent();

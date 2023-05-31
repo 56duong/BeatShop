@@ -3,9 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/dao/DAO.java</file>
             <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/ManagementAlbum.java</file>
-            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/dao/Firebase.java</file>
+            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/model/Album.java</file>
+            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/model/AlbumSpotify.java</file>
+            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/AlbumDetail.java</file>
             <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/dao/AlbumDAO.java</file>
+            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/Shop.java</file>
+            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/model/Track.java</file>
+            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/utils/ImageFeatures.java</file>
             <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/dao/AlbumDAOImpl.java</file>
         </group>
     </open-files>

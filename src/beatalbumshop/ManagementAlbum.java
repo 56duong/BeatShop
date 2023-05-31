@@ -4,9 +4,12 @@ import beatalbumshop.componment.MyDialog;
 import beatalbumshop.dao.AlbumDAO;
 import beatalbumshop.dao.AlbumDAOImpl;
 import beatalbumshop.model.Album;
+import beatalbumshop.model.Track;
 import beatalbumshop.utils.ClearComponent;
+import beatalbumshop.utils.ImageFeatures;
 import beatalbumshop.utils.ImageResizing;
 import beatalbumshop.utils.Validator;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -18,6 +21,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -25,7 +29,9 @@ import javax.swing.table.DefaultTableModel;
 public class ManagementAlbum extends javax.swing.JPanel {
 
     ArrayList<Album> lAlbum = new ArrayList<>(); //List Album
-    DefaultTableModel model;
+    ArrayList<Track> lTrack = new ArrayList<>(); //List Album
+    DefaultTableModel albumModel;
+    DefaultTableModel trackModel;
     AlbumDAO albumDAO = new AlbumDAOImpl();
     int index = -1;
     BufferedImage albumImage;
@@ -35,23 +41,35 @@ public class ManagementAlbum extends javax.swing.JPanel {
         
         //table
         //tao model
-        model = new DefaultTableModel();
+        albumModel = new DefaultTableModel();
+        trackModel = new DefaultTableModel();
 
         // Set the table model to the tblAlbum table
-        tblAlbum.setModel(model);
+        tblAlbum.setModel(albumModel);
+        tblTrack.setModel(trackModel);
         
         //disable table editing
         tblAlbum.setDefaultEditor(Object.class, null); 
+        tblTrack.setDefaultEditor(Object.class, null); 
         
         //table header
-        String [] colNames = {"ID", "Album Name", "Price", "In Stock"};
-        model.setColumnIdentifiers(colNames);
+        String [] colNames = {"ID", "Name", "Artist", "Release Date", "Price", "In Stock"};
+        albumModel.setColumnIdentifiers(colNames);
+        
+        String [] colNames2 = {"ID", "Track Name", "Duration"};
+        trackModel.setColumnIdentifiers(colNames2);
 
         //column width
-        tblAlbum.getColumnModel().getColumn(0).setPreferredWidth(30);
+        tblAlbum.getColumnModel().getColumn(0).setPreferredWidth(80);
         tblAlbum.getColumnModel().getColumn(1).setPreferredWidth(300);
-        tblAlbum.getColumnModel().getColumn(2).setPreferredWidth(80);
-        tblAlbum.getColumnModel().getColumn(3).setPreferredWidth(80);
+        tblAlbum.getColumnModel().getColumn(2).setPreferredWidth(100);
+        tblAlbum.getColumnModel().getColumn(3).setPreferredWidth(130);
+        tblAlbum.getColumnModel().getColumn(4).setPreferredWidth(80);
+        tblAlbum.getColumnModel().getColumn(5).setPreferredWidth(80);
+        
+        tblTrack.getColumnModel().getColumn(0).setPreferredWidth(10);
+        tblTrack.getColumnModel().getColumn(1).setPreferredWidth(150);
+        tblTrack.getColumnModel().getColumn(2).setPreferredWidth(30);
         
         //table data
         fillToTable();
@@ -70,7 +88,7 @@ public class ManagementAlbum extends javax.swing.JPanel {
             showDetail();
             //scroll toi dong duoc chon
             tblAlbum.scrollRectToVisible(new Rectangle(tblAlbum.getCellRect(index, 0, true)));
-            albumImage = null;
+            albumImage = ImageFeatures.IconToBufferedImage(lblImage.getIcon());
         }
     } 
     
@@ -79,21 +97,39 @@ public class ManagementAlbum extends javax.swing.JPanel {
     public void fillToTable() {
         lAlbum = (ArrayList<Album>) albumDAO.getAll();
         
-        model.setRowCount(0); //clear rows in the table
+        albumModel.setRowCount(0); //clear rows in the table
         
         //them tung dong vao
         if(lAlbum != null) {
             for(Album album : lAlbum) {
-                model.addRow(new Object[] {album.getAlbumID(), album.getAlbumName(), album.getAlbumPrice(), album.getInStock()});
+                albumModel.addRow(new Object[] {album.getAlbumID(), album.getAlbumName(), album.getArtist(), album.getReleaseDate(), album.getPrice(), album.getInStock()});
             }
         }
     }
     
     
     
-    public Integer findAlbumIndex(int albumID) {
+    public void fillToTrack(ArrayList<Track> list) {
+        lTrack = list;
+        
+        trackModel.setRowCount(0); //clear rows in the table
+        
+        //them tung dong vao
+        if(lTrack != null) {
+            for(Track track : lTrack) {
+                long duration = track.getDurationMS();
+                long minutes = (duration / 1000) / 60;
+                long seconds = (duration / 1000) % 60;
+                trackModel.addRow(new Object[] {track.getTrackID(), track.getTrackName(), minutes + ":" + seconds});
+            }
+        }
+    }
+    
+    
+    
+    public Integer findAlbumIndex(String albumID) {
         for(Album album : lAlbum) {
-            if((album.getAlbumID() + "").equalsIgnoreCase(albumID + "")) {
+            if((album.getAlbumID()).equalsIgnoreCase(albumID)) {
                 return lAlbum.indexOf(album);
             }
         }
@@ -109,13 +145,16 @@ public class ManagementAlbum extends javax.swing.JPanel {
         String id = tblAlbum.getValueAt(tblAlbum.getSelectedRow(), 0).toString();
         
         //tim album co ID trong lAlbum
-        album = lAlbum.get(findAlbumIndex(Integer.parseInt(id)));
+        album = lAlbum.get(findAlbumIndex(id));
         
         //do du lieu tu Album album len form
         lblID.setText(album.getAlbumID() + "");
         txtName.setText(album.getAlbumName());
-        txtPrice.setText(album.getAlbumPrice() + "");
+        txtArtist.setText(album.getArtist());
+        txtReleaseDate.setText(album.getReleaseDate());
+        txtPrice.setText(album.getPrice()+ "");
         txtInStock.setText(album.getInStock() + "");
+        fillToTrack(album.getlTrack());
         
 //        lblImage.setIcon(ImageResizing.ImageResizing("src/beatalbumshop/resources/images/albums/" + album.getAlbumID() + ".png", lblImage.getWidth() - 1, lblImage.getHeight()));
         try {
@@ -157,16 +196,22 @@ public class ManagementAlbum extends javax.swing.JPanel {
         txtPrice = new beatalbumshop.componment.MyTextField();
         lblInStock = new beatalbumshop.componment.MyLabel();
         txtInStock = new beatalbumshop.componment.MyTextField();
-        btnNew = new beatalbumshop.componment.MyButton();
-        btnUpdate = new beatalbumshop.componment.MyButton();
         btnDelete = new beatalbumshop.componment.MyButton();
         lblImage = new javax.swing.JLabel();
         lblID = new beatalbumshop.componment.MyLabel();
-        btnAdd = new beatalbumshop.componment.MyButton();
+        btnSave = new beatalbumshop.componment.MyButton();
+        lblArtist = new beatalbumshop.componment.MyLabel();
+        txtArtist = new beatalbumshop.componment.MyTextField();
+        lblName2 = new beatalbumshop.componment.MyLabel();
+        txtReleaseDate = new beatalbumshop.componment.MyTextField();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblTrack = new beatalbumshop.componment.MyTable();
+        txtAutoFill = new beatalbumshop.componment.MyButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setMaximumSize(new java.awt.Dimension(1030, 658));
         setMinimumSize(new java.awt.Dimension(1030, 658));
+        setPreferredSize(new java.awt.Dimension(1030, 658));
 
         tblAlbum.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -183,7 +228,7 @@ public class ManagementAlbum extends javax.swing.JPanel {
 
         txtName.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3)));
         txtName.setFont(new java.awt.Font("Open Sans", 0, 14)); // NOI18N
-        txtName.setNextFocusableComponent(txtPrice);
+        txtName.setNextFocusableComponent(txtArtist);
 
         lblPrice.setForeground(new java.awt.Color(80, 80, 80));
         lblPrice.setText("Price");
@@ -197,26 +242,6 @@ public class ManagementAlbum extends javax.swing.JPanel {
 
         txtInStock.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3)));
         txtInStock.setFont(new java.awt.Font("Open Sans", 0, 14)); // NOI18N
-
-        btnNew.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        btnNew.setText("New");
-        btnNew.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnNew.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNewActionPerformed(evt);
-            }
-        });
-
-        btnUpdate.setBackground(new java.awt.Color(0, 162, 47));
-        btnUpdate.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 162, 47)));
-        btnUpdate.setForeground(new java.awt.Color(255, 255, 255));
-        btnUpdate.setText("Update");
-        btnUpdate.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUpdateActionPerformed(evt);
-            }
-        });
 
         btnDelete.setBackground(new java.awt.Color(215, 46, 46));
         btnDelete.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(215, 46, 46)));
@@ -237,12 +262,41 @@ public class ManagementAlbum extends javax.swing.JPanel {
             }
         });
 
-        btnAdd.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        btnAdd.setText("Add");
-        btnAdd.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+        lblID.setFont(new java.awt.Font("Open Sans", 0, 14)); // NOI18N
+
+        btnSave.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnSave.setText("Save");
+        btnSave.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddActionPerformed(evt);
+                btnSaveActionPerformed(evt);
+            }
+        });
+
+        lblArtist.setForeground(new java.awt.Color(80, 80, 80));
+        lblArtist.setText("Artist");
+
+        txtArtist.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3)));
+        txtArtist.setFont(new java.awt.Font("Open Sans", 0, 14)); // NOI18N
+        txtArtist.setNextFocusableComponent(txtReleaseDate);
+
+        lblName2.setForeground(new java.awt.Color(80, 80, 80));
+        lblName2.setText("R.Date");
+
+        txtReleaseDate.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3)));
+        txtReleaseDate.setFont(new java.awt.Font("Open Sans", 0, 14)); // NOI18N
+        txtReleaseDate.setNextFocusableComponent(txtPrice);
+
+        jScrollPane2.setViewportView(tblTrack);
+
+        txtAutoFill.setBackground(new java.awt.Color(0, 162, 47));
+        txtAutoFill.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 162, 47)));
+        txtAutoFill.setForeground(new java.awt.Color(255, 255, 255));
+        txtAutoFill.setText("Auto Fill");
+        txtAutoFill.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        txtAutoFill.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtAutoFillActionPerformed(evt);
             }
         });
 
@@ -253,64 +307,79 @@ public class ManagementAlbum extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 970, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane1)
+                        .addGap(376, 376, 376))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblName2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtReleaseDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblArtist, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblID2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(10, 10, 10)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtName, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
+                                    .addComponent(txtArtist, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(lblInStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(8, 8, 8)
+                                        .addComponent(txtInStock, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(lblID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addGap(30, 30, 30)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblID2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblInStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(8, 8, 8)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtInStock, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblID, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(50, 50, 50)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnNew, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(30, Short.MAX_VALUE))
+                            .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtAutoFill, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(30, 30, 30))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblID, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblID2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(15, 15, 15)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblID2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnNew, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblID, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(21, 21, 21)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                                    .addComponent(lblName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(20, 20, 20)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                                    .addComponent(lblPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(21, 21, 21)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(lblInStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtInStock, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(20, 20, 20)
-                                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 367, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30))
+                            .addComponent(lblName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtAutoFill, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(15, 15, 15)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                            .addComponent(lblArtist, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtArtist, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(13, 13, 13)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblName2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtReleaseDate, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(15, 15, 15)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                            .addComponent(lblPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(lblInStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtInStock, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -318,23 +387,26 @@ public class ManagementAlbum extends javax.swing.JPanel {
         selectRow(tblAlbum.getSelectedRow());
     }//GEN-LAST:event_tblAlbumMousePressed
 
-    private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
-        clearForm();
-        txtName.requestFocus();
-    }//GEN-LAST:event_btnNewActionPerformed
-
-    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        String id = lblID.getText();
         String name = txtName.getText();
+        String artist = txtArtist.getText();
+        String releaseDate = txtReleaseDate.getText();
         String price = txtPrice.getText();
         String inStock = txtInStock.getText();
         
         //validate
         ArrayList<String> errors = new ArrayList<>();
 
+        if(tblTrack.getRowCount() == 0) errors.add("Không được để trống danh sách bài hát");
         errors.add(Validator.allowNumber((JTextField)txtInStock, "In Stock", inStock, false));
         errors.add(Validator.allowDouble((JTextField)txtPrice, "Price", price, false));
+        errors.add((!Validator.isNotNull((JTextField)txtReleaseDate, releaseDate)) ? "Vui lòng nhập Release Date\n" : "");
+        errors.add((!Validator.isNotNull((JTextField)txtArtist, artist)) ? "Vui lòng nhập Artist\n" : "");
         errors.add((!Validator.isNotNull((JTextField)txtName, name)) ? "Vui lòng nhập Name\n" : "");
+
         if(albumImage == null) errors.add("Vui lòng chọn ảnh\n");
+        if(id == null) errors.add("Vui lòng nhập ID");
         
         Collections.reverse(errors);
         String e = "";
@@ -347,28 +419,8 @@ public class ManagementAlbum extends javax.swing.JPanel {
         }
           
         //add
-        //get max id
-        int rowCount = tblAlbum.getRowCount();
-        int max =0;
-        for (int i = 0; i < rowCount; i++) {
-            Object value = tblAlbum.getValueAt(i, 0);
-            if(Integer.parseInt(value.toString()) > max) {
-                max = Integer.parseInt(value.toString());
-            }
-        }
-        int id = max + 1;
-
         // save image to file
         if(albumImage != null) {
-//            try {
-//                File destFile = new File("src/beatalbumshop/resources/images/albums/" + id + ".png");
-//                ImageIO.write(albumImage, "png", destFile);
-//            } catch (IOException ex) {
-//                //them that bai
-//                MyDialog.display(1, "Có lỗi xảy ra.");
-//                return;
-//            }
-
             try {
                 ByteArrayOutputStream os = new ByteArrayOutputStream();
                 ImageIO.write(albumImage, "png", os);                          
@@ -381,7 +433,7 @@ public class ManagementAlbum extends javax.swing.JPanel {
             }
         }
         
-        boolean result = albumDAO.add(new Album(id, name, Double.parseDouble(price), Integer.parseInt(inStock)));
+        boolean result = albumDAO.add(new Album(id, name, artist, releaseDate, lTrack, Double.parseDouble(price), Integer.parseInt(inStock)));
         
         if(result) {
             //them thanh cong
@@ -392,7 +444,7 @@ public class ManagementAlbum extends javax.swing.JPanel {
             //them that bai
             MyDialog.display(1, "Có lỗi xảy ra.");
         }
-    }//GEN-LAST:event_btnAddActionPerformed
+    }//GEN-LAST:event_btnSaveActionPerformed
 
     private void lblImageMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMousePressed
         JFileChooser fileChooser = new JFileChooser();
@@ -407,67 +459,6 @@ public class ManagementAlbum extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_lblImageMousePressed
-
-    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        String name = txtName.getText();
-        String price = txtPrice.getText();
-        String inStock = txtInStock.getText();
-        
-        //validate
-        ArrayList<String> errors = new ArrayList<>();
-
-        errors.add(Validator.allowNumber((JTextField)txtInStock, "In Stock", inStock, false));
-        errors.add(Validator.allowDouble((JTextField)txtPrice, "Price", price, false));
-        errors.add((!Validator.isNotNull((JTextField)txtName, name)) ? "Vui lòng nhập Name\n" : "");
-
-        Collections.reverse(errors);
-        String e = "";
-        for(String s : errors) e += s;
-        
-        //co loi
-        if(!e.isEmpty()) {
-            MyDialog.display(1, e);
-            return;
-        }
-          
-        //add
-        //get max id
-        int id = Integer.parseInt(tblAlbum.getValueAt(tblAlbum.getSelectedRow(), 0).toString());
-
-        // save image to file
-        if(albumImage != null) {
-//            try {
-//                File destFile = new File("src/beatalbumshop/resources/images/albums/" + id + ".png");
-//                ImageIO.write(albumImage, "png", destFile);
-//            } catch (IOException ex) {
-//                //them that bai
-//                MyDialog.display(1, "Có lỗi xảy ra.");
-//                return;
-//            }
-            try {
-                ByteArrayOutputStream os = new ByteArrayOutputStream();
-                ImageIO.write(albumImage, "png", os);                          
-                InputStream is = new ByteArrayInputStream(os.toByteArray());
-                albumDAO.uploadImage(id, is);
-            } catch (Exception ex) {
-                MyDialog.display(1, "Có lỗi xảy ra.");
-                ex.printStackTrace();
-                return;
-            }
-        }
-        
-        boolean result = albumDAO.updateByID(new Album(id, name, Double.parseDouble(price), Integer.parseInt(inStock)));
-        
-        if(result) {
-            //them thanh cong
-            fillToTable();
-            selectRow(findAlbumIndex(id));
-        }
-        else {
-            //them that bai
-            MyDialog.display(1, "Có lỗi xảy ra.");
-        }
-    }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         //delete
@@ -505,22 +496,63 @@ public class ManagementAlbum extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
+    private void txtAutoFillActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAutoFillActionPerformed
+        Album album = albumDAO.getDetailByNameAndArtist(txtName.getText(), txtArtist.getText());
+        if(album == null) {
+            MyDialog.display(1, "Không tìm thấy album nào khớp với mô tả");
+            txtName.requestFocus();
+            return;
+        }
+        lblID.setText(album.getAlbumID());
+        txtName.setText(album.getAlbumName());
+        txtArtist.setText(album.getArtist());
+        txtReleaseDate.setText(album.getReleaseDate());
+        fillToTrack(album.getlTrack());
+        
+        try {
+            URL url = new URL(album.getImage());
+            Image image = ImageIO.read(url);
+            lblImage.setIcon(ImageResizing.ImageResizing(image, lblImage.getWidth() - 1, lblImage.getHeight()));
+//            albumImage = album.getImage();
+            BufferedImage bimage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+            Graphics2D bGr = bimage.createGraphics();
+            bGr.drawImage(image, 0, 0, null);
+            bGr.dispose();
+            albumImage = bimage;
+        } catch(Exception ex) {
+            lblImage.setIcon(null);
+            ex.printStackTrace();
+        }
+        
+//        txtPrice.setText(album.getPrice() + "");
+//        txtInStock.setText(album.getInStock() + "");
+        txtPrice.requestFocus();
+        
+        index = -1;
+        tblAlbum.getSelectionModel().clearSelection();
+    }//GEN-LAST:event_txtAutoFillActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private beatalbumshop.componment.MyButton btnAdd;
     private beatalbumshop.componment.MyButton btnDelete;
-    private beatalbumshop.componment.MyButton btnNew;
-    private beatalbumshop.componment.MyButton btnUpdate;
+    private beatalbumshop.componment.MyButton btnSave;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private beatalbumshop.componment.MyLabel lblArtist;
     private beatalbumshop.componment.MyLabel lblID;
     private beatalbumshop.componment.MyLabel lblID2;
     private javax.swing.JLabel lblImage;
     private beatalbumshop.componment.MyLabel lblInStock;
     private beatalbumshop.componment.MyLabel lblName;
+    private beatalbumshop.componment.MyLabel lblName2;
     private beatalbumshop.componment.MyLabel lblPrice;
     private beatalbumshop.componment.MyTable tblAlbum;
+    private beatalbumshop.componment.MyTable tblTrack;
+    private beatalbumshop.componment.MyTextField txtArtist;
+    private beatalbumshop.componment.MyButton txtAutoFill;
     private beatalbumshop.componment.MyTextField txtInStock;
     private beatalbumshop.componment.MyTextField txtName;
     private beatalbumshop.componment.MyTextField txtPrice;
+    private beatalbumshop.componment.MyTextField txtReleaseDate;
     // End of variables declaration//GEN-END:variables
 }
