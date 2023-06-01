@@ -11,7 +11,9 @@ import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.WriteResult;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UserDAOImpl implements UserDAO{
     String projectId = Account.FIREBASE_PROJECT_ID;
@@ -51,19 +53,25 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public boolean updateByID(User user) {
-//        try {
-//            Firestore db = (Firestore) Firebase.getFirestore(projectId);
-//            CollectionReference colRef = db.collection("users");
-//            DocumentReference docRef = colRef.document(user.getUserID()+ "");
-//
-//            // (async) Update one field
-//            ApiFuture<WriteResult> result = docRef.set(new User(user.getUserID(), user.getEmail(), user.getPassword(), user.getDateCreated(), user.getRole()));
-//            
-//            System.out.println("Update time : " + result.get().getUpdateTime());
-//            return true;
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
+        try {
+            Firestore db = (Firestore) Firebase.getFirestore(projectId);
+            CollectionReference colRef = db.collection("users");
+            DocumentReference docRef = colRef.document(user.getID() + "");
+
+            // Create a map with the fields to update
+            Map<String, Object> updates = new HashMap<>();
+            updates.put("email", user.getEmail());
+            updates.put("password", user.getPassword());
+            updates.put("role", user.getRole());
+
+            // (async) Update the document with the new field values
+            ApiFuture<WriteResult> result = docRef.update(updates);
+            System.out.println("Update time: " + result.get().getUpdateTime());
+            
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
         
         return false;
     }

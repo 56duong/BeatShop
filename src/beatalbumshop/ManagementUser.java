@@ -440,19 +440,16 @@ public class ManagementUser extends javax.swing.JPanel {
             return;
         }
 
-        //add
-        //get max id
+        //update
         int id = Integer.parseInt(tblUser.getValueAt(tblUser.getSelectedRow(), 0).toString());
-
-        // update == add de len
-        boolean result = userDAO.add(new User(role, id, email, password));
+        boolean result = userDAO.updateByID(new User(role, id, email, password));
 
         if (result) {
-            //them thanh cong
+            //update thanh cong
             fillToTable();
             selectRow(findUserIndex(id));
         } else {
-            //them that bai
+            //update that bai
             MyDialog.display(1, "Có lỗi xảy ra.");
         }
     }//GEN-LAST:event_btnUpdateActionPerformed

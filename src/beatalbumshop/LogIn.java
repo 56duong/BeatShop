@@ -1,5 +1,6 @@
 package beatalbumshop;
 
+import beatalbumshop.componment.MyButton;
 import beatalbumshop.componment.MyDialog;
 import beatalbumshop.dao.CustomerDAO;
 import beatalbumshop.dao.CustomerDAOImpl;
@@ -99,6 +100,11 @@ public class LogIn extends javax.swing.JFrame {
             txtPassword.requestFocus();
             return "Vui lòng nhập Pasword";
         }
+        else if(!password.matches("[a-zA-Z0-9]+")) {
+            txtPassword.requestFocus();
+            return "Password chỉ được chứa các kí tự [a-zA-Z0-9]";
+        }
+        
         return null; // Trả về null nếu form hợp lệ
     }
 
@@ -278,7 +284,7 @@ public class LogIn extends javax.swing.JFrame {
 
     private void lblSignUpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblSignUpMouseClicked
         dispose();
-        new LogIn2().setVisible(true);
+        new SignUp().setVisible(true);
     }//GEN-LAST:event_lblSignUpMouseClicked
 
     private void btnLogInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogInActionPerformed
@@ -292,6 +298,7 @@ public class LogIn extends javax.swing.JFrame {
         }
         else {
             if (customerDAO.checkExitByEmail(email) && userDAO.checkExitByEmail(email)) {
+                txtEmail.requestFocus();
                 MyDialog.display(1, "Email này chưa đăng ký");
             }
             else {
@@ -299,17 +306,49 @@ public class LogIn extends javax.swing.JFrame {
                     Customer customer = customerDAO.authentication(email, password);
                     LoggedInUser.setCurrentLoggedIn(customer);
 
-                    //open 
                     Window[] windows = Window.getWindows();
-                    if(windows.length <= 1) new Main().setVisible(true);
+                    if(windows.length <= 1) {
+                        new Main().setVisible(true);
+                    }
+                    else {
+                        // open from buy now button
+                        for (Window window : windows) {
+                            if (window instanceof Main) {System.out.println("co");
+                                Main mainWindow = (Main) window;
+                                
+                                // Access btnLogIn in Main
+                                MyButton btnLI = mainWindow.getBtnLogIn();
+                                // Check login
+                                if (LoggedInUser.isLoggedIn()) {
+                                    btnLI.setText("Account");
+                                }
+                                
+                                // Repaint the current Main window
+                                mainWindow.revalidate();
+                                mainWindow.repaint();
+                                
+                                break;
+                            }
+                        }
+                    }
+
                     dispose();
                 }
                 else if(userDAO.authentication(email, password) != null) {
                     User user = userDAO.authentication(email, password);
                     LoggedInUser.setCurrentLoggedIn(user);
                     
+                    //closing all
+                    Window[] windows = Window.getWindows();
+                    for (Window window : windows) {
+                        window.dispose();
+                    }
+                    
                     new MainAdmin().setVisible(true);
-                    dispose();
+                }
+                else {
+                    txtEmail.requestFocus();
+                    MyDialog.display(1, "Sai Email hoặc Password");
                 }
             }
 //            // kiem tra ton tai

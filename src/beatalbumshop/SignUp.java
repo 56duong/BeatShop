@@ -8,6 +8,7 @@ import beatalbumshop.dao.UserDAO;
 import beatalbumshop.dao.UserDAOImpl;
 import beatalbumshop.model.Customer;
 import beatalbumshop.model.User;
+import beatalbumshop.utils.TextHelper;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentSnapshot;
@@ -79,7 +80,7 @@ public class SignUp extends javax.swing.JFrame {
     
     
     
-    public static int getMaxID(CollectionReference colRef, String column) {
+    public static long getMaxID(CollectionReference colRef, String column) {
         try {
             // Create a query to order the documents by albumID in descending order
             Query query = colRef.orderBy(column, Query.Direction.DESCENDING).limit(1);
@@ -92,7 +93,7 @@ public class SignUp extends javax.swing.JFrame {
                     // Retrieve the first document (with the maximum albumID)
                     DocumentSnapshot document = querySnapshot.getDocuments().get(0);
                     // Get the value of the albumID field
-                    return document.getLong(column).intValue();
+                    return document.getLong(column) + 1;
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -163,6 +164,11 @@ public class SignUp extends javax.swing.JFrame {
             txtPassword.requestFocus();
             return "Vui lòng nhập Pasword";
         }
+        else if(!password.matches("[a-zA-Z0-9]+")) {
+            txtPassword.requestFocus();
+            return "Password chỉ được chứa các kí tự [a-zA-Z0-9]";
+        }
+        
         if (!password.equals(confirmPassword)) {
             txtPassword2.requestFocus();
             return "Password và Password Confirm không khớp";
@@ -195,7 +201,6 @@ public class SignUp extends javax.swing.JFrame {
         setMaximumSize(new java.awt.Dimension(1280, 720));
         setMinimumSize(new java.awt.Dimension(1280, 720));
         setUndecorated(true);
-        setPreferredSize(new java.awt.Dimension(1280, 720));
 
         pnlMain.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         pnlMain.setLayout(new java.awt.BorderLayout());
@@ -358,7 +363,11 @@ public class SignUp extends javax.swing.JFrame {
             if (customerDAO.checkExitByEmail(email) && userDAO.checkExitByEmail(email)) {
                 Firestore db = Firebase.getFirestore("beat-75a88");
                 CollectionReference colRef = db.collection("customers");
-                boolean result = customerDAO.add(new Customer(null, getMaxID(colRef, "customerID"), email, password));
+                
+                // hash password
+                password = TextHelper.HashPassword(password);
+
+                boolean result = customerDAO.add(new Customer(null, getMaxID(colRef, "id"), email, password));
                 if(result) {
                     dispose();
                     new LogIn().setVisible(true);

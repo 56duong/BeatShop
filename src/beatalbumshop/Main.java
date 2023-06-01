@@ -1,5 +1,6 @@
 package beatalbumshop;
 
+import beatalbumshop.componment.MyButton;
 import beatalbumshop.model.LoggedInUser;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -56,6 +57,11 @@ public class Main extends javax.swing.JFrame {
         if (LoggedInUser.isLoggedIn()) {
             btnLogIn.setText("Account");
         }
+    }
+ 
+    // open login from buy now button
+    public MyButton getBtnLogIn() {
+        return btnLogIn;
     }
 
     /**

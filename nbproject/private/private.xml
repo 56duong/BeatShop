@@ -2,26 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/SignUp.java</file>
-            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/Main.java</file>
-            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/dao/CustomerDAO.java</file>
-            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/model/User.java</file>
-            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/model/Album.java</file>
-            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/AlbumDetail.java</file>
-            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/dao/UserDAO.java</file>
-            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/Shop.java</file>
-            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/ManagementUser.java</file>
-            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/dao/CustomerDAOImpl.java</file>
-            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/dao/AlbumDAOImpl.java</file>
-            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/model/U.java</file>
-            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/LogIn2.java</file>
-            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/LogIn.java</file>
-            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/model/LoggedInUser.java</file>
-            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/MainAdmin.java</file>
-            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/model/Customer.java</file>
-            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/utils/TimeFeatures.java</file>
-            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/dao/UserDAOImpl.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

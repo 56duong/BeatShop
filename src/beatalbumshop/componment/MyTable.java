@@ -1,6 +1,7 @@
 package beatalbumshop.componment;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import javax.swing.JLabel;
@@ -14,6 +15,7 @@ public class MyTable extends JTable {
         Object[] columnNames = {"Column 1", "Column 2"};
         DefaultTableModel model = new DefaultTableModel(data, columnNames);
         setModel(model);
+        setCursor(new Cursor(Cursor.HAND_CURSOR));
         
         // Style
         setRowHeight(30); //width height
