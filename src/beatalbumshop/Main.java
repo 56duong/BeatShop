@@ -44,7 +44,7 @@ public class Main extends javax.swing.JFrame {
                     String name = e.getActionCommand().toLowerCase().replaceAll(" ", "");
                     if(name.equalsIgnoreCase("login")) {
                         dispose();
-                        new LogIn2().setVisible(true);
+                        new LogIn().setVisible(true);
                     }
                     
                     CardLayout c = (CardLayout) pnlTabContent.getLayout();

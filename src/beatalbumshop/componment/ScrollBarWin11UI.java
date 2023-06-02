@@ -23,10 +23,6 @@ import javax.swing.plaf.basic.BasicScrollBarUI;
 import org.jdesktop.animation.timing.Animator;
 import org.jdesktop.animation.timing.TimingTargetAdapter;
 
-/**
- *
- * @author Raven
- */
 public class ScrollBarWin11UI extends BasicScrollBarUI {
 
     private Animator animator;

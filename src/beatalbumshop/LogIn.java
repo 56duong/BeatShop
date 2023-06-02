@@ -307,7 +307,7 @@ public class LogIn extends javax.swing.JFrame {
                     LoggedInUser.setCurrentLoggedIn(customer);
 
                     Window[] windows = Window.getWindows();
-                    if(windows.length <= 1) {
+                    if(windows.length <= 2) {
                         new Main().setVisible(true);
                     }
                     else {

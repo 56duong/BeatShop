@@ -1,7 +1,8 @@
 package beatalbumshop.model;
 
 public class AddressBook {
-    private String addressBoookID;
+    private long addressBoookID;
+    private String addressType;
     private String fullName;
     private String address;
     private String phoneNumber;
@@ -9,19 +10,28 @@ public class AddressBook {
     public AddressBook() {
     }
 
-    public AddressBook(String addressBoookID, String fullName, String address, String phoneNumber) {
+    public AddressBook(long addressBoookID, String addressType, String fullName, String address, String phoneNumber) {
         this.addressBoookID = addressBoookID;
+        this.addressType = addressType;
         this.fullName = fullName;
         this.address = address;
         this.phoneNumber = phoneNumber;
     }
 
-    public String getAddressBoookID() {
+    public long getAddressBoookID() {
         return addressBoookID;
     }
 
-    public void setAddressBoookID(String addressBoookID) {
+    public void setAddressBoookID(long addressBoookID) {
         this.addressBoookID = addressBoookID;
+    }
+
+    public String getAddressType() {
+        return addressType;
+    }
+
+    public void setAddressType(String addressType) {
+        this.addressType = addressType;
     }
 
     public String getFullName() {

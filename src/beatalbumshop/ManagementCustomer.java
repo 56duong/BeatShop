@@ -63,7 +63,7 @@ public class ManagementCustomer extends javax.swing.JPanel {
         String [] colNames = {"ID", "Email", "Password", "DateCreated"};
         customerModel.setColumnIdentifiers(colNames);
         
-        String [] colNames2 = {"ID", "Full Name", "Address", "PhoneNumber"};
+        String [] colNames2 = {"ID", "Type", "Full Name", "Address", "PhoneNumber"};
         addressbookModel.setColumnIdentifiers(colNames2);
 
         //column width
@@ -73,9 +73,10 @@ public class ManagementCustomer extends javax.swing.JPanel {
         tblCustomer.getColumnModel().getColumn(3).setPreferredWidth(130);
         
         tblAddressBook.getColumnModel().getColumn(0).setPreferredWidth(50);
-        tblAddressBook.getColumnModel().getColumn(1).setPreferredWidth(150);
-        tblAddressBook.getColumnModel().getColumn(2).setPreferredWidth(200);
-        tblAddressBook.getColumnModel().getColumn(3).setPreferredWidth(100);
+        tblAddressBook.getColumnModel().getColumn(1).setPreferredWidth(100);
+        tblAddressBook.getColumnModel().getColumn(2).setPreferredWidth(150);
+        tblAddressBook.getColumnModel().getColumn(3).setPreferredWidth(200);
+        tblAddressBook.getColumnModel().getColumn(4).setPreferredWidth(100);
         
         //table data
         fillToTable();
@@ -125,7 +126,7 @@ public class ManagementCustomer extends javax.swing.JPanel {
         //them tung dong vao
         if(lAddressBook != null) {
             for(AddressBook addressbook : lAddressBook) {
-                addressbookModel.addRow(new Object[] {addressbook.getAddressBoookID(), addressbook.getFullName(), addressbook.getAddress(), addressbook.getPhoneNumber()});
+                addressbookModel.addRow(new Object[] {addressbook.getAddressBoookID(), addressbook.getAddressType(), addressbook.getFullName(), addressbook.getAddress(), addressbook.getPhoneNumber()});
             }
         }
     }
