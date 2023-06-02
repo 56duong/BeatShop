@@ -336,9 +336,17 @@ public class SignUp extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void lblContinueAsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblContinueAsMouseClicked
+        dispose();
+        
+        boolean check = false; // true if open form buy now
         Window[] windows = Window.getWindows();
-        if(windows.length <= 1) {
-            dispose();
+        for (Window window : windows) {
+            if (window instanceof Main mainWindow && window.isVisible()) {
+                check = true;
+            }
+        }
+        
+        if(!check) {
             new Main().setVisible(true);
         }
     }//GEN-LAST:event_lblContinueAsMouseClicked

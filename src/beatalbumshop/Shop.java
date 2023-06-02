@@ -41,6 +41,11 @@ public class Shop extends javax.swing.JPanel {
     
     
     public void showAlbumCard(Album album) {
+        //check instock
+        if(album.getInStock() <= 0) {
+            return;
+        }
+        
         JPanel pnl = new JPanel();
         pnl.setLayout(new BoxLayout(pnl, BoxLayout.Y_AXIS));
         pnl.setBackground(Color.WHITE);

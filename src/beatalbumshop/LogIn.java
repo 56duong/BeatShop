@@ -275,9 +275,17 @@ public class LogIn extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void lblContinueAsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblContinueAsMouseClicked
+        dispose();
+        
+        boolean check = false; // true if open form buy now
         Window[] windows = Window.getWindows();
-        if(windows.length <= 1) {
-            dispose();
+        for (Window window : windows) {
+            if (window instanceof Main mainWindow && window.isVisible()) {
+                check = true;
+            }
+        }
+        
+        if(!check) {
             new Main().setVisible(true);
         }
     }//GEN-LAST:event_lblContinueAsMouseClicked
@@ -303,36 +311,35 @@ public class LogIn extends javax.swing.JFrame {
             }
             else {
                 if(customerDAO.authentication(email, password) != null) {
+                    dispose();
+                    
                     Customer customer = customerDAO.authentication(email, password);
                     LoggedInUser.setCurrentLoggedIn(customer);
-
+                    
+                    boolean check = false; // true if open form buy now
                     Window[] windows = Window.getWindows();
-                    if(windows.length <= 2) {
-                        new Main().setVisible(true);
-                    }
-                    else {
-                        // open from buy now button
-                        for (Window window : windows) {
-                            if (window instanceof Main) {System.out.println("co");
-                                Main mainWindow = (Main) window;
-                                
-                                // Access btnLogIn in Main
-                                MyButton btnLI = mainWindow.getBtnLogIn();
-                                // Check login
-                                if (LoggedInUser.isLoggedIn()) {
-                                    btnLI.setText("Account");
-                                }
-                                
-                                // Repaint the current Main window
-                                mainWindow.revalidate();
-                                mainWindow.repaint();
-                                
-                                break;
+                    for (Window window : windows) {
+                        if (window instanceof Main mainWindow && window.isVisible()) {
+
+                            // Access btnLogIn in Main
+                            MyButton btnLI = mainWindow.getBtnLogIn();
+                            // Check login
+                            if (LoggedInUser.isLoggedIn()) {
+                                btnLI.setText("Account");
                             }
+
+                            // Repaint the current Main window
+                            mainWindow.revalidate();
+                            mainWindow.repaint();
+
+                            check = true;
+                            break;
                         }
                     }
-
-                    dispose();
+                    
+                    if(!check) {
+                        new Main().setVisible(true);
+                    }
                 }
                 else if(userDAO.authentication(email, password) != null) {
                     User user = userDAO.authentication(email, password);
@@ -351,19 +358,6 @@ public class LogIn extends javax.swing.JFrame {
                     MyDialog.display(1, "Sai Email hoặc Password");
                 }
             }
-//            // kiem tra ton tai
-//            if (customerDAO.checkExitByEmail(email) && userDAO.checkExitByEmail(email)) {
-//                Firestore db = Firebase.getFirestore("beat-75a88");
-//                CollectionReference colRef = db.collection("customers");
-////                customerDAO.add(new Customer(null, getMaxID(colRef, "customerID"), email, password));
-//                dispose();
-//                new LogIn2().setVisible(true);
-//                MyDialog.display(0, "Đăng ký thành công!");
-//            }
-//            else {
-//                txtEmail.requestFocus();
-//                MyDialog.display(1, "Email đã tồn tại vui lòng thử lại");
-//            }
         }
     }//GEN-LAST:event_btnLogInActionPerformed
 

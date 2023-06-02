@@ -2,6 +2,7 @@ package beatalbumshop;
 
 import beatalbumshop.componment.MyDialog;
 import beatalbumshop.componment.MyLabel;
+import beatalbumshop.componment.MyNotification;
 import beatalbumshop.dao.AlbumDAO;
 import beatalbumshop.dao.AlbumDAOImpl;
 import beatalbumshop.model.Album;
@@ -19,8 +20,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 public class AlbumDetail extends javax.swing.JPanel {
@@ -84,6 +87,7 @@ public class AlbumDetail extends javax.swing.JPanel {
         myScrollPane1 = new beatalbumshop.componment.MyScrollPane();
         pnlTrackList = new javax.swing.JPanel();
         btnBuyNow = new beatalbumshop.componment.MyButton();
+        btnAddToBag = new beatalbumshop.componment.MyButton();
         btnClose = new beatalbumshop.componment.MyButton();
 
         pnlMain.setBackground(new java.awt.Color(255, 255, 255));
@@ -131,6 +135,14 @@ public class AlbumDetail extends javax.swing.JPanel {
             }
         });
 
+        btnAddToBag.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnAddToBag.setText("Add to Bag");
+        btnAddToBag.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddToBagActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlContentLayout = new javax.swing.GroupLayout(pnlContent);
         pnlContent.setLayout(pnlContentLayout);
         pnlContentLayout.setHorizontalGroup(
@@ -138,7 +150,10 @@ public class AlbumDetail extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlContentLayout.createSequentialGroup()
                 .addContainerGap(54, Short.MAX_VALUE)
                 .addGroup(pnlContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnBuyNow, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnlContentLayout.createSequentialGroup()
+                        .addComponent(btnAddToBag, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
+                        .addComponent(btnBuyNow, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pnlContentLayout.createSequentialGroup()
                         .addGroup(pnlContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -168,7 +183,9 @@ public class AlbumDetail extends javax.swing.JPanel {
                         .addGap(0, 0, 0)
                         .addComponent(lblPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(30, 30, 30)
-                .addComponent(btnBuyNow, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(pnlContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnBuyNow, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAddToBag, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(74, Short.MAX_VALUE))
         );
 
@@ -227,8 +244,14 @@ public class AlbumDetail extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnBuyNowActionPerformed
 
+    private void btnAddToBagActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddToBagActionPerformed
+        MyNotification n = new MyNotification((JFrame) SwingUtilities.getWindowAncestor(this), true, "Added to Bag");
+        n.setVisible(true);
+    }//GEN-LAST:event_btnAddToBagActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private beatalbumshop.componment.MyButton btnAddToBag;
     private beatalbumshop.componment.MyButton btnBuyNow;
     private beatalbumshop.componment.MyButton btnClose;
     private beatalbumshop.componment.MyLabel lblArtist;

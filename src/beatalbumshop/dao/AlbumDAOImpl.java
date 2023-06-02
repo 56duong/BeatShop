@@ -295,6 +295,8 @@ public class AlbumDAOImpl implements AlbumDAO {
         return false;
     }
 
+    
+    
     @Override
     public Album getDetailByNameAndArtist(String name, String artist) {
         try {

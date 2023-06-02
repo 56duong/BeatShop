@@ -25,10 +25,11 @@ public class Main extends javax.swing.JFrame {
         pnlTabContent.setLayout(new CardLayout());
         pnlTabContent.add(new Home(), "home");
         pnlTabContent.add(new Shop(), "shop");
+        pnlTabContent.add(new ShoppingBag(), "shoppingbag");
         pnlTabContent.add(new AboutUs(), "aboutus");
         pnlTabContent.add(new Account(), "account");
         
-        btnMenuList = new JButton[] {btnHome, btnShop, btnAboutUs, btnLogIn};
+        btnMenuList = new JButton[] {btnHome, btnShop, btnShoppingBag, btnAboutUs, btnLogIn};
         for(JButton btn : btnMenuList) {
             btn.addActionListener(new ActionListener() {
                 @Override
@@ -75,12 +76,13 @@ public class Main extends javax.swing.JFrame {
 
         pnlMain = new javax.swing.JPanel();
         windowTitleBar = new beatalbumshop.componment.WindowTitleBar();
+        pnlTabContent = new javax.swing.JPanel();
         pnlSideBar = new javax.swing.JPanel();
         btnHome = new beatalbumshop.componment.MyButton();
         btnShop = new beatalbumshop.componment.MyButton();
+        btnShoppingBag = new beatalbumshop.componment.MyButton();
         btnAboutUs = new beatalbumshop.componment.MyButton();
         btnLogIn = new beatalbumshop.componment.MyButton();
-        pnlTabContent = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Beat To Beat");
@@ -99,63 +101,6 @@ public class Main extends javax.swing.JFrame {
         windowTitleBar.setFrame(this);
         pnlMain.add(windowTitleBar, java.awt.BorderLayout.PAGE_START);
 
-        pnlSideBar.setBackground(new java.awt.Color(255, 255, 255));
-        pnlSideBar.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 1, 1, 1, new java.awt.Color(0, 0, 0)));
-        pnlSideBar.setPreferredSize(new java.awt.Dimension(250, 658));
-
-        btnHome.setBackground(null);
-        btnHome.setText("Home");
-        btnHome.setFont(new java.awt.Font("Open Sans", 0, 18)); // NOI18N
-        btnHome.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnHome.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnHome.setMargin(new java.awt.Insets(2, 20, 3, 14));
-
-        btnShop.setBackground(null);
-        btnShop.setText("Shop");
-        btnShop.setFont(new java.awt.Font("Open Sans", 0, 18)); // NOI18N
-        btnShop.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnShop.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnShop.setMargin(new java.awt.Insets(2, 20, 3, 14));
-
-        btnAboutUs.setBackground(null);
-        btnAboutUs.setText("About Us");
-        btnAboutUs.setFont(new java.awt.Font("Open Sans", 0, 18)); // NOI18N
-        btnAboutUs.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnAboutUs.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnAboutUs.setMargin(new java.awt.Insets(2, 20, 3, 14));
-
-        btnLogIn.setBackground(null);
-        btnLogIn.setText("Log In");
-        btnLogIn.setFont(new java.awt.Font("Open Sans", 0, 18)); // NOI18N
-        btnLogIn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnLogIn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnLogIn.setMargin(new java.awt.Insets(2, 20, 3, 14));
-
-        javax.swing.GroupLayout pnlSideBarLayout = new javax.swing.GroupLayout(pnlSideBar);
-        pnlSideBar.setLayout(pnlSideBarLayout);
-        pnlSideBarLayout.setHorizontalGroup(
-            pnlSideBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btnHome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(btnShop, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
-            .addComponent(btnAboutUs, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
-            .addComponent(btnLogIn, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
-        );
-        pnlSideBarLayout.setVerticalGroup(
-            pnlSideBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlSideBarLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(btnHome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
-                .addComponent(btnShop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
-                .addComponent(btnAboutUs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
-                .addComponent(btnLogIn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(475, Short.MAX_VALUE))
-        );
-
-        pnlMain.add(pnlSideBar, java.awt.BorderLayout.LINE_START);
-
         pnlTabContent.setBackground(new java.awt.Color(255, 255, 255));
         pnlTabContent.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 1, new java.awt.Color(0, 0, 0)));
 
@@ -171,6 +116,69 @@ public class Main extends javax.swing.JFrame {
         );
 
         pnlMain.add(pnlTabContent, java.awt.BorderLayout.CENTER);
+
+        pnlSideBar.setBackground(new java.awt.Color(255, 255, 255));
+        pnlSideBar.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 1, 1, 1, new java.awt.Color(0, 0, 0)));
+        pnlSideBar.setPreferredSize(new java.awt.Dimension(250, 658));
+        pnlSideBar.setLayout(new javax.swing.BoxLayout(pnlSideBar, javax.swing.BoxLayout.Y_AXIS));
+
+        btnHome.setBackground(null);
+        btnHome.setBorder(javax.swing.BorderFactory.createEmptyBorder(25, 20, 0, 0));
+        btnHome.setText("Home");
+        btnHome.setFont(new java.awt.Font("Open Sans", 0, 18)); // NOI18N
+        btnHome.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
+        btnHome.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnHome.setMargin(new java.awt.Insets(20, 20, 3, 14));
+        btnHome.setMaximumSize(new java.awt.Dimension(248, 50));
+        btnHome.setMinimumSize(new java.awt.Dimension(248, 50));
+        btnHome.setPreferredSize(new java.awt.Dimension(248, 46));
+        pnlSideBar.add(btnHome);
+
+        btnShop.setBackground(null);
+        btnShop.setBorder(javax.swing.BorderFactory.createEmptyBorder(25, 20, 0, 0));
+        btnShop.setText("Shop");
+        btnShop.setFont(new java.awt.Font("Open Sans", 0, 18)); // NOI18N
+        btnShop.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnShop.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnShop.setMargin(new java.awt.Insets(2, 20, 3, 14));
+        btnShop.setMaximumSize(new java.awt.Dimension(248, 50));
+        btnShop.setMinimumSize(new java.awt.Dimension(248, 50));
+        pnlSideBar.add(btnShop);
+
+        btnShoppingBag.setBackground(null);
+        btnShoppingBag.setBorder(javax.swing.BorderFactory.createEmptyBorder(25, 20, 0, 0));
+        btnShoppingBag.setText("Shopping Bag");
+        btnShoppingBag.setFont(new java.awt.Font("Open Sans", 0, 18)); // NOI18N
+        btnShoppingBag.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnShoppingBag.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnShoppingBag.setMargin(new java.awt.Insets(2, 20, 3, 14));
+        btnShoppingBag.setMaximumSize(new java.awt.Dimension(248, 50));
+        btnShoppingBag.setMinimumSize(new java.awt.Dimension(248, 50));
+        pnlSideBar.add(btnShoppingBag);
+
+        btnAboutUs.setBackground(null);
+        btnAboutUs.setBorder(javax.swing.BorderFactory.createEmptyBorder(25, 20, 0, 0));
+        btnAboutUs.setText("About Us");
+        btnAboutUs.setFont(new java.awt.Font("Open Sans", 0, 18)); // NOI18N
+        btnAboutUs.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnAboutUs.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAboutUs.setMargin(new java.awt.Insets(2, 20, 3, 14));
+        btnAboutUs.setMaximumSize(new java.awt.Dimension(248, 50));
+        btnAboutUs.setMinimumSize(new java.awt.Dimension(248, 50));
+        pnlSideBar.add(btnAboutUs);
+
+        btnLogIn.setBackground(null);
+        btnLogIn.setBorder(javax.swing.BorderFactory.createEmptyBorder(25, 20, 0, 0));
+        btnLogIn.setText("Log In");
+        btnLogIn.setFont(new java.awt.Font("Open Sans", 0, 18)); // NOI18N
+        btnLogIn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnLogIn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnLogIn.setMargin(new java.awt.Insets(2, 20, 3, 14));
+        btnLogIn.setMaximumSize(new java.awt.Dimension(248, 50));
+        btnLogIn.setMinimumSize(new java.awt.Dimension(248, 50));
+        pnlSideBar.add(btnLogIn);
+
+        pnlMain.add(pnlSideBar, java.awt.BorderLayout.LINE_START);
 
         getContentPane().add(pnlMain, java.awt.BorderLayout.CENTER);
 
@@ -208,8 +216,6 @@ public class Main extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -224,6 +230,7 @@ public class Main extends javax.swing.JFrame {
     private beatalbumshop.componment.MyButton btnHome;
     private beatalbumshop.componment.MyButton btnLogIn;
     private beatalbumshop.componment.MyButton btnShop;
+    private beatalbumshop.componment.MyButton btnShoppingBag;
     private javax.swing.JPanel pnlMain;
     private javax.swing.JPanel pnlSideBar;
     private javax.swing.JPanel pnlTabContent;
