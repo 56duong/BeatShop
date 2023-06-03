@@ -95,6 +95,30 @@ public class Validator {
     }
     
     
+    
+    /**
+     * Validates an integer input and returns an error message if the input is invalid.
+     * 
+     * @param txt        The JTextComponent associated with the input field.
+     * @param title      The title or description of the input field.
+     * @param input      The input value to validate.
+     * @param allowNull  Specifies whether null values are allowed or not.
+     * @return           An error message if the input is invalid, an empty string otherwise.
+     */
+    public static String allowInteger(JTextComponent txt, String title, String input, boolean allowNull) {
+           if (isNotNull(null, input) && !input.matches("^(-?)(0|([1-9][0-9]*))$")) {
+            if(txt != null) txt.requestFocus();
+            return title + " sai định dạng" + "\n";
+        }
+        else if(!isNotNull(null, input) && !allowNull) {
+            if(txt != null) txt.requestFocus();
+            return "Vui lòng nhập " + title + "\n";
+        }
+        
+        return "";
+    }
+    
+    
 
     /**
      * Validates an input string to allow a double value.

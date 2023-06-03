@@ -397,7 +397,8 @@ public class ManagementAlbum extends javax.swing.JPanel {
         ArrayList<String> errors = new ArrayList<>();
 
         if(tblTrack.getRowCount() == 0) errors.add("Không được để trống danh sách bài hát");
-        errors.add(Validator.allowNumber((JTextField)txtInStock, "In Stock", inStock, false));
+        errors.add(Validator.allowInteger((JTextField)txtInStock, "In Stock", inStock, false));
+        if(Integer.parseInt(inStock) < -1) errors.add("In Stock phải >= -1\n(-1: Discontinued, 0: Out of stock)\n");
         errors.add(Validator.allowDouble((JTextField)txtPrice, "Price", price, false));
         errors.add((!Validator.isNotNull((JTextField)txtReleaseDate, releaseDate)) ? "Vui lòng nhập Release Date\n" : "");
         errors.add((!Validator.isNotNull((JTextField)txtArtist, artist)) ? "Vui lòng nhập Artist\n" : "");
@@ -462,6 +463,10 @@ public class ManagementAlbum extends javax.swing.JPanel {
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         //delete
+        if(tblAlbum.getSelectedRow() < 0) {
+            MyDialog.display(1, "Vui lòng chọn dòng cần xóa");
+            return;
+        }
         String id = tblAlbum.getValueAt(tblAlbum.getSelectedRow(), 0).toString();
         //delete image
 //        File imageFile = new File("src/beatalbumshop/resources/images/albums/" + id + ".png");
@@ -521,8 +526,8 @@ public class ManagementAlbum extends javax.swing.JPanel {
             ex.printStackTrace();
         }
         
-//        txtPrice.setText(album.getPrice() + "");
-//        txtInStock.setText(album.getInStock() + "");
+        txtPrice.setText("");
+        txtInStock.setText("");
         txtPrice.requestFocus();
         
         index = -1;

@@ -3,6 +3,7 @@ package beatalbumshop.dao;
 import beatalbumshop.componment.MyDialog;
 import beatalbumshop.config.Account;
 import beatalbumshop.model.AddressBook;
+import beatalbumshop.model.BagItem;
 import beatalbumshop.model.Customer;
 import beatalbumshop.model.User;
 import beatalbumshop.utils.TextHelper;
@@ -53,6 +54,7 @@ public class CustomerDAOImpl implements CustomerDAO {
             Map<String, Object> updates = new HashMap<>();
             updates.put("email", customer.getEmail());
             updates.put("password", customer.getPassword());
+            updates.put("lBagItem", customer.getlBagItem());
 
             // (async) Update the document with the new field values
             ApiFuture<WriteResult> result = docRef.update(updates);
@@ -111,9 +113,11 @@ public class CustomerDAOImpl implements CustomerDAO {
                 Customer customerData = customerSnapshot.toObject(Customer.class);
                 // Extract the lAddressBook field from the custom class
                 ArrayList<AddressBook> lAddressBook = customerData.getlAddressBook();
+                ArrayList<BagItem> lBagItem = customerData.getlBagItem();
 
                 Customer c = new Customer(
                     lAddressBook,
+                    lBagItem,
                     customerData.getID(),
                     customerData.getEmail(),
                     customerData.getPassword()
@@ -168,14 +172,16 @@ public class CustomerDAOImpl implements CustomerDAO {
             
             for (QueryDocumentSnapshot customer : customers) {
                 if(customer.getString("email").equalsIgnoreCase(email) && TextHelper.authenticationPasswordHash(password, customer.getString("password"))) {
-                    DocumentSnapshot albumSnapshot = customer;
+                    DocumentSnapshot customerSnapshot = customer;
                     // Convert the document snapshot to a custom class
-                    Customer albumData = albumSnapshot.toObject(Customer.class);
+                    Customer customerData = customerSnapshot.toObject(Customer.class);
                     // Extract the lTrack field from the custom class
-                    ArrayList<AddressBook> lAddressBook = albumData.getlAddressBook();
+                    ArrayList<AddressBook> lAddressBook = customerData.getlAddressBook();
+                    ArrayList<BagItem> lBagItem = customerData.getlBagItem();
                     
                     return new Customer(
                         lAddressBook,
+                        lBagItem,
                         customer.getLong("id"),
                         customer.getString("email"),
                         customer.getString("password")

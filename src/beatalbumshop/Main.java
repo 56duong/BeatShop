@@ -1,6 +1,7 @@
 package beatalbumshop;
 
 import beatalbumshop.componment.MyButton;
+import beatalbumshop.componment.MyLabel;
 import beatalbumshop.model.LoggedInUser;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -8,11 +9,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.JButton;
+import javax.swing.JPanel;
 
 public class Main extends javax.swing.JFrame {
     JButton [] btnMenuList;
     Color gray = new Color(50, 50, 50);
-
+    public ShoppingBag tabSP;
+    
     public Main() {
         initComponents();
         
@@ -25,9 +28,18 @@ public class Main extends javax.swing.JFrame {
         pnlTabContent.setLayout(new CardLayout());
         pnlTabContent.add(new Home(), "home");
         pnlTabContent.add(new Shop(), "shop");
-        pnlTabContent.add(new ShoppingBag(), "shoppingbag");
         pnlTabContent.add(new AboutUs(), "aboutus");
         pnlTabContent.add(new Account(), "account");
+        
+        // Check login
+        if (LoggedInUser.isLoggedIn()) {
+            btnLogIn.setText("Account");
+            tabSP = new ShoppingBag();
+            pnlTabContent.add(tabSP, "shoppingbag");
+        }
+        else {
+            btnShoppingBag.setVisible(false);
+        }
         
         btnMenuList = new JButton[] {btnHome, btnShop, btnShoppingBag, btnAboutUs, btnLogIn};
         for(JButton btn : btnMenuList) {
@@ -50,20 +62,37 @@ public class Main extends javax.swing.JFrame {
                     
                     CardLayout c = (CardLayout) pnlTabContent.getLayout();
                     c.show(pnlTabContent, name);
+                    
+                    if(name.equals("shoppingbag")) {
+                        tabSP.updateBag();
+                    }
                 }
             });
-        }
-        
-        // Check login
-        if (LoggedInUser.isLoggedIn()) {
-            btnLogIn.setText("Account");
         }
     }
  
     // open login from buy now button
+    public JPanel getPnlTabContent() {
+        return pnlTabContent;
+    }
+    
+    public MyButton getBtnHome() {
+        return btnHome;
+    }
+    
+    public MyButton getBtnShop() {
+        return btnShop;
+    }
+    
+    public MyButton getBtnShoppingBag() {
+        return btnShoppingBag;
+    }
+    
     public MyButton getBtnLogIn() {
         return btnLogIn;
     }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.

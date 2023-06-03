@@ -294,7 +294,7 @@ public class SignUp extends javax.swing.JFrame {
                 .addGap(30, 30, 30)
                 .addComponent(txtPassword2)
                 .addGap(30, 30, 30)
-                .addComponent(btnSignup, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                .addComponent(btnSignup, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
                 .addGap(50, 50, 50)
                 .addComponent(lblLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(10, 10, 10)
@@ -375,7 +375,7 @@ public class SignUp extends javax.swing.JFrame {
                 // hash password
                 password = TextHelper.HashPassword(password);
 
-                boolean result = customerDAO.add(new Customer(null, getMaxID(colRef, "id"), email, password));
+                boolean result = customerDAO.add(new Customer(null, null, getMaxID(colRef, "id"), email, password));
                 if(result) {
                     dispose();
                     new LogIn().setVisible(true);

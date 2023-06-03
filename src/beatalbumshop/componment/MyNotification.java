@@ -29,6 +29,8 @@ public class MyNotification extends javax.swing.JDialog {
         pnlMain.setLayout(new BorderLayout());
         pnlMain.add(lbl);
         
+        pack();
+        
         //rounded frame
         setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 40, 40));
         setSize(getWidth(), getHeight());
@@ -66,6 +68,8 @@ public class MyNotification extends javax.swing.JDialog {
         
         pnlMain.setLayout(new BorderLayout());
         pnlMain.add(lbl);
+        
+        pack();
         
         //rounded frame
         setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 40, 40));

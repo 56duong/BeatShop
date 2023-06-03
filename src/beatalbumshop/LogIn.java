@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.BorderFactory;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class LogIn extends javax.swing.JFrame {
@@ -233,7 +234,7 @@ public class LogIn extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblForgotPassword)
                 .addGap(57, 57, 57)
-                .addComponent(btnLogIn, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                .addComponent(btnLogIn, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
                 .addGap(50, 50, 50)
                 .addComponent(lblSignUp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(10, 10, 10)
@@ -253,9 +254,9 @@ public class LogIn extends javax.swing.JFrame {
         pnlContentLayout.setVerticalGroup(
             pnlContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlContentLayout.createSequentialGroup()
-                .addContainerGap(103, Short.MAX_VALUE)
+                .addContainerGap(104, Short.MAX_VALUE)
                 .addComponent(pnlForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(105, 105, 105))
+                .addGap(104, 104, 104))
         );
 
         pnlMain.add(pnlContent, java.awt.BorderLayout.CENTER);
@@ -323,9 +324,13 @@ public class LogIn extends javax.swing.JFrame {
 
                             // Access btnLogIn in Main
                             MyButton btnLI = mainWindow.getBtnLogIn();
+                            MyButton btnSP = mainWindow.getBtnShoppingBag();
                             // Check login
                             if (LoggedInUser.isLoggedIn()) {
                                 btnLI.setText("Account");
+                                btnSP.setVisible(true);
+                                JPanel pnlTabContent = mainWindow.getPnlTabContent();
+                                pnlTabContent.add(new ShoppingBag(), "shoppingbag");
                             }
 
                             // Repaint the current Main window

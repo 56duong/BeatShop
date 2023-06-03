@@ -455,6 +455,10 @@ public class ManagementUser extends javax.swing.JPanel {
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         //delete
+        if(tblUser.getSelectedRow() < 0) {
+            MyDialog.display(1, "Vui lòng chọn dòng cần xóa");
+            return;
+        }
         String id = tblUser.getValueAt(tblUser.getSelectedRow(), 0).toString();
 //        //delete image
 //        File imageFile = new File("src/beatalbumshop/resources/images/users/" + id + ".png");

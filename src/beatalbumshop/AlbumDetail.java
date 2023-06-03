@@ -5,23 +5,24 @@ import beatalbumshop.componment.MyLabel;
 import beatalbumshop.componment.MyNotification;
 import beatalbumshop.dao.AlbumDAO;
 import beatalbumshop.dao.AlbumDAOImpl;
+import beatalbumshop.dao.CustomerDAO;
+import beatalbumshop.dao.CustomerDAOImpl;
 import beatalbumshop.model.Album;
+import beatalbumshop.model.BagItem;
+import beatalbumshop.model.Customer;
 import beatalbumshop.model.LoggedInUser;
 import beatalbumshop.model.Track;
 import beatalbumshop.utils.ImageHelper;
+import beatalbumshop.utils.OtherHelper;
 import beatalbumshop.utils.TimeHelper;
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
@@ -29,13 +30,17 @@ import javax.swing.border.EmptyBorder;
 public class AlbumDetail extends javax.swing.JPanel {
 
     AlbumDAO albumDAO = new AlbumDAOImpl();
+    CustomerDAO customerDAO = new CustomerDAOImpl();
+    String albumID;
+    Album album;
     
     public AlbumDetail(String id) {
         initComponents();
         
-        Album album = albumDAO.getByID(id + "");
+        this.albumID = id;
         
-//        lblImage.setIcon(ImageResizing.ImageResizing("src/beatalbumshop/resources/images/albums/" + albumSpotify.getAlbumID() + ".png", 300, 300));
+        album = albumDAO.getByID(id + "");
+        
         try {
             URL url = new URL("https://firebasestorage.googleapis.com/v0/b/beat-75a88.appspot.com/o/albums%2F" + album.getAlbumID() + ".png?alt=media");
             Image image = ImageIO.read(url);
@@ -50,10 +55,15 @@ public class AlbumDetail extends javax.swing.JPanel {
         lblReleaseDate.setText(album.getReleaseDate());
         lblPrice.setText("$" + album.getPrice());
         
-//        pnlTrackList.setLayout(new GridLayout(0, 1, 0, 0));
+        cboQuantity.removeAllItems();
+        for(int i = 1; i <= album.getInStock(); i++) {
+            cboQuantity.addItem(i);
+        }
+        
         pnlTrackList.setLayout(new BoxLayout(pnlTrackList, BoxLayout.Y_AXIS));
         pnlTrackList.setBorder(new EmptyBorder(0, 20, 0, 20));
 
+        // tracks
         ArrayList<Track> lTrack = new ArrayList<>();
         lTrack = album.getlTrack();
         for (Track track : lTrack) {
@@ -88,6 +98,8 @@ public class AlbumDetail extends javax.swing.JPanel {
         pnlTrackList = new javax.swing.JPanel();
         btnBuyNow = new beatalbumshop.componment.MyButton();
         btnAddToBag = new beatalbumshop.componment.MyButton();
+        cboQuantity = new beatalbumshop.componment.MyComboBox();
+        lblQuantity = new beatalbumshop.componment.MyLabel();
         btnClose = new beatalbumshop.componment.MyButton();
 
         pnlMain.setBackground(new java.awt.Color(255, 255, 255));
@@ -143,17 +155,20 @@ public class AlbumDetail extends javax.swing.JPanel {
             }
         });
 
+        cboQuantity.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 5)));
+        cboQuantity.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2" }));
+        cboQuantity.setFont(new java.awt.Font("Open Sans", 0, 14)); // NOI18N
+
+        lblQuantity.setForeground(new java.awt.Color(80, 80, 80));
+        lblQuantity.setText("Quantity:");
+
         javax.swing.GroupLayout pnlContentLayout = new javax.swing.GroupLayout(pnlContent);
         pnlContent.setLayout(pnlContentLayout);
         pnlContentLayout.setHorizontalGroup(
             pnlContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlContentLayout.createSequentialGroup()
                 .addContainerGap(54, Short.MAX_VALUE)
-                .addGroup(pnlContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(pnlContentLayout.createSequentialGroup()
-                        .addComponent(btnAddToBag, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(30, 30, 30)
-                        .addComponent(btnBuyNow, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(pnlContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(pnlContentLayout.createSequentialGroup()
                         .addGroup(pnlContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -163,30 +178,46 @@ public class AlbumDetail extends javax.swing.JPanel {
                                 .addComponent(lblArtist, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(lblName, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(30, 30, 30)
-                        .addComponent(myScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 596, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(myScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 596, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlContentLayout.createSequentialGroup()
+                        .addComponent(lblQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cboQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnAddToBag, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnBuyNow, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(50, 50, 50))
         );
         pnlContentLayout.setVerticalGroup(
             pnlContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlContentLayout.createSequentialGroup()
-                .addGap(0, 0, 0)
                 .addGroup(pnlContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(myScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 414, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlContentLayout.createSequentialGroup()
-                        .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(lblArtist, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(lblReleaseDate, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(lblPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(30, 30, 30)
-                .addGroup(pnlContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnBuyNow, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAddToBag, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(74, Short.MAX_VALUE))
+                        .addGap(444, 444, 444)
+                        .addComponent(btnBuyNow, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(pnlContentLayout.createSequentialGroup()
+                            .addGroup(pnlContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(myScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 414, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(pnlContentLayout.createSequentialGroup()
+                                    .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(lblName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(0, 0, 0)
+                                    .addComponent(lblArtist, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(0, 0, 0)
+                                    .addComponent(lblReleaseDate, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(0, 0, 0)
+                                    .addComponent(lblPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnAddToBag, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(pnlContentLayout.createSequentialGroup()
+                            .addGap(446, 446, 446)
+                            .addGroup(pnlContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(lblQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cboQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(121, Short.MAX_VALUE))
         );
 
         btnClose.setBackground(null);
@@ -229,9 +260,8 @@ public class AlbumDetail extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
-        JPanel pnlTabContent = (JPanel) getParent();
-        CardLayout c = (CardLayout) pnlTabContent.getLayout();
-        c.show(pnlTabContent, "shop");
+        Main mainFrame = OtherHelper.getMainFrame(this);
+        mainFrame.getBtnShop().doClick();
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void btnBuyNowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuyNowActionPerformed
@@ -245,8 +275,54 @@ public class AlbumDetail extends javax.swing.JPanel {
     }//GEN-LAST:event_btnBuyNowActionPerformed
 
     private void btnAddToBagActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddToBagActionPerformed
-        MyNotification n = new MyNotification((JFrame) SwingUtilities.getWindowAncestor(this), true, "Added to Bag");
-        n.setVisible(true);
+        if (!LoggedInUser.isLoggedIn() || !LoggedInUser.isCustomer()) {
+            new LogIn().setVisible(true);
+            MyDialog.display(1, "Bạn phải đăng nhập trước khi sử dụng tính năng này");
+        }
+        else {
+            Customer customer = (Customer) LoggedInUser.getCurrentUser();
+            ArrayList<BagItem> lBagItem = customer.getlBagItem();
+            
+            //check exist
+            boolean added = false;
+            boolean error = false; // false = kh add
+            int q = Integer.parseInt(cboQuantity.getSelectedItem().toString()); // so tren combobox
+            
+            for(BagItem item : lBagItem) {
+                // kiem tra ton tai trong bag
+                if(item.getAlbumID().equals(albumID)) {
+                    // da ton tai
+                    if(album.getInStock() < item.getQuantity() + q) {
+                        // them > instock
+                        MyNotification n = new MyNotification((JFrame) SwingUtilities.getWindowAncestor(this), true, "Currently not available");
+                        n.setVisible(true);
+                        error = true;
+                    }
+                    else {
+                        item.setQuantity(item.getQuantity() + q);   
+                    }
+                    
+                    added = true;
+                    break;
+                }
+            }
+            
+            if(!added) {
+                lBagItem.add(new BagItem(albumID, q));
+                added = true;
+            }
+            
+            if(!error) {
+                // +1 hoac them moi
+                customer.setlBagItem(lBagItem);
+                boolean result = customerDAO.updateByID(customer);
+                if(result && added) {
+                    LoggedInUser.setCurrentLoggedIn(customer); //update
+                    MyNotification n = new MyNotification((JFrame) SwingUtilities.getWindowAncestor(this), true, "Added to Bag");
+                    n.setVisible(true);
+                }
+            }
+        }
     }//GEN-LAST:event_btnAddToBagActionPerformed
 
 
@@ -254,10 +330,12 @@ public class AlbumDetail extends javax.swing.JPanel {
     private beatalbumshop.componment.MyButton btnAddToBag;
     private beatalbumshop.componment.MyButton btnBuyNow;
     private beatalbumshop.componment.MyButton btnClose;
+    private beatalbumshop.componment.MyComboBox cboQuantity;
     private beatalbumshop.componment.MyLabel lblArtist;
     private beatalbumshop.componment.MyLabel lblImage;
     private beatalbumshop.componment.MyLabel lblName;
     private beatalbumshop.componment.MyLabel lblPrice;
+    private beatalbumshop.componment.MyLabel lblQuantity;
     private beatalbumshop.componment.MyLabel lblReleaseDate;
     private beatalbumshop.componment.MyScrollPane myScrollPane1;
     private javax.swing.JPanel pnlContent;
