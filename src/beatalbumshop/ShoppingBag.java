@@ -3,6 +3,8 @@ package beatalbumshop;
 import beatalbumshop.componment.MyLabel;
 import beatalbumshop.dao.AlbumDAO;
 import beatalbumshop.dao.AlbumDAOImpl;
+import beatalbumshop.dao.CustomerDAO;
+import beatalbumshop.dao.CustomerDAOImpl;
 import beatalbumshop.model.Album;
 import beatalbumshop.model.BagItem;
 import beatalbumshop.model.Customer;
@@ -16,6 +18,7 @@ import javax.swing.JLabel;
 public class ShoppingBag extends javax.swing.JPanel {
 
     AlbumDAO albumDAO = new AlbumDAOImpl();
+    CustomerDAO customerDAO = new CustomerDAOImpl();
     ArrayList<BagItem> lBagItem = new ArrayList<>();
     Customer customer;
     double subtotal = 0;
@@ -52,19 +55,22 @@ public class ShoppingBag extends javax.swing.JPanel {
             btnCheckout.setVisible(false);
         }
         else {
-            for(BagItem item : lBagItem) {System.out.println("1");
+            for(BagItem item : lBagItem) {
+                
                 Album album = albumDAO.getByID(item.getAlbumID());
+                
+                if(album.getInStock() > 0) {
+                    SelectionProduct sp = new SelectionProduct(album, item.getQuantity());
 
-                SelectionProduct sp = new SelectionProduct(album, item.getQuantity());
-
-                pnlListBag.add(sp);
-                subtotal += sp.getSubtotal();
+                    pnlListBag.add(sp);
+                    subtotal += sp.getSubtotal();
+                    
+                    lblSubtotal.setText(subtotal + "");
+                    String shipping = lblShipping.getText().substring(lblShipping.getText().indexOf("$ ") + 2);
+                    double total = subtotal + Double.parseDouble(shipping);
+                    lblTotal.setText(total + "");
+                }
             }
-
-            lblSubtotal.setText(subtotal + "");
-            String shipping = lblShipping.getText().substring(lblShipping.getText().indexOf("$ ") + 2);
-            double total = subtotal + Double.parseDouble(shipping);
-            lblTotal.setText(total + "");
             
             pnlListBag.revalidate();
             pnlListBag.repaint();

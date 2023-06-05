@@ -41,7 +41,9 @@ public class Shop extends javax.swing.JPanel {
         btnSort.setForeground(Color.WHITE);
         btnSort.setText("sort price");
         for(Album album : lAlbum) {
-            showAlbumCard(album);
+            if(album.getInStock() > 0) {
+                showAlbumCard(album);
+            }
         }
     }
     private void setDefaultButtonStyle() {

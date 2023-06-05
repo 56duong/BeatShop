@@ -477,11 +477,11 @@ public class ManagementAlbum extends javax.swing.JPanel {
 //                return;
 //            }
 //        }
-        boolean success = albumDAO.deleteImage(Long.parseLong(id));
-        if(!success) {
-            MyDialog.display(1, "Có lỗi xảy ra.");
-            return;
-        }
+//        boolean success = albumDAO.deleteImage(Long.parseLong(id));
+//        if(!success) {
+//            MyDialog.display(1, "Có lỗi xảy ra.");
+//            return;
+//        }
         
         boolean result = albumDAO.deleteByID(id);
         
