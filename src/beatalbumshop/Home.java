@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package beatalbumshop;
 
 import beatalbumshop.componment.MyLabel;
@@ -33,10 +29,6 @@ import javax.swing.LayoutStyle;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 
-/**
- *
- * @author PC
- */
 public class Home extends javax.swing.JPanel {
 
     AlbumDAO albumDAO = new AlbumDAOImpl();
@@ -50,25 +42,39 @@ public class Home extends javax.swing.JPanel {
         initComponents();
 
         pnlListAlbum2.setLayout(new GridLayout(0, 4, 20, 20)); // 1028
-        pnlListAlbum2.setBorder(new EmptyBorder(20, 20, 20, 20));
+        pnlListAlbum2.setBorder(new EmptyBorder(5, 20, 20, 20));
         
         pnlListAlbum4.setLayout(new GridLayout(0, 4, 20, 20)); // 1028
-        pnlListAlbum4.setBorder(new EmptyBorder(20, 20, 20, 20));
+        pnlListAlbum4.setBorder(new EmptyBorder(5, 20, 20, 20));
         lAlbum = (ArrayList<Album>) albumDAO.getAll();
         
         // radom album
         Collections.shuffle(lAlbum);
-        for (int i = 0; i < 4 && i < lAlbum.size(); i++) {
+        int count1 = 4;
+        for (int i = 0; i < count1 && i < lAlbum.size(); i++) {
             Album album = lAlbum.get(i);
-            showAlbumCard(album);
+            if(album.getInStock() > 0) {
+                showAlbumCard2(album);
+            }
+            else {
+                count1++;
+            }
         }
-        // new album
+        
+        // newest album
         sortByReleaseDate(lAlbum);
-        for (int i = 0; i < 4 && i < lAlbum.size(); i++) {
+        int count2 = 4;
+        for (int i = 0; i < count2 && i < lAlbum.size(); i++) {
             Album album = lAlbum.get(i);
-            showAlbumCard2(album);
+            if(album.getInStock() > 0) {
+                showAlbumCard(album);
+            }
+            else {
+                count2++;
+            }
         }
     }
+    
     public static void sortByReleaseDate(ArrayList<Album> lAlbum) {
         Collections.sort(lAlbum, new Comparator<Album>() {
             @Override
@@ -77,6 +83,9 @@ public class Home extends javax.swing.JPanel {
             }
         });
     }
+    
+    
+    
     public void showAlbumCard(Album album) {
         JPanel pnl = new JPanel();
         pnl.setLayout(new BoxLayout(pnl, BoxLayout.Y_AXIS));
@@ -112,6 +121,9 @@ public class Home extends javax.swing.JPanel {
 
         pnlListAlbum4.add(pnl);
     }
+    
+    
+    
     MouseAdapter showInfo = new MouseAdapter() {
         public void mouseClicked(MouseEvent e) {
             JPanel s = (JPanel) e.getSource();
@@ -124,6 +136,9 @@ public class Home extends javax.swing.JPanel {
             c.show(pnlTabContent, "albumdetailpanel");
         }
     };
+    
+    
+    
     public void showAlbumCard2(Album album) {
         JPanel pnl = new JPanel();
         pnl.setLayout(new BoxLayout(pnl, BoxLayout.Y_AXIS));
@@ -190,7 +205,7 @@ public class Home extends javax.swing.JPanel {
         pnlListAlbumfull.setBackground(new Color(255, 255, 255));
         pnlListAlbumfull.setPreferredSize(new Dimension(1030, 758));
 
-        lblRadom.setText("Radom for you");
+        lblRadom.setText("Newest Albums");
         lblRadom.setToolTipText("");
         lblRadom.setFont(new Font("Open Sans", 1, 18)); // NOI18N
 
@@ -212,7 +227,7 @@ public class Home extends javax.swing.JPanel {
 
         myScrollPane3.setViewportView(pnlListAlbum4);
 
-        lblNewAlbum.setText("Newest albums ");
+        lblNewAlbum.setText("Random Albums ");
         lblNewAlbum.setFont(new Font("Open Sans", 1, 18)); // NOI18N
 
         myScrollPane4.setBackground(null);
@@ -228,7 +243,7 @@ public class Home extends javax.swing.JPanel {
             .addGap(0, 1030, Short.MAX_VALUE)
         );
         pnlListAlbum2Layout.setVerticalGroup(pnlListAlbum2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 320, Short.MAX_VALUE)
+            .addGap(0, 323, Short.MAX_VALUE)
         );
 
         myScrollPane4.setViewportView(pnlListAlbum2);
@@ -239,25 +254,22 @@ public class Home extends javax.swing.JPanel {
             .addComponent(myScrollPane3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(myScrollPane4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(pnlListAlbumfullLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
                 .addGroup(pnlListAlbumfullLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlListAlbumfullLayout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addComponent(lblRadom, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pnlListAlbumfullLayout.createSequentialGroup()
-                        .addGap(23, 23, 23)
-                        .addComponent(lblNewAlbum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(lblRadom, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblNewAlbum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlListAlbumfullLayout.setVerticalGroup(pnlListAlbumfullLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(GroupLayout.Alignment.TRAILING, pnlListAlbumfullLayout.createSequentialGroup()
-                .addGap(8, 8, 8)
+                .addGap(20, 20, 20)
                 .addComponent(lblRadom, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(myScrollPane3, GroupLayout.PREFERRED_SIZE, 323, GroupLayout.PREFERRED_SIZE)
-                .addGap(48, 48, 48)
+                .addGap(30, 30, 30)
                 .addComponent(lblNewAlbum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(myScrollPane4, GroupLayout.PREFERRED_SIZE, 320, GroupLayout.PREFERRED_SIZE))
+                .addGap(5, 5, 5)
+                .addComponent(myScrollPane4, GroupLayout.PREFERRED_SIZE, 323, GroupLayout.PREFERRED_SIZE))
         );
 
         myScrollPaneFull.setViewportView(pnlListAlbumfull);

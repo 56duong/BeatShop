@@ -9,6 +9,7 @@ import beatalbumshop.utils.ClearComponent;
 import beatalbumshop.utils.ImageHelper;
 import beatalbumshop.utils.TimeHelper;
 import beatalbumshop.utils.Validator;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -24,6 +25,9 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
 public class ManagementAlbum extends javax.swing.JPanel {

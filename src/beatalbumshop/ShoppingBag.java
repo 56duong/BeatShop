@@ -11,9 +11,11 @@ import beatalbumshop.model.Customer;
 import beatalbumshop.model.LoggedInUser;
 import beatalbumshop.utils.OtherHelper;
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.util.ArrayList;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class ShoppingBag extends javax.swing.JPanel {
 
@@ -64,17 +66,19 @@ public class ShoppingBag extends javax.swing.JPanel {
 
                     pnlListBag.add(sp);
                     subtotal += sp.getSubtotal();
-                    
-                    lblSubtotal.setText(subtotal + "");
-                    String shipping = lblShipping.getText().substring(lblShipping.getText().indexOf("$ ") + 2);
-                    double total = subtotal + Double.parseDouble(shipping);
-                    lblTotal.setText(total + "");
                 }
             }
+
+            btnCheckout.setVisible(true);
             
             pnlListBag.revalidate();
             pnlListBag.repaint();
         }
+        
+        lblSubtotal.setText("$ " + subtotal);
+        String shipping = lblShipping.getText().substring(lblShipping.getText().indexOf("$ ") + 2);
+        double total = subtotal + Double.parseDouble(shipping);
+        lblTotal.setText("$ " + total);
     }
 
     
@@ -165,6 +169,11 @@ public class ShoppingBag extends javax.swing.JPanel {
         btnCheckout.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnCheckout.setForeground(new java.awt.Color(255, 255, 255));
         btnCheckout.setText("Checkout");
+        btnCheckout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCheckoutActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlSummaryLayout = new javax.swing.GroupLayout(pnlSummary);
         pnlSummary.setLayout(pnlSummaryLayout);
@@ -260,6 +269,13 @@ public class ShoppingBag extends javax.swing.JPanel {
         Main mainFrame = OtherHelper.getMainFrame(this);
         mainFrame.getBtnShop().doClick();
     }//GEN-LAST:event_btnCloseActionPerformed
+
+    private void btnCheckoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckoutActionPerformed
+        JPanel pnlTabContent = (JPanel) getParent();
+        pnlTabContent.add(new Checkout(), "checkout");
+        CardLayout c = (CardLayout) pnlTabContent.getLayout();
+        c.show(pnlTabContent, "checkout");
+    }//GEN-LAST:event_btnCheckoutActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

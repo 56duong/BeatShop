@@ -7,7 +7,7 @@ import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.LineBorder;
 
-public class MyTextField extends JTextField {
+public class MyTextArea extends JTextArea {
     private Shape shape;
     private int radius = 20;
 
@@ -19,7 +19,7 @@ public class MyTextField extends JTextField {
         this.radius = radius;
     }
     
-    public MyTextField() {
+    public MyTextArea() {
         setOpaque(false);
         setFont(new Font("Open Sans", 0, 16));
         setCursor(new Cursor(Cursor.TEXT_CURSOR));

@@ -1,5 +1,7 @@
 package beatalbumshop;
 
+import beatalbumshop.componment.MyButton;
+import beatalbumshop.componment.MyComboBox;
 import beatalbumshop.dao.CustomerDAO;
 import beatalbumshop.dao.CustomerDAOImpl;
 import beatalbumshop.model.Album;
@@ -60,6 +62,16 @@ public class SelectionProduct extends javax.swing.JPanel {
     }
     
     
+    
+    public MyButton getBthRemove() {
+        return btnRemove;
+    }
+    
+    public MyComboBox getCboQuantity() {
+        return cboQuantity;
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -79,7 +91,6 @@ public class SelectionProduct extends javax.swing.JPanel {
         btnRemove = new beatalbumshop.componment.MyButton();
 
         setMaximumSize(new java.awt.Dimension(571, 100));
-        setMinimumSize(new java.awt.Dimension(571, 100));
         setPreferredSize(new java.awt.Dimension(571, 100));
 
         pnlMain.setBackground(new java.awt.Color(255, 255, 255));
