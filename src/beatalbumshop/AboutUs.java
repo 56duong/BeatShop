@@ -1,18 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package beatalbumshop;
 
-/**
- *
- * @author PC
- */
 public class AboutUs extends javax.swing.JPanel {
 
-    /**
-     * Creates new form AboutUs
-     */
     public AboutUs() {
         initComponents();
     }
@@ -34,7 +23,8 @@ public class AboutUs extends javax.swing.JPanel {
 
         pnlMain.setBackground(new java.awt.Color(255, 255, 255));
 
-        lblAboutUs.setText("<html>Vào năm 2022, ba sinh viên chuyên ngành phát triển phần mềm tại FPT Polytechnic đã gặp nhau và trở thành bạn thân. Họ cảm thấy mệt mỏi với lịch học và quyết định tổ chức một buổi gặp mặt, sau đó chơi game và nghe nhạc cùng nhau. Họ nhận ra rằng âm nhạc giúp họ gắn kết hơn và bắt đầu sáng tạo âm nhạc riêng. Sau đó, vào tháng 5 năm 2023, họ thành lập công ty quản lý ứng dụng âm nhạc với mục tiêu kinh doanh bán album. Công ty mong muốn mang đến trải nghiệm âm nhạc tốt nhất và kết nối mọi người thông qua việc bán album. Mặc dù gặp nhiều khó khăn khi khởi nghiệp, nhưng với sự quyết tâm và nỗ lực không ngừng, công ty đã và đang phát triển với tham vọng trở thành một trong những thương hiệu hàng đầu trong lĩnh vực bán album.</html>");
+        lblAboutUs.setText("<html>\n  <p style=\"text-align: justify\">\n    Vào năm 2022, ba sinh viên chuyên ngành phát triển phần mềm tại FPT Polytechnic đã gặp nhau và trở thành bạn thân. Họ cảm thấy mệt mỏi với lịch học và quyết định tổ chức một buổi gặp mặt, sau đó chơi game và nghe nhạc cùng nhau. Họ nhận ra rằng âm nhạc giúp họ gắn kết hơn và bắt đầu sáng tạo âm nhạc riêng. Sau đó, vào tháng 5 năm 2023, họ thành lập công ty quản lý ứng dụng âm nhạc với mục tiêu kinh doanh bán album. Công ty mong muốn mang đến trải nghiệm âm nhạc tốt nhất và kết nối mọi người thông qua việc bán album. Mặc dù gặp nhiều khó khăn khi khởi nghiệp, nhưng với sự quyết tâm và nỗ lực không ngừng, công ty đã và đang phát triển với tham vọng trở thành một trong những thương hiệu hàng đầu trong lĩnh vực bán album.\n  </p>\n</html>");
+        lblAboutUs.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         javax.swing.GroupLayout pnlMainLayout = new javax.swing.GroupLayout(pnlMain);
         pnlMain.setLayout(pnlMainLayout);

@@ -4,19 +4,161 @@
  */
 package beatalbumshop;
 
+import beatalbumshop.componment.MyLabel;
+import beatalbumshop.componment.MyScrollPane;
+import beatalbumshop.dao.AlbumDAO;
+import beatalbumshop.dao.AlbumDAOImpl;
+import beatalbumshop.model.Album;
+import beatalbumshop.utils.ImageResizing;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import javax.imageio.ImageIO;
+import javax.swing.BoxLayout;
+import javax.swing.GroupLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.LayoutStyle;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.border.EmptyBorder;
+
 /**
  *
  * @author PC
  */
 public class Home extends javax.swing.JPanel {
 
+    AlbumDAO albumDAO = new AlbumDAOImpl();
+    ArrayList<Album> lAlbum = new ArrayList<>();
+    int count = 0;
+
     /**
      * Creates new form Home
      */
     public Home() {
         initComponents();
-    }
 
+        pnlListAlbum2.setLayout(new GridLayout(0, 4, 20, 20)); // 1028
+        pnlListAlbum2.setBorder(new EmptyBorder(20, 20, 20, 20));
+        
+        pnlListAlbum4.setLayout(new GridLayout(0, 4, 20, 20)); // 1028
+        pnlListAlbum4.setBorder(new EmptyBorder(20, 20, 20, 20));
+        lAlbum = (ArrayList<Album>) albumDAO.getAll();
+        
+        // radom album
+        Collections.shuffle(lAlbum);
+        for (int i = 0; i < 4 && i < lAlbum.size(); i++) {
+            Album album = lAlbum.get(i);
+            showAlbumCard(album);
+        }
+        // new album
+        sortByReleaseDate(lAlbum);
+        for (int i = 0; i < 4 && i < lAlbum.size(); i++) {
+            Album album = lAlbum.get(i);
+            showAlbumCard2(album);
+        }
+    }
+    public static void sortByReleaseDate(ArrayList<Album> lAlbum) {
+        Collections.sort(lAlbum, new Comparator<Album>() {
+            @Override
+            public int compare(Album album1, Album album2) {
+                return album2.getReleaseDate().compareTo(album1.getReleaseDate());
+            }
+        });
+    }
+    public void showAlbumCard(Album album) {
+        JPanel pnl = new JPanel();
+        pnl.setLayout(new BoxLayout(pnl, BoxLayout.Y_AXIS));
+        pnl.setBackground(Color.WHITE);
+        pnl.setSize(new Dimension(227, 300));
+        pnl.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        JLabel lblImage = new JLabel();
+        try {
+            URL url = new URL("https://firebasestorage.googleapis.com/v0/b/beat-75a88.appspot.com/o/albums%2F" + album.getAlbumID() + ".png?alt=media");
+            Image image = ImageIO.read(url);
+            lblImage.setIcon(ImageResizing.ImageResizing(image, 227, 227));
+        } catch (Exception ex) {
+            lblImage.setIcon(null);
+            ex.printStackTrace();
+        }
+        pnl.add(lblImage);
+
+        MyLabel lblName = new MyLabel("<html>" + album.getAlbumName() + "</html>");
+        lblName.setPreferredSize(new Dimension(227, 50));
+        lblName.setFont(new Font("Open Sans", 0, 18));
+        pnl.add(lblName);
+
+        MyLabel lblArtist = new MyLabel("<html>" + album.getArtist() + "</html>");
+        lblArtist.setFont(new Font("Open Sans", 0, 14));
+        pnl.add(lblArtist);
+
+//        MyLabel lblPrice = new MyLabel("$" + album.getPrice());
+//        lblPrice.setFont(new Font("Open Sans", 0, 14));
+//        pnl.add(lblPrice);
+        pnl.setName(album.getAlbumID() + "");
+        pnl.addMouseListener(showInfo);
+
+        pnlListAlbum4.add(pnl);
+    }
+    MouseAdapter showInfo = new MouseAdapter() {
+        public void mouseClicked(MouseEvent e) {
+            JPanel s = (JPanel) e.getSource();
+            String id = s.getName();
+
+//            new AlbumDetail(id).setVisible(true);
+            JPanel pnlTabContent = (JPanel) getParent();
+            pnlTabContent.add(new AlbumDetail(id), "albumdetailpanel");
+            CardLayout c = (CardLayout) pnlTabContent.getLayout();
+            c.show(pnlTabContent, "albumdetailpanel");
+        }
+    };
+    public void showAlbumCard2(Album album) {
+        JPanel pnl = new JPanel();
+        pnl.setLayout(new BoxLayout(pnl, BoxLayout.Y_AXIS));
+        pnl.setBackground(Color.WHITE);
+        pnl.setSize(new Dimension(227, 300));
+        pnl.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        JLabel lblImage = new JLabel();
+        try {
+            URL url = new URL("https://firebasestorage.googleapis.com/v0/b/beat-75a88.appspot.com/o/albums%2F" + album.getAlbumID() + ".png?alt=media");
+            Image image = ImageIO.read(url);
+            lblImage.setIcon(ImageResizing.ImageResizing(image, 227, 227));
+        } catch (Exception ex) {
+            lblImage.setIcon(null);
+            ex.printStackTrace();
+        }
+        pnl.add(lblImage);
+
+        MyLabel lblName = new MyLabel("<html>" + album.getAlbumName() + "</html>");
+        lblName.setPreferredSize(new Dimension(227, 50));
+        lblName.setFont(new Font("Open Sans", 0, 18));
+        pnl.add(lblName);
+
+        MyLabel lblArtist = new MyLabel("<html>" + album.getArtist() + "</html>");
+        lblArtist.setFont(new Font("Open Sans", 0, 14));
+        pnl.add(lblArtist);
+
+//        MyLabel lblPrice = new MyLabel("$" + album.getPrice());
+//        lblPrice.setFont(new Font("Open Sans", 0, 14));
+//        pnl.add(lblPrice);
+        pnl.setName(album.getAlbumID() + "");
+        pnl.addMouseListener(showInfo);
+
+        pnlListAlbum2.add(pnl);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -26,36 +168,112 @@ public class Home extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        myLabel1 = new beatalbumshop.componment.MyLabel();
+        myScrollPaneFull = new MyScrollPane();
+        pnlListAlbumfull = new JPanel();
+        lblRadom = new MyLabel();
+        myScrollPane3 = new MyScrollPane();
+        pnlListAlbum4 = new JPanel();
+        lblNewAlbum = new MyLabel();
+        myScrollPane4 = new MyScrollPane();
+        pnlListAlbum2 = new JPanel();
 
-        setMaximumSize(new java.awt.Dimension(1030, 658));
-        setMinimumSize(new java.awt.Dimension(1030, 658));
-        setPreferredSize(new java.awt.Dimension(1030, 658));
+        setBackground(new Color(255, 255, 255));
+        setMaximumSize(new Dimension(1030, 658));
+        setMinimumSize(new Dimension(1030, 658));
+        setPreferredSize(new Dimension(1030, 658));
+        setLayout(new BorderLayout());
 
-        myLabel1.setBackground(null);
-        myLabel1.setText("HOME");
-        myLabel1.setFont(new java.awt.Font("Open Sans", 0, 24)); // NOI18N
+        myScrollPaneFull.setBackground(null);
+        myScrollPaneFull.setBorder(null);
+        myScrollPaneFull.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(453, 453, 453)
-                .addComponent(myLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(506, Short.MAX_VALUE))
+        pnlListAlbumfull.setBackground(new Color(255, 255, 255));
+        pnlListAlbumfull.setPreferredSize(new Dimension(1030, 758));
+
+        lblRadom.setText("Radom for you");
+        lblRadom.setToolTipText("");
+        lblRadom.setFont(new Font("Open Sans", 1, 18)); // NOI18N
+
+        myScrollPane3.setBackground(null);
+        myScrollPane3.setBorder(null);
+        myScrollPane3.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        pnlListAlbum4.setBackground(new Color(255, 255, 255));
+        pnlListAlbum4.setPreferredSize(new Dimension(1030, 302));
+
+        GroupLayout pnlListAlbum4Layout = new GroupLayout(pnlListAlbum4);
+        pnlListAlbum4.setLayout(pnlListAlbum4Layout);
+        pnlListAlbum4Layout.setHorizontalGroup(pnlListAlbum4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 1030, Short.MAX_VALUE)
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(307, 307, 307)
-                .addComponent(myLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(318, Short.MAX_VALUE))
+        pnlListAlbum4Layout.setVerticalGroup(pnlListAlbum4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 323, Short.MAX_VALUE)
         );
+
+        myScrollPane3.setViewportView(pnlListAlbum4);
+
+        lblNewAlbum.setText("Newest albums ");
+        lblNewAlbum.setFont(new Font("Open Sans", 1, 18)); // NOI18N
+
+        myScrollPane4.setBackground(null);
+        myScrollPane4.setBorder(null);
+        myScrollPane4.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        pnlListAlbum2.setBackground(new Color(255, 255, 255));
+        pnlListAlbum2.setPreferredSize(new Dimension(1030, 302));
+
+        GroupLayout pnlListAlbum2Layout = new GroupLayout(pnlListAlbum2);
+        pnlListAlbum2.setLayout(pnlListAlbum2Layout);
+        pnlListAlbum2Layout.setHorizontalGroup(pnlListAlbum2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 1030, Short.MAX_VALUE)
+        );
+        pnlListAlbum2Layout.setVerticalGroup(pnlListAlbum2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 320, Short.MAX_VALUE)
+        );
+
+        myScrollPane4.setViewportView(pnlListAlbum2);
+
+        GroupLayout pnlListAlbumfullLayout = new GroupLayout(pnlListAlbumfull);
+        pnlListAlbumfull.setLayout(pnlListAlbumfullLayout);
+        pnlListAlbumfullLayout.setHorizontalGroup(pnlListAlbumfullLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addComponent(myScrollPane3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(myScrollPane4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(pnlListAlbumfullLayout.createSequentialGroup()
+                .addGroup(pnlListAlbumfullLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlListAlbumfullLayout.createSequentialGroup()
+                        .addGap(25, 25, 25)
+                        .addComponent(lblRadom, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlListAlbumfullLayout.createSequentialGroup()
+                        .addGap(23, 23, 23)
+                        .addComponent(lblNewAlbum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        pnlListAlbumfullLayout.setVerticalGroup(pnlListAlbumfullLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(GroupLayout.Alignment.TRAILING, pnlListAlbumfullLayout.createSequentialGroup()
+                .addGap(8, 8, 8)
+                .addComponent(lblRadom, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(myScrollPane3, GroupLayout.PREFERRED_SIZE, 323, GroupLayout.PREFERRED_SIZE)
+                .addGap(48, 48, 48)
+                .addComponent(lblNewAlbum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(myScrollPane4, GroupLayout.PREFERRED_SIZE, 320, GroupLayout.PREFERRED_SIZE))
+        );
+
+        myScrollPaneFull.setViewportView(pnlListAlbumfull);
+
+        add(myScrollPaneFull, BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private beatalbumshop.componment.MyLabel myLabel1;
+    private MyLabel lblNewAlbum;
+    private MyLabel lblRadom;
+    private MyScrollPane myScrollPane3;
+    private MyScrollPane myScrollPane4;
+    private MyScrollPane myScrollPaneFull;
+    private JPanel pnlListAlbum2;
+    private JPanel pnlListAlbum4;
+    private JPanel pnlListAlbumfull;
     // End of variables declaration//GEN-END:variables
 }

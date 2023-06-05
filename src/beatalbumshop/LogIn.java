@@ -330,7 +330,9 @@ public class LogIn extends javax.swing.JFrame {
                                 btnLI.setText("Account");
                                 btnSP.setVisible(true);
                                 JPanel pnlTabContent = mainWindow.getPnlTabContent();
-                                pnlTabContent.add(new ShoppingBag(), "shoppingbag");
+                                ShoppingBag sp = new ShoppingBag();
+                                mainWindow.setTabSP(sp);
+                                pnlTabContent.add(sp, "shoppingbag");
                             }
 
                             // Repaint the current Main window

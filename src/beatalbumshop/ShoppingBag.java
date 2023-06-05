@@ -42,7 +42,7 @@ public class ShoppingBag extends javax.swing.JPanel {
 
         customer = (Customer) LoggedInUser.getCurrentUser();
         lBagItem = customer.getlBagItem();
-        
+              
         // bag empty
         if(lBagItem.isEmpty()) {
             pnlListBag.setLayout(new BorderLayout());
@@ -51,23 +51,24 @@ public class ShoppingBag extends javax.swing.JPanel {
             pnlListBag.add(lbl);
             btnCheckout.setVisible(false);
         }
+        else {
+            for(BagItem item : lBagItem) {System.out.println("1");
+                Album album = albumDAO.getByID(item.getAlbumID());
 
-        for(BagItem item : lBagItem) {
-            Album album = albumDAO.getByID(item.getAlbumID());
+                SelectionProduct sp = new SelectionProduct(album, item.getQuantity());
 
-            SelectionProduct sp = new SelectionProduct(album, item.getQuantity());
+                pnlListBag.add(sp);
+                subtotal += sp.getSubtotal();
+            }
 
-            pnlListBag.add(sp);
-            subtotal += sp.getSubtotal();
+            lblSubtotal.setText(subtotal + "");
+            String shipping = lblShipping.getText().substring(lblShipping.getText().indexOf("$ ") + 2);
+            double total = subtotal + Double.parseDouble(shipping);
+            lblTotal.setText(total + "");
+            
+            pnlListBag.revalidate();
+            pnlListBag.repaint();
         }
-        
-        lblSubtotal.setText(subtotal + "");
-        String shipping = lblShipping.getText().substring(lblShipping.getText().indexOf("$ ") + 2);
-        double total = subtotal + Double.parseDouble(shipping);
-        lblTotal.setText(total + "");
-        
-        pnlListBag.revalidate();
-        pnlListBag.repaint();
     }
 
     

@@ -72,6 +72,10 @@ public class Main extends javax.swing.JFrame {
     }
  
     // open login from buy now button
+    public void setTabSP(ShoppingBag sp) {
+        this.tabSP = sp;
+    }
+    
     public JPanel getPnlTabContent() {
         return pnlTabContent;
     }

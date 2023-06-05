@@ -16,36 +16,60 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 public class Shop extends javax.swing.JPanel {
     AlbumDAO albumDAO = new AlbumDAOImpl();
     ArrayList<Album> lAlbum = new ArrayList<>();
-        
+    int clickCount = 0;
+    Border border = BorderFactory.createLineBorder(Color.BLACK);
     public Shop() {
         initComponents();
-        
         pnlListAlbum.setLayout(new GridLayout(0, 4, 20, 20)); // 1028
         pnlListAlbum.setBorder(new EmptyBorder(20, 20, 20, 20));
         lAlbum = (ArrayList<Album>) albumDAO.getAll();
-
+        
+        btnSort.setBackground(Color.BLACK);
+        btnSort.setForeground(Color.WHITE);
+        btnSort.setText("sort price");
         for(Album album : lAlbum) {
             showAlbumCard(album);
         }
     }
+    private void setDefaultButtonStyle() {
+        btnSort.setBackground(Color.BLACK);
+        btnSort.setForeground(Color.WHITE);
+        btnSort.setText("sort price");
+    }
     
+    
+    public static void sortByPriceDescending(ArrayList<Album> lAlbum) {
+        Collections.sort(lAlbum, new Comparator<Album>() {
+            @Override
+            public int compare(Album album1, Album album2) {
+                return album1.getPrice().compareTo(album2.getPrice());
+            }
+        });
+    }
+    public static void sortByPriceAscending(ArrayList<Album> lAlbum) {
+        Collections.sort(lAlbum, new Comparator<Album>() {
+            @Override
+            public int compare(Album album1, Album album2) {
+                return album2.getPrice().compareTo(album1.getPrice());
+            }
+        });
+    }
     
     
     public void showAlbumCard(Album album) {
-        //check instock
-        if(album.getInStock() <= 0) {
-            return;
-        }
-        
         JPanel pnl = new JPanel();
         pnl.setLayout(new BoxLayout(pnl, BoxLayout.Y_AXIS));
         pnl.setBackground(Color.WHITE);
@@ -127,6 +151,7 @@ public class Shop extends javax.swing.JPanel {
         pnlListAlbum = new javax.swing.JPanel();
         txtSearch = new beatalbumshop.componment.MyTextField();
         lblSearch = new beatalbumshop.componment.MyLabel();
+        btnSort = new beatalbumshop.componment.MyButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setMaximumSize(new java.awt.Dimension(1030, 658));
@@ -160,6 +185,15 @@ public class Shop extends javax.swing.JPanel {
 
         lblSearch.setText("Search:");
 
+        btnSort.setBackground(new java.awt.Color(0, 0, 0));
+        btnSort.setForeground(new java.awt.Color(255, 255, 255));
+        btnSort.setText("Sort price");
+        btnSort.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSortActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -170,7 +204,9 @@ public class Shop extends javax.swing.JPanel {
                 .addComponent(lblSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnSort, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -178,7 +214,8 @@ public class Shop extends javax.swing.JPanel {
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSort, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(20, 20, 20)
                 .addComponent(myScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -188,8 +225,34 @@ public class Shop extends javax.swing.JPanel {
         search(txtSearch.getText());
     }//GEN-LAST:event_txtSearchKeyReleased
 
+    private void btnSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSortActionPerformed
+        pnlListAlbum.removeAll();
+        clickCount++;
+
+        if (clickCount % 3 == 1) {
+            sortByPriceAscending(lAlbum);
+            btnSort.setText("Low to high");
+            btnSort.setBackground(Color.WHITE);
+            btnSort.setForeground(Color.BLACK);
+            btnSort.setBorder(border) ;
+        } else if (clickCount % 3 == 2) {
+            sortByPriceDescending(lAlbum);
+            btnSort.setBackground(Color.WHITE);
+            btnSort.setForeground(Color.BLACK);
+            btnSort.setText("High to low");
+        } else {
+            Collections.shuffle(lAlbum);
+            setDefaultButtonStyle();
+            clickCount = 0;
+        }
+        for (Album album : lAlbum) {
+            showAlbumCard(album);
+        }
+    }//GEN-LAST:event_btnSortActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private beatalbumshop.componment.MyButton btnSort;
     private beatalbumshop.componment.MyLabel lblSearch;
     private beatalbumshop.componment.MyScrollPane myScrollPane1;
     private javax.swing.JPanel pnlListAlbum;

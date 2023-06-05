@@ -282,6 +282,7 @@ public class AlbumDetail extends javax.swing.JPanel {
         else {
             Customer customer = (Customer) LoggedInUser.getCurrentUser();
             ArrayList<BagItem> lBagItem = customer.getlBagItem();
+            if(lBagItem.isEmpty()) lBagItem = new ArrayList<>();
             
             //check exist
             boolean added = false;
