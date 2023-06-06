@@ -6,7 +6,7 @@ import beatalbumshop.dao.AlbumDAOImpl;
 import beatalbumshop.dao.CustomerDAO;
 import beatalbumshop.dao.CustomerDAOImpl;
 import beatalbumshop.model.Album;
-import beatalbumshop.model.BagItem;
+import beatalbumshop.model.Item;
 import beatalbumshop.model.Customer;
 import beatalbumshop.model.LoggedInUser;
 import beatalbumshop.utils.OtherHelper;
@@ -21,7 +21,7 @@ public class ShoppingBag extends javax.swing.JPanel {
 
     AlbumDAO albumDAO = new AlbumDAOImpl();
     CustomerDAO customerDAO = new CustomerDAOImpl();
-    ArrayList<BagItem> lBagItem = new ArrayList<>();
+    ArrayList<Item> lBagItem = new ArrayList<>();
     Customer customer;
     double subtotal = 0;
     
@@ -35,7 +35,7 @@ public class ShoppingBag extends javax.swing.JPanel {
     
     
     
-    public ArrayList<BagItem> getlBagItem() {
+    public ArrayList<Item> getlBagItem() {
         return lBagItem;
     }
     
@@ -57,7 +57,7 @@ public class ShoppingBag extends javax.swing.JPanel {
             btnCheckout.setVisible(false);
         }
         else {
-            for(BagItem item : lBagItem) {
+            for(Item item : lBagItem) {
                 
                 Album album = albumDAO.getByID(item.getAlbumID());
                 

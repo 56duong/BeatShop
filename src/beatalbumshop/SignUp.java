@@ -6,7 +6,9 @@ import beatalbumshop.dao.CustomerDAOImpl;
 import beatalbumshop.dao.Firebase;
 import beatalbumshop.dao.UserDAO;
 import beatalbumshop.dao.UserDAOImpl;
+import beatalbumshop.model.AddressBook;
 import beatalbumshop.model.Customer;
+import beatalbumshop.model.Item;
 import beatalbumshop.model.User;
 import beatalbumshop.utils.TextHelper;
 import com.google.api.core.ApiFuture;
@@ -361,6 +363,8 @@ public class SignUp extends javax.swing.JFrame {
         String password = new String(txtPassword.getPassword());
         String confirmpassword = new String(txtPassword2.getPassword());
         String errorMessage = validateFormSigup(email, password, confirmpassword);
+        ArrayList<AddressBook> lAddressBook = new ArrayList<>();
+        ArrayList<Item> lBagItem = new ArrayList<>();
         
         // co loi
         if (errorMessage != null) {
@@ -375,7 +379,7 @@ public class SignUp extends javax.swing.JFrame {
                 // hash password
                 password = TextHelper.HashPassword(password);
 
-                boolean result = customerDAO.add(new Customer(null, null, getMaxID(colRef, "id"), email, password));
+                boolean result = customerDAO.add(new Customer(lAddressBook, lBagItem, getMaxID(colRef, "id"), email, password));
                 if(result) {
                     dispose();
                     new LogIn().setVisible(true);

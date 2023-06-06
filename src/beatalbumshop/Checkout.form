@@ -137,24 +137,27 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="20" pref="20" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <Component id="lblMessage1" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                                      <Component id="rdoCOD" min="-2" max="-2" attributes="0"/>
+                                  </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="myLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="lblLastName" alignment="0" min="-2" max="-2" attributes="0"/>
                                           <Component id="lblPhoneNumber" min="-2" max="-2" attributes="0"/>
                                           <Component id="lblMessage" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="lblFirstName" alignment="0" min="-2" max="-2" attributes="0"/>
                                           <Component id="lblAddress" alignment="0" min="-2" max="-2" attributes="0"/>
                                       </Group>
-                                      <EmptySpace max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Component id="txtLastName" alignment="0" min="-2" pref="190" max="-2" attributes="0"/>
-                                          <Component id="txtFirstName" alignment="0" min="-2" pref="190" max="-2" attributes="0"/>
                                           <Component id="jScrollPane1" alignment="0" pref="348" max="32767" attributes="0"/>
                                           <Component id="txtPhoneNumber" alignment="0" min="-2" pref="190" max="-2" attributes="0"/>
                                           <Component id="jScrollPane2" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="txtFullName" alignment="0" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <Group type="102" attributes="0">
@@ -183,13 +186,8 @@
                               </Group>
                               <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="lblFirstName" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="txtFirstName" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="myLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="txtLastName" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                                  <Component id="lblLastName" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="txtFullName" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
@@ -206,7 +204,12 @@
                                   <Component id="lblMessage" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="jScrollPane2" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="354" max="32767" attributes="0"/>
+                              <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="lblMessage1" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="rdoCOD" alignment="3" min="-2" pref="17" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace pref="361" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -228,29 +231,6 @@
                         </Property>
                       </Properties>
                     </Component>
-                    <Component class="beatalbumshop.componment.MyLabel" name="lblFirstName">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="First Name"/>
-                      </Properties>
-                    </Component>
-                    <Component class="beatalbumshop.componment.MyTextField" name="txtFirstName">
-                      <Properties>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.CompoundBorderInfo">
-                            <CompoundBorder>
-                              <Border PropertyName="outside" info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                                <LineBorder>
-                                  <Color PropertyName="color" blue="99" green="99" red="99" type="rgb"/>
-                                </LineBorder>
-                              </Border>
-                              <Border PropertyName="inside" info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                                <EmptyBorder bottom="3" left="3" right="3" top="3"/>
-                              </Border>
-                            </CompoundBorder>
-                          </Border>
-                        </Property>
-                      </Properties>
-                    </Component>
                     <Component class="beatalbumshop.componment.MyLabel" name="lblShippingAddress">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Shipping Address"/>
@@ -259,12 +239,12 @@
                         </Property>
                       </Properties>
                     </Component>
-                    <Component class="beatalbumshop.componment.MyLabel" name="myLabel3">
+                    <Component class="beatalbumshop.componment.MyLabel" name="lblLastName">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Last Name"/>
+                        <Property name="text" type="java.lang.String" value="Full Name"/>
                       </Properties>
                     </Component>
-                    <Component class="beatalbumshop.componment.MyTextField" name="txtLastName">
+                    <Component class="beatalbumshop.componment.MyTextField" name="txtFullName">
                       <Properties>
                         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                           <Border info="org.netbeans.modules.form.compat2.border.CompoundBorderInfo">
@@ -387,7 +367,7 @@
 
                       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                       <SubComponents>
-                        <Component class="beatalbumshop.componment.MyTextArea" name="txtMessage">
+                        <Component class="beatalbumshop.componment.MyTextArea" name="txaMessage">
                           <Properties>
                             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                               <Border info="org.netbeans.modules.form.compat2.border.CompoundBorderInfo">
@@ -411,6 +391,18 @@
                         </Component>
                       </SubComponents>
                     </Container>
+                    <Component class="beatalbumshop.componment.MyLabel" name="lblMessage1">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Payment Option"/>
+                      </Properties>
+                    </Component>
+                    <Component class="beatalbumshop.componment.MyRadioButton" name="rdoCOD">
+                      <Properties>
+                        <Property name="selected" type="boolean" value="true"/>
+                        <Property name="text" type="java.lang.String" value="COD"/>
+                        <Property name="toolTipText" type="java.lang.String" value="Cash on delivery"/>
+                      </Properties>
+                    </Component>
                   </SubComponents>
                 </Container>
                 <Container class="javax.swing.JPanel" name="pnlRight">

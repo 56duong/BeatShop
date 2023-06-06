@@ -8,7 +8,7 @@ import beatalbumshop.dao.AlbumDAOImpl;
 import beatalbumshop.dao.CustomerDAO;
 import beatalbumshop.dao.CustomerDAOImpl;
 import beatalbumshop.model.Album;
-import beatalbumshop.model.BagItem;
+import beatalbumshop.model.Item;
 import beatalbumshop.model.Customer;
 import beatalbumshop.model.LoggedInUser;
 import beatalbumshop.model.Track;
@@ -281,7 +281,7 @@ public class AlbumDetail extends javax.swing.JPanel {
         }
         else {
             Customer customer = (Customer) LoggedInUser.getCurrentUser();
-            ArrayList<BagItem> lBagItem = customer.getlBagItem();
+            ArrayList<Item> lBagItem = customer.getlBagItem();
             if(lBagItem.isEmpty()) lBagItem = new ArrayList<>();
             
             //check exist
@@ -289,7 +289,7 @@ public class AlbumDetail extends javax.swing.JPanel {
             boolean error = false; // false = kh add
             int q = Integer.parseInt(cboQuantity.getSelectedItem().toString()); // so tren combobox
             
-            for(BagItem item : lBagItem) {
+            for(Item item : lBagItem) {
                 // kiem tra ton tai trong bag
                 if(item.getAlbumID().equals(albumID)) {
                     // da ton tai
@@ -309,7 +309,7 @@ public class AlbumDetail extends javax.swing.JPanel {
             }
             
             if(!added) {
-                lBagItem.add(new BagItem(albumID, q));
+                lBagItem.add(new Item(albumID, q));
                 added = true;
             }
             

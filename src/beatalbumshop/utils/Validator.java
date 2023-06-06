@@ -258,4 +258,27 @@ public class Validator {
         return "";
     }
 
+    
+    
+    /**
+    * Validates an input string to allow only alphanumeric characters and validates that it is a 10-digit Vietnamese phone number starting with "0".
+     *
+     * @param txt the associated text component
+     * @param title the title or description of the input
+     * @param input the input string to be validated
+     * @param allowNull specifies if the input can be null or empty
+     * @return an error message if the input is invalid, an empty string if the input is valid
+     */
+    public static String allowVietnamesePhoneNumber(JTextComponent txt, String title, String input, Boolean allowNull) {
+        if (!isNotNull(null, input) && !allowNull) {
+            if (txt != null) txt.requestFocus();
+            return "Vui lòng nhập " + title + "\n";
+        } else if (isNotNull(null, input) && !input.matches("^0\\d{9}$")) {
+            if (txt != null) txt.requestFocus();
+            return title + " phải là số điện thoại Việt Nam có 10 chữ số và bắt đầu bằng số 0" + "\n";
+        }
+
+        return "";
+    }
+
 }

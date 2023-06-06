@@ -1,13 +1,13 @@
 package beatalbumshop.model;
 
-public class BagItem {
+public class Item {
     private String albumID;
     private int quantity;
 
-    public BagItem() {
+    public Item() {
     }
 
-    public BagItem(String albumID, int quantity) {
+    public Item(String albumID, int quantity) {
         this.albumID = albumID;
         this.quantity = quantity;
     }

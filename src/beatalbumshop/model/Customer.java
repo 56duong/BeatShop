@@ -4,18 +4,18 @@ import java.util.ArrayList;
 
 public class Customer extends U {
     ArrayList<AddressBook> lAddressBook;
-    ArrayList<BagItem> lBagItem;
+    ArrayList<Item> lBagItem;
 
     public Customer() {
     }
 
-    public Customer(ArrayList<AddressBook> lAddressBook, ArrayList<BagItem> lBagItem, long ID, String email, String password) {
+    public Customer(ArrayList<AddressBook> lAddressBook, ArrayList<Item> lBagItem, long ID, String email, String password) {
         super(ID, email, password);
         this.lAddressBook = lAddressBook;
         this.lBagItem = lBagItem;
     }
 
-    public Customer(ArrayList<AddressBook> lAddressBook, ArrayList<BagItem> lBagItem, long ID, String email, String password, String dateCreated) {
+    public Customer(ArrayList<AddressBook> lAddressBook, ArrayList<Item> lBagItem, long ID, String email, String password, String dateCreated) {
         super(ID, email, password, dateCreated);
         this.lAddressBook = lAddressBook;
         this.lBagItem = lBagItem;
@@ -29,11 +29,11 @@ public class Customer extends U {
         this.lAddressBook = lAddressBook;
     }
 
-    public ArrayList<BagItem> getlBagItem() {
+    public ArrayList<Item> getlBagItem() {
         return lBagItem;
     }
 
-    public void setlBagItem(ArrayList<BagItem> lBagItem) {
+    public void setlBagItem(ArrayList<Item> lBagItem) {
         this.lBagItem = lBagItem;
     }
     

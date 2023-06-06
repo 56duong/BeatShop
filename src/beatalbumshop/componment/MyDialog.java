@@ -14,6 +14,7 @@ public class MyDialog extends javax.swing.JFrame {
     public static final int ERROR = 1;
     public static final int QUESTION = 2;
     public static final int WARNING = 3;
+    public static final int SUCCESS = 4;
 
     /**
      * Creates new form MyDialog.
@@ -41,7 +42,7 @@ public class MyDialog extends javax.swing.JFrame {
     /**
      * Displays a MyDialog with the specified type and message.
      * @param type The type of message to display. 0 = information, 1 = error,
-     * 2 = question, 3 = warning.
+     * 2 = question, 3 = warning, 4 = success.
      * @param message The message to display in the dialog.
      */
     public static void display(int type, String message) {
@@ -59,6 +60,9 @@ public class MyDialog extends javax.swing.JFrame {
                 break;
             case MyDialog.WARNING:
                 title = "Warning";
+                break;
+            case MyDialog.SUCCESS:
+                title = "Success";
                 break;
         }
         
@@ -128,7 +132,7 @@ public class MyDialog extends javax.swing.JFrame {
                 .addComponent(lblTitleBarName, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(67, 67, 67)
                 .addComponent(lblClose, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20))
+                .addGap(15, 15, 15))
         );
         pnlTitleBarLayout.setVerticalGroup(
             pnlTitleBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -173,12 +177,12 @@ public class MyDialog extends javax.swing.JFrame {
                         .addComponent(btnOK, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pnlMainLayout.createSequentialGroup()
                         .addGap(20, 20, 20)
-                        .addComponent(lblIcon, javax.swing.GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)
+                        .addComponent(lblIcon, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(20, 20, 20))
             .addGroup(pnlMainLayout.createSequentialGroup()
-                .addComponent(pnlTitleBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(pnlTitleBar, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addContainerGap())
         );
         pnlMainLayout.setVerticalGroup(
@@ -189,7 +193,7 @@ public class MyDialog extends javax.swing.JFrame {
                 .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
                     .addGroup(pnlMainLayout.createSequentialGroup()
-                        .addComponent(lblIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnOK, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)

@@ -3,7 +3,7 @@ package beatalbumshop.dao;
 import beatalbumshop.componment.MyDialog;
 import beatalbumshop.config.Account;
 import beatalbumshop.model.AddressBook;
-import beatalbumshop.model.BagItem;
+import beatalbumshop.model.Item;
 import beatalbumshop.model.Customer;
 import beatalbumshop.model.User;
 import beatalbumshop.utils.TextHelper;
@@ -113,7 +113,7 @@ public class CustomerDAOImpl implements CustomerDAO {
                 Customer customerData = customerSnapshot.toObject(Customer.class);
                 // Extract the lAddressBook field from the custom class
                 ArrayList<AddressBook> lAddressBook = customerData.getlAddressBook();
-                ArrayList<BagItem> lBagItem = customerData.getlBagItem();
+                ArrayList<Item> lBagItem = customerData.getlBagItem();
 
                 Customer c = new Customer(
                     lAddressBook,
@@ -177,7 +177,7 @@ public class CustomerDAOImpl implements CustomerDAO {
                     Customer customerData = customerSnapshot.toObject(Customer.class);
                     // Extract the lTrack field from the custom class
                     ArrayList<AddressBook> lAddressBook = customerData.getlAddressBook();
-                    ArrayList<BagItem> lBagItem = customerData.getlBagItem();
+                    ArrayList<Item> lBagItem = customerData.getlBagItem();
                     
                     return new Customer(
                         lAddressBook,

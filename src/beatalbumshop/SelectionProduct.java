@@ -5,7 +5,7 @@ import beatalbumshop.componment.MyComboBox;
 import beatalbumshop.dao.CustomerDAO;
 import beatalbumshop.dao.CustomerDAOImpl;
 import beatalbumshop.model.Album;
-import beatalbumshop.model.BagItem;
+import beatalbumshop.model.Item;
 import beatalbumshop.model.Customer;
 import beatalbumshop.model.LoggedInUser;
 import beatalbumshop.utils.ImageHelper;
@@ -172,8 +172,8 @@ public class SelectionProduct extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
-        ArrayList<BagItem> lBagItem = customer.getlBagItem();
-        for(BagItem item : lBagItem) {
+        ArrayList<Item> lBagItem = customer.getlBagItem();
+        for(Item item : lBagItem) {
             if(item.getAlbumID().equals(albumID)) {
                 lBagItem.remove(item);
                 ShoppingBag sp = new ShoppingBag();
@@ -197,8 +197,8 @@ public class SelectionProduct extends javax.swing.JPanel {
         if (evt.getStateChange() == ItemEvent.SELECTED && OtherHelper.getMainFrame(this) != null) {
             int q = Integer.parseInt(cboQuantity.getSelectedItem().toString()); // so tren combobox
             
-            ArrayList<BagItem> lBagItem = customer.getlBagItem();
-            for(BagItem item : lBagItem) {
+            ArrayList<Item> lBagItem = customer.getlBagItem();
+            for(Item item : lBagItem) {
                 if(item.getAlbumID().equals(albumID)) {
                     item.setQuantity(q);
                     break;
