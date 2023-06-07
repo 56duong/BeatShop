@@ -258,7 +258,7 @@ public class AlbumDAOImpl implements AlbumDAO {
     
     
     @Override
-    public boolean deleteImage(long id) {
+    public boolean deleteImage(String id) {
         try {
             FirebaseApp fireApp;
             

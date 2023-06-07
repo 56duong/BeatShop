@@ -74,6 +74,7 @@
                           <Component id="btnSave" min="-2" pref="100" max="-2" attributes="0"/>
                           <Component id="jScrollPane2" alignment="0" min="-2" pref="316" max="-2" attributes="0"/>
                           <Component id="txtAutoFill" min="-2" pref="100" max="-2" attributes="0"/>
+                          <Component id="btnInactive" min="-2" pref="100" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                   </Group>
@@ -108,15 +109,16 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="lblName2" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="txtReleaseDate" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                          <Component id="btnDelete" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                          <Component id="btnInactive" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="2" attributes="0">
                           <Component id="lblPrice" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="txtPrice" alignment="2" min="-2" pref="30" max="-2" attributes="0"/>
                           <Group type="103" alignment="2" groupAlignment="3" attributes="0">
                               <Component id="lblInStock" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="txtInStock" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                              <Component id="btnDelete" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -390,6 +392,28 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtAutoFillActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="beatalbumshop.componment.MyButton" name="btnInactive">
+      <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="2e" green="2e" red="d7" type="rgb"/>
+        </Property>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+            <LineBorder>
+              <Color PropertyName="color" blue="2e" green="2e" red="d7" type="rgb"/>
+            </LineBorder>
+          </Border>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ff" green="ff" red="ff" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Inactive"/>
+        <Property name="horizontalTextPosition" type="int" value="0"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnInactiveActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

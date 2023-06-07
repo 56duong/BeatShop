@@ -7,6 +7,6 @@ public interface AlbumDAO extends DAO<Album> {
     public Album getDetailByID(String albumID);
     public Album getDetailByNameAndArtist(String name, String artist);
     public boolean uploadImage(String id, InputStream image);
-    public boolean deleteImage(long id);
+    public boolean deleteImage(String id);
 }
 

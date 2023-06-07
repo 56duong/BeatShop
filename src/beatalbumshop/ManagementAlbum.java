@@ -43,6 +43,9 @@ public class ManagementAlbum extends javax.swing.JPanel {
     public ManagementAlbum() {
         initComponents();
         
+        // btnDelete
+        btnDelete.setVisible(false);
+        
         //table
         //tao model
         albumModel = new DefaultTableModel();
@@ -209,6 +212,7 @@ public class ManagementAlbum extends javax.swing.JPanel {
         jScrollPane2 = new javax.swing.JScrollPane();
         tblTrack = new beatalbumshop.componment.MyTable();
         txtAutoFill = new beatalbumshop.componment.MyButton();
+        btnInactive = new beatalbumshop.componment.MyButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setMaximumSize(new java.awt.Dimension(1030, 658));
@@ -302,6 +306,17 @@ public class ManagementAlbum extends javax.swing.JPanel {
             }
         });
 
+        btnInactive.setBackground(new java.awt.Color(215, 46, 46));
+        btnInactive.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(215, 46, 46)));
+        btnInactive.setForeground(new java.awt.Color(255, 255, 255));
+        btnInactive.setText("Inactive");
+        btnInactive.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnInactive.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInactiveActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -342,7 +357,8 @@ public class ManagementAlbum extends javax.swing.JPanel {
                             .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtAutoFill, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtAutoFill, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnInactive, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(30, 30, 30))))
         );
         layout.setVerticalGroup(
@@ -369,14 +385,15 @@ public class ManagementAlbum extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblName2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtReleaseDate, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(15, 15, 15)
+                            .addComponent(btnInactive, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(13, 13, 13)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                             .addComponent(lblPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(lblInStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(txtInStock, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(txtInStock, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -401,8 +418,13 @@ public class ManagementAlbum extends javax.swing.JPanel {
         ArrayList<String> errors = new ArrayList<>();
 
         if(tblTrack.getRowCount() == 0) errors.add("Không được để trống danh sách bài hát");
+        
         errors.add(Validator.allowInteger((JTextField)txtInStock, "In Stock", inStock, false));
-        if(Integer.parseInt(inStock) < -1) errors.add("In Stock phải >= -1\n(-1: Discontinued, 0: Out of stock)\n");
+        if(Validator.isNotNull((JTextField)txtInStock, inStock)) {
+            if(Integer.parseInt(inStock) < -1) errors.add("In Stock phải >= -1\n(-1: Discontinued, 0: Out of stock)\n");
+        }
+        
+        errors.add((!Validator.isNotNull((JTextField)txtReleaseDate, releaseDate)) ? "Vui lòng nhập Release Date\n" : "");
         errors.add(Validator.allowDouble((JTextField)txtPrice, "Price", price, false));
         errors.add((!Validator.isNotNull((JTextField)txtReleaseDate, releaseDate)) ? "Vui lòng nhập Release Date\n" : "");
         errors.add((!Validator.isNotNull((JTextField)txtArtist, artist)) ? "Vui lòng nhập Artist\n" : "");
@@ -481,7 +503,7 @@ public class ManagementAlbum extends javax.swing.JPanel {
 //                return;
 //            }
 //        }
-        boolean success = albumDAO.deleteImage(Long.parseLong(id));
+        boolean success = albumDAO.deleteImage(id);
         if(!success) {
             MyDialog.display(1, "Có lỗi xảy ra.");
             return;
@@ -538,9 +560,21 @@ public class ManagementAlbum extends javax.swing.JPanel {
         tblAlbum.getSelectionModel().clearSelection();
     }//GEN-LAST:event_txtAutoFillActionPerformed
 
+    private void btnInactiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInactiveActionPerformed
+        if(tblAlbum.getSelectedRow() < 0) {
+            MyDialog.display(1, "Vui lòng chọn dòng cần Inactive");
+            return;
+        }
+        else {
+            txtInStock.setText("-1");
+            btnSave.doClick();
+        }
+    }//GEN-LAST:event_btnInactiveActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private beatalbumshop.componment.MyButton btnDelete;
+    private beatalbumshop.componment.MyButton btnInactive;
     private beatalbumshop.componment.MyButton btnSave;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
