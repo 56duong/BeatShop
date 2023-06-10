@@ -10,6 +10,7 @@ import javax.swing.border.LineBorder;
 public class MyTextField extends JTextField {
     private Shape shape;
     private int radius = 20;
+    private Color disabledBackgroundColor = getBackground();
 
     public int getRadius() {
         return radius;
@@ -51,5 +52,23 @@ public class MyTextField extends JTextField {
         }
         return shape.contains(x, y);
     }
+    
+    @Override
+    public Color getBackground() {
+        if (isEnabled()) {
+            return super.getBackground();
+        } else {
+            return disabledBackgroundColor;
+        }
+    }
+
+    public Color getDisabledBackgroundColor() {
+        return disabledBackgroundColor;
+    }
+
+    public void setDisabledBackgroundColor(Color disabledBackgroundColor) {
+        this.disabledBackgroundColor = disabledBackgroundColor;
+    }
+    
 }
 

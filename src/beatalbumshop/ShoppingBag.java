@@ -30,7 +30,7 @@ public class ShoppingBag extends javax.swing.JPanel {
     
         pnlListBag.setLayout(new BoxLayout(pnlListBag, BoxLayout.Y_AXIS));
 
-        updateBag();
+//        updateBag();
     }
     
     

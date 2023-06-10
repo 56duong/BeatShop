@@ -452,12 +452,11 @@ public class ManagementCustomer extends javax.swing.JPanel {
         String id = lblID.getText();
         String email = txtEmail.getText();
         String password = txtPassword.getText();
-        String dateCreated = txtDateCreated.getText();
+        String dateCreated = TimeHelper.getCurrentDateTime();
         
         //validate
         ArrayList<String> errors = new ArrayList<>();
 
-        errors.add((!Validator.isNotNull((JTextField)txtDateCreated, dateCreated)) ? "Vui lòng nhập Date Created\n" : "");
         errors.add((!Validator.isNotNull((JTextField)txtPassword, password)) ? "Vui lòng nhập Password\n" : "");
         errors.add((!Validator.isNotNull((JTextField)txtEmail, email)) ? "Vui lòng nhập Email\n" : "");
 

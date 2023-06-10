@@ -83,7 +83,7 @@
                   <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
               </Group>
               <Group type="102" alignment="0" attributes="0">
-                  <Component id="pnlTitleBar" pref="0" max="32767" attributes="0"/>
+                  <Component id="pnlTitleBar" pref="390" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -155,8 +155,9 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="lblClose">
               <Properties>
+                <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/beatalbumshop/resources/images/icons/close.png"/>
+                  <Image iconType="3" name="/beatalbumshop/resources/images/icons/close-16x16.png"/>
                 </Property>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Hand Cursor"/>

@@ -1,5 +1,7 @@
 package beatalbumshop;
 
+import static beatalbumshop.MainAdmin.curTab;
+import static beatalbumshop.MainAdmin.prevTab;
 import beatalbumshop.componment.MyButton;
 import beatalbumshop.componment.MyLabel;
 import beatalbumshop.model.LoggedInUser;
@@ -15,6 +17,7 @@ public class Main extends javax.swing.JFrame {
     JButton [] btnMenuList;
     Color gray = new Color(50, 50, 50);
     public ShoppingBag tabSP;
+    public static String prevTab, curTab;
     
     public Main() {
         initComponents();
@@ -55,6 +58,10 @@ public class Main extends javax.swing.JFrame {
                     
                     // show tab
                     String name = e.getActionCommand().toLowerCase().replaceAll(" ", "");
+                    
+                    prevTab = curTab;
+                    curTab = name;
+                    
                     if(name.equalsIgnoreCase("login")) {
                         dispose();
                         new LogIn().setVisible(true);
@@ -70,6 +77,15 @@ public class Main extends javax.swing.JFrame {
             });
         }
     }
+    
+    public static void showTab(String newTab) {
+        prevTab = curTab;
+        curTab = newTab;
+        CardLayout c = (CardLayout) pnlTabContent.getLayout();
+        c.show(pnlTabContent, curTab);
+    }
+    
+    
  
     // open login from buy now button
     public void setTabSP(ShoppingBag sp) {
@@ -266,7 +282,7 @@ public class Main extends javax.swing.JFrame {
     private beatalbumshop.componment.MyButton btnShoppingBag;
     private javax.swing.JPanel pnlMain;
     private javax.swing.JPanel pnlSideBar;
-    private javax.swing.JPanel pnlTabContent;
+    private static javax.swing.JPanel pnlTabContent;
     private beatalbumshop.componment.WindowTitleBar windowTitleBar;
     // End of variables declaration//GEN-END:variables
 }

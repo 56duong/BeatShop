@@ -89,8 +89,35 @@ public class CustomerDAOImpl implements CustomerDAO {
     
     
     @Override
-    public Customer getByID(String entityID) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Customer getByID(long customerID) {
+        Firestore db = (Firestore) Firebase.getFirestore(projectId);
+        DocumentReference docRef = db.collection("customers").document(customerID + "");
+        Customer customer;
+        
+        try {
+            DocumentSnapshot customerSnapshot = docRef.get().get();
+            
+            if (customerSnapshot.exists()) {
+                // Convert the document snapshot to a custom class
+                Customer customerData = customerSnapshot.toObject(Customer.class);
+                // Extract the lAddressBook field from the custom class
+                ArrayList<AddressBook> lAddressBook = customerData.getlAddressBook();
+                ArrayList<Item> lBagItem = customerData.getlBagItem();
+
+                customer = new Customer(
+                    lAddressBook,
+                    lBagItem,
+                    customerData.getID(),
+                    customerData.getEmail(),
+                    customerData.getPassword()
+                );
+                return customer;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        
+        return null;
     }
     
     
@@ -193,6 +220,11 @@ public class CustomerDAOImpl implements CustomerDAO {
         }
         
         return null;
+    }
+
+    @Override
+    public Customer getByID(String entityID) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

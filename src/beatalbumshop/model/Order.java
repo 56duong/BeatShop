@@ -20,6 +20,7 @@ public class Order {
     public Order() {
     }
 
+    // - dateCreated
     public Order(long orderID, String fullName, String address, String phoneNumber, String message, Double shipping, long status, ArrayList<Item> lOrderItem, long customerID, long staffID) {
         this.orderID = orderID;
         this.fullName = fullName;
@@ -47,6 +48,7 @@ public class Order {
         this.dateCreated = dateCreated;
     }
 
+    // - staffID, dateCreated
     public Order(long orderID, String fullName, String address, String phoneNumber, String message, Double shipping, long status, ArrayList<Item> lOrderItem, long customerID) {
         this.orderID = orderID;
         this.fullName = fullName;
@@ -59,6 +61,7 @@ public class Order {
         this.customerID = customerID;
     }
     
+    // - staffID
     public Order(long orderID, String fullName, String address, String phoneNumber, String message, Double shipping, long status, ArrayList<Item> lOrderItem, long customerID, String dateCreated) {
         this.orderID = orderID;
         this.fullName = fullName;
@@ -158,6 +161,14 @@ public class Order {
 
     public void setDateCreated(String dateCreated) {
         this.dateCreated = dateCreated;
+    }
+
+    public long getPaymentOption() {
+        return paymentOption;
+    }
+
+    public void setPaymentOption(long paymentOption) {
+        this.paymentOption = paymentOption;
     }
     
 }

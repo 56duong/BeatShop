@@ -29,7 +29,6 @@ import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QuerySnapshot;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -38,6 +37,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusListener;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.Collections;
 import javax.swing.BoxLayout;
@@ -193,6 +193,7 @@ public class Checkout extends javax.swing.JPanel {
             
             // order summary
             JPanel pnlSummary = new JPanel();
+            pnlSummary.setPreferredSize(new Dimension(550, 280));
             pnlSummary.setBackground(Color.WHITE);
             pnlSummary.setBorder(new EmptyBorder(40, 20, 10, 20));
             
@@ -253,7 +254,7 @@ public class Checkout extends javax.swing.JPanel {
             pnlSummary.add(btnPlaceOrder);
             
             pnlRight.add(pnlSummary);
-            
+
             pnlRight.revalidate();
             pnlRight.repaint();
         }
@@ -333,258 +334,244 @@ public class Checkout extends javax.swing.JPanel {
             // send email order confirmation details
             String subject = "ORDER CONFIRMATION DETAILS";
             String recipientName = customer.getEmail();
-            String itemList = "";
+            String orderItems = "";
             double sub = 0.0;
 
             for(Item item : lBagItem) {
                 Album album = albumDAO.getByID(item.getAlbumID());
 
                 if(album.getInStock() > 0) {
-                    itemList += "" +
-        "            <a class=\"bag-item\">\n" +
-        "                <img src=\"https://firebasestorage.googleapis.com/v0/b/beat-75a88.appspot.com/o/albums%252F" + album.getAlbumID() + ".png?alt=media\">\n" +
-        "                <div class=\"infor\">\n" +
-        "                    <p class=\"bag-item-name\">" + album.getAlbumName() + "</p>\n" +
-        "                    <p class=\"bag-item-price\">Price: $" + album.getPrice()+ "</p>\n" +
-        "                    <div class=\"select-size-quantity\">\n" +
-        "                        <p>Quantity:</p>\n" +
-        "                        <p class=\"bag-item-quantity\">" + item.getQuantity()+ "</p>\n" +
-        "                    </div><!--select-size-quantity-->\n" +
-        "                </div><!--infor-->\n" +
-        "            </a><!--bag-item-->";
+                    orderItems += ""
+                            + "<tr>\n" +
+"                                <td class=\"item text-left\">\n" +
+"                                    <img src=\"https://firebasestorage.googleapis.com/v0/b/beat-75a88.appspot.com/o/albums%252F" + album.getAlbumID() + ".png?alt=media\" alt=\"\">\n" +
+"                                    <div class=\"col-8\">\n" +
+"                                        <p class=\"cart-name\">" + album.getAlbumName() + "</p>\n" +
+"                                        <p class=\"cart-quantity\">Quantity:" + item.getQuantity()+ "</p>\n" +
+"                                        <p class=\"cart-price\">$" + album.getPrice()+ "</p>\n" +
+"                                    </div>\n" +
+"                                </td>\n" +
+"                            </tr>";
 
                     sub += album.getPrice() * item.getQuantity();
                 }
             }
-
-
-            String body = "" +
-"                                <html lang=\"en\">\n" +
-"                                    <head>\n" +
-"                                        <meta charset=\"UTF-8\">\n" +
-"                                        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n" +
-"                                        <meta http-equiv=\"X-UA-Compatible\" content=\"ie=edge\">\n" +
-"                                        <title>PLACE ORDER | BEAT</title>   \n" +
-"                                        <!--font-->\n" +
-//"                                        <link href=\"https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap\" rel=\"stylesheet\">\n" +
-"                                        <style>\n" +
+            
+            String billingAddress = ""
+                    + "  <p>OrderID: <strong>#" + id + "</strong></p>\n" +
+"                        <p>Order Date: " + dateCreated + "</p>\n" +
+"                        <br>"
+                    + "  <p>Full Name: " + fullName + "</p>"
+                    + "  <p>Phone Number: " + phoneNumber + "</p>"
+                    + "  <p>Payment Option: " + OtherHelper.paymentOptionToString(0) + "</p>"
+                    + "  <p>Address: " + address + "</p>"
+                    + "  <p>Message: " + message + "</p>";
+            
+            
+            String body = "<html>\n" +
+"                            <head>\n" +
+"                                <style>\n" +
+"                                * {\n" +
+"                                    margin: 0;\n" +
+"                                    padding: 0;\n" +
+"                                    box-sizing: border-box;\n" +
+"                                    font-family: Arial, Helvetica, sans-serif;\n" +
+"                                }\n" +
 "\n" +
-"                                            * { \n" +
-"                                                padding: 0;\n" +
-"                                                margin: 0;\n" +
-"                                                box-sizing: border-box;\n" +
-"                                                font-family: Arial, sans-serif;\n" +
-"                                            } \n" +
+"                                a {\n" +
+"                                    color: #ffffff;\n" +
+"                                }\n" +
 "\n" +
-"                                            body {\n" +
-"                                                position: relative;\n" +
-"                                            }\n" +
+"                                .text-center {\n" +
+"                                    text-align: center;\n" +
+"                                }\n" +
 "\n" +
-"                                            .container{\n" +
-"                                                width: 100%;\n" +
-"                                                max-width: 500px;\n" +
-"                                                position: absolute;\n" +
-"                                                top: 50%;\n" +
-"                                                left: 50%;\n" +
-"                                                transform: translate(-50%);\n" +
-"                                                padding: 25px 15px 15px 15px;\n" +
-"                                                background: #f2f2f2;\n" +
-"                                            }\n" +
+"                                .text-left {\n" +
+"                                    text-align: left;\n" +
+"                                }\n" +
 "\n" +
-"                                            .header{\n" +
-"                                                margin-bottom: 30px;\n" +
-"                                                text-align: center;\n" +
-"                                                text-transform: uppercase;\n" +
-"                                            }\n" +
+"                                .bd {\n" +
+"                                    font-size: 0.875rem;\n" +
+"                                }\n" +
 "\n" +
-"                                            .header p{\n" +
-"                                                margin: 10px;\n" +
-"                                                font-size: 12px;\n" +
-"                                            }\n" +
+"                                table {\n" +
+"                                    min-width: 600px;\n" +
+"                                    max-width: 600px;\n" +
+"                                    margin: 40px auto;\n" +
+"                                    border: 1px solid #000;\n" +
+"                                }\n" +
 "\n" +
-"                                            .header .title{\n" +
-"                                                margin: 0;\n" +
-"                                                padding-top: 5px;\n" +
-"                                            }\n" +
+"                                table {\n" +
+"                                    border-bottom: 0;\n" +
+"                                }\n" +
 "\n" +
-"                                            .shipping-address{\n" +
-"                                                padding-bottom: 5px;\n" +
-"                                            }\n" +
+"                                tr {\n" +
+"                                    display: block;\n" +
+"                                    width: 100%;\n" +
+"                                    border-bottom: 1px solid #000;\n" +
+"                                    text-align: center;\n" +
+"                                }\n" +
 "\n" +
-"                                            .shipping-address,\n" +
-"                                            .bag-list{\n" +
-"                                                margin-bottom: 10px;\n" +
-"                                            }\n" +
+"                                td,\n" +
+"                                th {\n" +
+"                                    display: inline-block;\n" +
+"                                    width: 520px;\n" +
+"                                    margin: auto;\n" +
+"                                    padding: 20px 0;\n" +
+"                                }\n" +
 "\n" +
-"                                            .title{ \n" +
-"                                                margin-bottom: 5px;\n" +
-"                                                padding-top: 45px;\n" +
-"                                                font-size: 14px;\n" +
-"                                                font-weight: 500;\n" +
-"                                                text-transform: uppercase;\n" +
-"                                            }\n" +
+"                                .black-button {\n" +
+"                                    display: block;\n" +
+"                                    width: fit-content;\n" +
+"                                    padding: 7px 30px;\n" +
+"                                    border: 1px solid #000;\n" +
+"                                    border-radius: 5px;\n" +
+"                                    margin: auto;\n" +
+"                                    color: #fff;\n" +
+"                                    background-color: #000;\n" +
+"                                    text-transform: uppercase;\n" +
+"                                    text-decoration: none;\n" +
+"                                    cursor: pointer;\n" +
+"                                    transition: .2s;\n" +
+"                                }\n" +
 "\n" +
-"                                            .shipping-address .first{\n" +
-"                                                padding-top: 0;\n" +
-"                                            }\n" +
+"                                span {\n" +
+"                                    text-decoration: underline;\n" +
+"                                }\n" +
 "\n" +
-"                                            .shipping-address p:not(:first-child){\n" +
-"                                                font-size: 13px;\n" +
-"                                                font-weight: 300;\n" +
-"                                                line-height: 20px;\n" +
-"                                            }\n" +
+"                                .item {\n" +
+"                                    display: flex;\n" +
+"                                    justify-content: center;\n" +
+"                                    align-items: center;\n" +
+"                                    width: 100%;\n" +
+"                                    padding: 0;\n" +
+"                                }\n" +
 "\n" +
-"                                            .container>div{\n" +
-"                                                overflow-x: hidden;\n" +
-"                                            }\n" +
+"                                .item img {\n" +
+"                                    width: 33.33%;\n" +
+"                                    border-right: 1px solid #000;\n" +
+"                                }\n" +
 "\n" +
-"                                            .bag-list a{\n" +
-"                                                text-decoration: none;\n" +
-"                                            }\n" +
+"                                .item .col-8 {\n" +
+"                                    width: 66.66%;\n" +
+"                                    padding: 20px;\n" +
+"                                }\n" +
 "\n" +
-"                                            .bag-item{\n" +
-"                                                display: flex;\n" +
-"                                                justify-content: space-between;\n" +
-"                                                align-items: center;\n" +
-"                                                padding: 15px;\n" +
-"                                                border-bottom: 1px solid #e0e0e0;\n" +
-"                                            }\n" +
+"                                .item .cart-name {\n" +
+"                                    margin-bottom: 5px;\n" +
+"                                    font-weight: bold;\n" +
+"                                    text-transform: uppercase;\n" +
+"                                }\n" +
 "\n" +
-"                                            .bag-item:last-child{\n" +
-"                                                border-bottom: none;\n" +
-"                                            }\n" +
+"                                .item span {\n" +
+"                                    text-decoration: none;\n" +
+"                                }\n" +
 "\n" +
-"                                            .bag-item img{\n" +
-"                                                width: 70px;\n" +
-"                                            }\n" +
+"                                .item .cart-price {\n" +
+"                                    margin-top: 10px;\n" +
+"                                }\n" +
 "\n" +
-"                                            .infor{\n" +
-"                                                width: 100%;\n" +
-"                                                margin: 0 10px;\n" +
-"                                                color: #777777;\n" +
-"                                                font-weight: 400;\n" +
-"                                                text-transform: uppercase;\n" +
-"                                            }\n" +
+"                                .summary div {\n" +
+"                                    display: flex;\n" +
+"                                    justify-content: space-between;\n" +
+"                                    align-items: center;\n" +
+"                                    margin: 10px 0;\n" +
+"                                }\n" +
 "\n" +
-"                                            .infor .bag-item-name{\n" +
-"                                                margin-bottom: 10px;\n" +
-"                                                color: #000000;\n" +
-"                                                font-size: 12px;\n" +
-"                                            }\n" +
+"                                .summary div p {\n" +
+"                                    white-space: nowrap;\n" +
+"                                }\n" +
 "\n" +
-"                                            .infor .bag-item-price{\n" +
-"                                                margin-bottom: 3px;\n" +
-"                                                font-size: 11px;\n" +
-"                                            }\n" +
+"                                .summary div .right {\n" +
+"                                    width: 100%;\n" +
+"                                    text-align: right;  \n" +
+"                                }\n" +
 "\n" +
-"                                            .select-size-quantity{\n" +
-"                                                display: flex;\n" +
-"                                                justify-content: flex-start;\n" +
-"                                                align-items: center;\n" +
-"                                                margin-bottom: 3px;\n" +
-"                                                font-size: 11px;\n" +
-"                                            }\n" +
+"                                .summary .total {\n" +
+"                                    text-transform: uppercase;\n" +
+"                                    font-weight: bold;\n" +
+"                                }\n" +
 "\n" +
-"                                            .select-size-quantity p{\n" +
-"                                                margin-right: 5px;\n" +
-"                                            }\n" +
+"                            </style>\n" +
+"                            </head>\n" +
 "\n" +
-"                                            .order-summary{\n" +
-"                                                width: fit-content;\n" +
-"                                                margin: auto;\n" +
-"                                            }\n" +
+"                            <div class=\"bd\">\n" +
+"                                <table>\n" +
+"                                    <tbody>\n" +
+"                                        <tr>\n" +
+"                                            <th>BEAT</th>\n" +
+"                                        </tr>\n" +
 "\n" +
-"                                            .order-summary .title{\n" +
-"                                                margin-bottom: 10px;\n" +
-"                                                text-align: center;\n" +
-"                                            }\n" +
+"                                        <tr>\n" +
+"                                            <th>Your BEAT Order</th>\n" +
+"                                        </tr>\n" +
 "\n" +
-"                                            .table{\n" +
-"                                                display: table-row;\n" +
-"                                                font-size: 12px;\n" +
-"                                                font-weight: 300;\n" +
-"                                                text-transform: uppercase;\n" +
-"                                            }\n" +
+"                                        <tr>\n" +
+"                                            <td class=\"text-left\" style=\"padding: 40px 0 !important;\">\n" +
+"                                                Dear " + fullName + ",<br><br>\n" +
+"                                                Thank you for your trust in the BEAT Shop.\n" +
+"                                                <br><br>\n" +
+"                                                We are pleased to confirm that your order <strong>#" + id+"</strong> has been received and we will call you shortly to confirm this order.\n" +
+"                                                <br>\n" +
+"                                                If you did not place this order, we strongly request you to contact our customer support team immediately.\n" +
+"                                                <br>\n" +
+"                                                Please feel free to follow the status of your order in BEAT app, either in our dedicated Client Service area or in <span>My Account</span> if your are already a member.\n" +
+"                                            </td>\n" +
+"                                        </tr>\n" +
 "\n" +
-"                                            .row{\n" +
-"                                                display: table-row;\n" +
-"                                            }\n" +
+"                                        <tr>\n" +
+"                                            <th>Order Details</th>\n" +
+"                                        </tr>\n" +
 "\n" +
-"                                            .col{\n" +
-"                                                display: table-cell;\n" +
-"                                                padding: 5px 20px;\n" +
-"                                            }\n" +
+"                                        <tr>\n" +
+"                                            <td class=\"text-left\">\n" +
+"                                                " + billingAddress + "\n" +
+"                                            </td>\n" +
+"                                        </tr>\n" +
 "\n" +
-"                                            .col.right{\n" +
-"                                                font-size: 15px;\n" +
-"                                                text-align: right;\n" +
-"                                            }\n" +
+"                                        " + orderItems + "\n" +
 "\n" +
-"                                            .last{\n" +
-"                                                font-size: 22px !important;\n" +
-"                                                font-weight: 400;\n" +
-"                                            }\n" +
-"\n" +
-"                                            .help{\n" +
-"                                                margin-top: 50px;\n" +
-"                                                font-size: 12px;\n" +
-"                                                font-weight: 500;\n" +
-"                                                text-align: center;\n" +
-"                                                text-transform: uppercase;\n" +
-"                                            }\n" +
-"\n" +
-"                                            .help a{\n" +
-"                                                color: #000000;\n" +
-"                                            }\n" +
-"\n" +
-"                                        </style>\n" +
-"                                    </head>\n" +
-"                                    <body>\n" +
-"                                        <div class=\"container\">  \n" +
-"                                        <div class=\"header\">\n" +
-"                                            <h2>Thank you for your order!</h2>\n" +
-"                                            <p>Dear " + fullName + ", Thank you for shopping with BEAT</p>\n" +
-"                                            <p>We will call you shortly to confirm your order.</p> \n" +
-"                                            <p class=\"title\">Order Number: " + id + "</p>\n" +
-"                                            <p class=\"title\">Order Date: " + dateCreated + "</p>\n" +
-"                                        </div><!--header-->\n" +
-"\n" +
-"                                            <div class=\"shipping-address\">\n" +
-"                                                <p class=\"title first\">Shipping address</p>\n" +
-"                                                <p>" + fullName + "</p>\n" +
-"                                                <p>" + phoneNumber + "</p>\n" +
-"                                                <p>" + address + "</p>\n" +
-"                                                <p>" + message + "</p>\n" +
-"                                            </div><!--shipping-address-->\n" +
-"\n" +
-"                                            <div class=\"bag-list\">\n" +
-"                                                <p class=\"title\">YOUR SELECTIONS</p>\n" +
-"                                                " + itemList + "\n" +
-"                                            </div><!--bag-list-->  \n" +
-"\n" +
-"                                            <div class=\"order-summary\">\n" +
-"                                                <p class=\"title\">Order summary</p>\n" +
-"                                                <div class=\"table\">\n" +
-"                                                    <div class=\"row\">\n" +
-"                                                        <div class=\"col\">Subtotal:</div>\n" +
-"                                                        <div class=\"col right\">$ " + sub + "</div>\n" +
-"                                                    </div>\n" +
-"                                                    <div class=\"row\">\n" +
-"                                                        <div class=\"col\">Shipping (COD):</div>\n" +
-"                                                        <div class=\"col right\">$ 0</div>\n" +
-"                                                    </div>\n" +
-"                                                    <div class=\"row\">\n" +
-"                                                        <div class=\"col\">Total:</div>\n" +
-"                                                        <div class=\"col right last\">$ " + sub + "</div>\n" +
-"                                                    </div>\n" +
+"                                        <tr>\n" +
+"                                            <td class=\"summary text-left\">\n" +
+"                                                <div>\n" +
+"                                                    <p>Subtotal</p>\n" +
+"                                                    <p class=\"right\">$" + sub + "</p>\n" +
 "                                                </div>\n" +
-"                                            </div><!--order-summary--> \n" +
 "\n" +
-"                                            <p class=\"help\">May we help: <a href=\"mailto:56duong@gmail.com\" target=\"_blank\">56duong@gmail.com</a></p>\n" +
+"                                                <div>\n" +
+"                                                    <p>Shipping cost</p>\n" +
+"                                                    <p class=\"right\">$" + shipping + "</p>\n" +
+"                                                </div>\n" +
 "\n" +
-"                                        </div><!--container-->  \n" +
-"                                    </body>\n" +
-"                                </html>";
+"                                                <div class=\"total\">\n" +
+"                                                    <p>Total</p>\n" +
+"                                                    <p class=\"right\">$" + sub + "</p>\n" +
+"                                                </div>\n" +
+"                                            </td>\n" +
+"                                        </tr>\n" +
+"\n" +
+"                                        <tr>\n" +
+"                                            <td class=\"text-center\">\n" +
+"                                                Should you need any further information, please <span>email us</span>.<br>\n" +
+"                                                By contacting Client Service, you agree that your data will be transferred outside your country.\n" +
+"                                                <br><br>\n" +
+"                                                BEAT Client Service\n" +
+"                                                <br><br>\n" +
+"                                                <a href='beattobeat.online' class=\"black-button\">VISIT BEATTOBEAT.ONLINE</a>\n" +
+"                                            </td>\n" +
+"                                        </tr>\n" +
+"\n" +
+"                                        <tr>\n" +
+"                                            <td class=\"text-center\">\n" +
+"                                                ©\n" +
+"                                                " + Year.now().getValue() + "\n" +
+"                                                BEAT\n" +
+"                                            </td>\n" +
+"                                        </tr>\n" +
+"                                    </tbody>\n" +
+"                                </table>\n" +
+"                            </div>\n" +
+"                        </html>";
 
             boolean sendStatus = SendEmail.send(recipientName, recipientName, subject, body); 
 
@@ -669,7 +656,7 @@ public class Checkout extends javax.swing.JPanel {
         myScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         pnlListBag.setBackground(new java.awt.Color(255, 255, 255));
-        pnlListBag.setPreferredSize(new java.awt.Dimension(1028, 800));
+        pnlListBag.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 20, 0));
         pnlListBag.setLayout(new java.awt.BorderLayout());
 
         pnlLeft.setBackground(new java.awt.Color(255, 255, 255));
@@ -788,13 +775,13 @@ public class Checkout extends javax.swing.JPanel {
                 .addGroup(pnlLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblMessage1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(rdoCOD, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(361, Short.MAX_VALUE))
+                .addContainerGap(152, Short.MAX_VALUE))
         );
 
         pnlListBag.add(pnlLeft, java.awt.BorderLayout.LINE_START);
 
         pnlRight.setBackground(new java.awt.Color(255, 255, 255));
-        pnlRight.setPreferredSize(new java.awt.Dimension(540, 800));
+        pnlRight.setMaximumSize(new java.awt.Dimension(540, 32767));
 
         javax.swing.GroupLayout pnlRightLayout = new javax.swing.GroupLayout(pnlRight);
         pnlRight.setLayout(pnlRightLayout);
@@ -804,7 +791,7 @@ public class Checkout extends javax.swing.JPanel {
         );
         pnlRightLayout.setVerticalGroup(
             pnlRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 800, Short.MAX_VALUE)
+            .addGap(0, 591, Short.MAX_VALUE)
         );
 
         pnlListBag.add(pnlRight, java.awt.BorderLayout.CENTER);

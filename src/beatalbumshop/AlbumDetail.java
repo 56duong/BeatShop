@@ -13,7 +13,6 @@ import beatalbumshop.model.Customer;
 import beatalbumshop.model.LoggedInUser;
 import beatalbumshop.model.Track;
 import beatalbumshop.utils.ImageHelper;
-import beatalbumshop.utils.OtherHelper;
 import beatalbumshop.utils.TimeHelper;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -260,8 +259,7 @@ public class AlbumDetail extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
-        Main mainFrame = OtherHelper.getMainFrame(this);
-        mainFrame.getBtnShop().doClick();
+        Main.showTab(Main.prevTab);
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void btnBuyNowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuyNowActionPerformed

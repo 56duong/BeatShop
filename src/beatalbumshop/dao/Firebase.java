@@ -5,6 +5,7 @@ import com.google.cloud.firestore.Firestore;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
@@ -14,7 +15,7 @@ public class Firebase {
         try {
             if(FirebaseApp.getApps().isEmpty()) {
                 // Use the application default credentials
-                InputStream serviceAccount = new FileInputStream("src/beatalbumshop/config/serviceAccountKey.json");
+                InputStream serviceAccount = new FileInputStream(new File(Firebase.class.getResource("/beatalbumshop/config/serviceAccountKey.json").toURI()));
                 GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
                 FirebaseOptions options = new FirebaseOptions.Builder()
                         .setCredentials(credentials)

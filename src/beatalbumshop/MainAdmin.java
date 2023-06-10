@@ -1,5 +1,6 @@
 package beatalbumshop;
 
+import beatalbumshop.componment.MyButton;
 import beatalbumshop.componment.MyDialog;
 import beatalbumshop.model.LoggedInUser;
 import java.awt.CardLayout;
@@ -12,6 +13,8 @@ import javax.swing.JButton;
 public class MainAdmin extends javax.swing.JFrame {
     JButton [] btnMenuList;
     Color gray = new Color(50, 50, 50);
+    public ManagementOrder managementOrder;
+    public static String prevTab, curTab;
 
     public MainAdmin() {
         initComponents();
@@ -22,10 +25,11 @@ public class MainAdmin extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         
         // tab
+        managementOrder = new ManagementOrder();
         pnlTabContent.setLayout(new CardLayout());
         pnlTabContent.add(new ManagementAlbum(), "album");
         pnlTabContent.add(new ManagementCustomer(), "customer");
-        pnlTabContent.add(new ManagementOrder(), "order");
+        pnlTabContent.add(managementOrder, "order");
         pnlTabContent.add(new ManagementUser(), "user");
         pnlTabContent.add(new ManagementReport(), "report");
         pnlTabContent.add(new Account(), "account");
@@ -44,8 +48,8 @@ public class MainAdmin extends javax.swing.JFrame {
                     
                     // show tab
                     String name = e.getActionCommand().toLowerCase().replaceAll(" ", "");
-                    CardLayout c = (CardLayout) pnlTabContent.getLayout();
-                    c.show(pnlTabContent, name);
+                    
+                    showTab(name);
                 }
             });
         }
@@ -62,7 +66,28 @@ public class MainAdmin extends javax.swing.JFrame {
             btnReport.setVisible(false);
         }
     }
+    
+    
+    
+    public static void showTab(String newTab) {
+        prevTab = curTab;
+        curTab = newTab;
+        CardLayout c = (CardLayout) pnlTabContent.getLayout();
+        c.show(pnlTabContent, curTab);
+    }
 
+    
+    
+    public MyButton getBtnOrder() {
+        return btnOrder;
+    }
+    
+    public ManagementOrder getManagementOrder() {
+        return managementOrder;
+    }
+    
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -229,6 +254,7 @@ public class MainAdmin extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+        
                 // Check login
                 if (!LoggedInUser.isAdmin()) {
                     new LogIn().setVisible(true);
@@ -250,7 +276,7 @@ public class MainAdmin extends javax.swing.JFrame {
     private beatalbumshop.componment.MyButton btnUser;
     private javax.swing.JPanel pnlMain;
     private javax.swing.JPanel pnlSideBar;
-    private javax.swing.JPanel pnlTabContent;
+    private static javax.swing.JPanel pnlTabContent;
     private beatalbumshop.componment.WindowTitleBar windowTitleBar;
     // End of variables declaration//GEN-END:variables
 }

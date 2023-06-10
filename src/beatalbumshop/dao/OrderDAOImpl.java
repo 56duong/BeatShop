@@ -79,7 +79,8 @@ public class OrderDAOImpl implements OrderDAO {
                     orderData.getStatus(),
                     lOrderItem,
                     orderData.getCustomerID(),
-                    orderData.getStaffID()
+                    orderData.getStaffID(),
+                    orderData.getDateCreated()
                 );
 
                 lOrder.add(o);
@@ -115,19 +116,31 @@ public class OrderDAOImpl implements OrderDAO {
 
     @Override
     public boolean updateByID(Order order) {
-//        try {
-//            Firestore db = (Firestore) Firebase.getFirestore(projectId);
-//            CollectionReference colRef = db.collection("album");
-//            DocumentReference docRef = colRef.document(album.getAlbumID() + "");
-//
-//            // (async) Update one field
-//            ApiFuture<WriteResult> result = docRef.set(new Album(album.getAlbumID(), album.getAlbumName(), album.getAlbumPrice(), album.getInStock()));
-//            
-//            System.out.println("Update time : " + result.get().getUpdateTime());
-//            return true;
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
+        try {
+            Firestore db = (Firestore) Firebase.getFirestore(projectId);
+            CollectionReference colRef = db.collection("orders");
+            DocumentReference docRef = colRef.document(order.getOrderID() + "");
+
+            // Create a map with the fields to update
+            Map<String, Object> updates = new HashMap<>();
+            updates.put("address", order.getAddress());
+            updates.put("fullName", order.getFullName());
+            updates.put("lOrderItem", order.getlOrderItem());
+            updates.put("message", order.getMessage());
+            updates.put("paymentOption", order.getPaymentOption());
+            updates.put("phoneNumber", order.getPhoneNumber());
+            updates.put("shipping", order.getShipping());
+            updates.put("staffID", order.getStaffID());
+            updates.put("status", order.getStatus());
+
+            // (async) Update the document with the new field values
+            ApiFuture<WriteResult> result = docRef.update(updates);
+            System.out.println("Update time: " + result.get().getUpdateTime());
+            
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
         
         return false;
     }
@@ -150,17 +163,58 @@ public class OrderDAOImpl implements OrderDAO {
                 ArrayList<Item> lOrderItem = orderData.getlOrderItem();
                 
                 order = new Order(
-                        documentSnapshot.getLong("orderID"),
-                        documentSnapshot.getString("fullName"),
-                        documentSnapshot.getString("address"),
-                        documentSnapshot.getString("phoneNumber"),
-                        documentSnapshot.getString("message"),
-                        documentSnapshot.getDouble("shipping"),
-                        documentSnapshot.getLong("status"),
-                        lOrderItem,
-                        documentSnapshot.getLong("customerID"),
-                        documentSnapshot.getLong("staffID")
+                    documentSnapshot.getLong("orderID"),
+                    documentSnapshot.getString("fullName"),
+                    documentSnapshot.getString("address"),
+                    documentSnapshot.getString("phoneNumber"),
+                    documentSnapshot.getString("message"),
+                    documentSnapshot.getDouble("shipping"),
+                    documentSnapshot.getLong("status"),
+                    lOrderItem,
+                    documentSnapshot.getLong("customerID"),
+                    documentSnapshot.getLong("staffID"),
+                    documentSnapshot.getString("dateCreated")
                 );
+                return order;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        
+        return null;
+    }
+
+    
+    
+    @Override
+    public Order getByID(long orderID) {
+        Firestore db = (Firestore) Firebase.getFirestore(projectId);
+        DocumentReference docRef = db.collection("orders").document(orderID + "");
+        Order order;
+        
+        try {
+            DocumentSnapshot documentSnapshot = docRef.get().get();
+            
+            if (documentSnapshot.exists()) {
+                // Convert the document snapshot to a custom class
+                Order orderData = documentSnapshot.toObject(Order.class);
+                // Extract the lTrack field from the custom class
+                ArrayList<Item> lOrderItem = orderData.getlOrderItem();
+                
+                order = new Order(
+                    documentSnapshot.getLong("orderID"),
+                    documentSnapshot.getString("fullName"),
+                    documentSnapshot.getString("address"),
+                    documentSnapshot.getString("phoneNumber"),
+                    documentSnapshot.getString("message"),
+                    documentSnapshot.getDouble("shipping"),
+                    documentSnapshot.getLong("status"),
+                    lOrderItem,
+                    documentSnapshot.getLong("customerID"),
+                    documentSnapshot.getLong("staffID"),
+                    documentSnapshot.getString("dateCreated")
+                );
+                
                 return order;
             }
         } catch (Exception ex) {

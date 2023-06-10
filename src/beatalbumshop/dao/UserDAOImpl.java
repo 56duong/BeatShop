@@ -23,16 +23,48 @@ public class UserDAOImpl implements UserDAO{
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
+    
+    
     @Override
     public User getByEmail(String email) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Firestore db = (Firestore) Firebase.getFirestore(projectId);
+        CollectionReference colRef = db.collection("users");
+        User user;
+        
+        ApiFuture<QuerySnapshot> query = colRef.get();
+        try {
+            QuerySnapshot querySnapshot = query.get();
+            List<QueryDocumentSnapshot> users = querySnapshot.getDocuments();
+            
+            for (QueryDocumentSnapshot u : users) {
+                if(u.getString("email").equalsIgnoreCase(email)) {
+                    user = new User(
+                        u.getLong("role"),
+                        u.getLong("id"),
+                        u.getString("email"),
+                        u.getString("password"),
+                        u.getString("dateCreated")
+                    );
+                    
+                    return user;
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        
+        return null;
     }
 
+    
+    
     @Override
     public int updatePasswordByEmail(String password, String email) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
+    
+    
     @Override
     public boolean add(User user) {
         Firestore db = Firebase.getFirestore(projectId);
@@ -51,6 +83,8 @@ public class UserDAOImpl implements UserDAO{
         return false;
     }
 
+    
+    
     @Override
     public boolean updateByID(User user) {
         try {
@@ -76,6 +110,8 @@ public class UserDAOImpl implements UserDAO{
         return false;
     }
 
+    
+    
     @Override
     public boolean deleteByID(String userID) {
         Firestore db = (Firestore) Firebase.getFirestore(projectId);
@@ -150,6 +186,8 @@ public class UserDAOImpl implements UserDAO{
         return null;
     }
 
+    
+    
     @Override
     public boolean checkExitByEmail(String email) {
         Firestore db = (Firestore) Firebase.getFirestore(projectId);
@@ -194,6 +232,35 @@ public class UserDAOImpl implements UserDAO{
                         user.getString("dateCreated")
                     );
                 }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        
+        return null;
+    }
+
+    
+    
+    @Override
+    public User getByID(long userID) {
+        Firestore db = (Firestore) Firebase.getFirestore(projectId);
+        DocumentReference docRef = db.collection("users").document(userID + "");
+        User user;
+        
+        try {
+            DocumentSnapshot documentSnapshot = docRef.get().get();
+            
+            if (documentSnapshot.exists()) {
+                user = new User(
+                        documentSnapshot.getLong("role"),
+                        documentSnapshot.getLong("id"),
+                        documentSnapshot.getString("email"),
+                        documentSnapshot.getString("password"),
+                        documentSnapshot.getString("dateCreated")
+                );
+                
+                return user;
             }
         } catch (Exception ex) {
             ex.printStackTrace();

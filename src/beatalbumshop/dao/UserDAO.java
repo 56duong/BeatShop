@@ -9,4 +9,6 @@ public interface UserDAO extends DAO<User> {
     public User validateUser(String email, String password);
     public User getByEmail(String email);
     public int updatePasswordByEmail(String password, String email);
+    
+    public User getByID(long userID);
 }

@@ -198,12 +198,14 @@ public class ManagementUser extends javax.swing.JPanel {
 
         txtEmail.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3)));
         txtEmail.setFont(new java.awt.Font("Open Sans", 0, 14)); // NOI18N
+        txtEmail.setNextFocusableComponent(txtPassword);
 
         lblPassword.setForeground(new java.awt.Color(80, 80, 80));
         lblPassword.setText("Password:");
 
         txtPassword.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3)));
         txtPassword.setFont(new java.awt.Font("Open Sans", 0, 14)); // NOI18N
+        txtPassword.setNextFocusableComponent(lblDateCreated);
 
         btnNew.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnNew.setText("New");

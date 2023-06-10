@@ -132,8 +132,8 @@ public class Home extends javax.swing.JPanel {
 //            new AlbumDetail(id).setVisible(true);
             JPanel pnlTabContent = (JPanel) getParent();
             pnlTabContent.add(new AlbumDetail(id), "albumdetailpanel");
-            CardLayout c = (CardLayout) pnlTabContent.getLayout();
-            c.show(pnlTabContent, "albumdetailpanel");
+            
+            Main.showTab("albumdetailpanel");
         }
     };
     

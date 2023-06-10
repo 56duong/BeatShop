@@ -1,28 +1,40 @@
 package beatalbumshop.componment;
 
 import java.awt.Font;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 
-/**
- * MyDialog is a custom dialog box that displays different types of messages
- * based on the specified type. It is used for displaying information, errors,
- * warnings, or asking questions.
- */
-public class MyDialog extends javax.swing.JFrame {
+public class MyOkCancelDialog extends javax.swing.JDialog {
+
     public static final int INFORMATION = 0;
     public static final int ERROR = 1;
     public static final int QUESTION = 2;
     public static final int WARNING = 3;
     public static final int SUCCESS = 4;
+    
+    /**
+     * A return status code - returned if Cancel button has been pressed
+     */
+    public static final int RET_CANCEL = 0;
+    /**
+     * A return status code - returned if OK button has been pressed
+     */
+    public static final int RET_OK = 1;
 
     /**
-     * Creates new form MyDialog.
-     * Sets the font for the message text area and adds a listener for the
-     * Enter key to close the dialog.
+     * Creates new form NewOkCancelDialog
      */
-    public MyDialog() {
+    public MyOkCancelDialog(java.awt.Frame parent, boolean modal, int type, String message) {
+        super(parent, modal);
         initComponents();
+        
+        setLocationRelativeTo(null);
         txtMessage.setFont(new Font("Open Sans", 0, 16));
         
         // When the Enter key is pressed, close the dialog
@@ -30,47 +42,53 @@ public class MyDialog extends javax.swing.JFrame {
             @Override
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-                    dispose();
+                    btnOK.doClick();
                 }
             }
         });
-    }
-    
-    
-    
-    /**
-     * Displays a MyDialog with the specified type and message.
-     * @param type The type of message to display. 0 = information, 1 = error,
-     * 2 = question, 3 = warning, 4 = success.
-     * @param message The message to display in the dialog.
-     */
-    public static void display(int type, String message) {
+        
+        
         String title = "";
                 
         switch(type) {
-            case MyDialog.INFORMATION:
+            case MyOkCancelDialog.INFORMATION:
                 title = "Infomation";
                 break;
-            case MyDialog.ERROR:
+            case MyOkCancelDialog.ERROR:
                 title = "Error";
                 break;
-            case MyDialog.QUESTION:
+            case MyOkCancelDialog.QUESTION:
                 title = "Question";
                 break;
-            case MyDialog.WARNING:
+            case MyOkCancelDialog.WARNING:
                 title = "Warning";
                 break;
-            case MyDialog.SUCCESS:
+            case MyOkCancelDialog.SUCCESS:
                 title = "Success";
                 break;
         }
         
-        MyDialog dialog = new MyDialog();
-        dialog.lblIcon.setIcon(new ImageIcon(MyDialog.class.getResource("/beatalbumshop/resources/images/icons/" + title + ".png")));
-        dialog.lblTitleBarName.setText(title);
-        dialog.txtMessage.setText(message);
+        lblIcon.setIcon(new ImageIcon(MyOkCancelDialog.class.getResource("/beatalbumshop/resources/images/icons/" + title + ".png")));
+        lblTitleBarName.setText(title);
+        txtMessage.setText(message);
 
-        dialog.setVisible(true);
+        // Close the dialog when Esc is pressed
+        String cancelName = "cancel";
+        InputMap inputMap = getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), cancelName);
+        ActionMap actionMap = getRootPane().getActionMap();
+        actionMap.put(cancelName, new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                doClose(RET_CANCEL);
+            }
+        });
+    }
+
+    /**
+     * @return the return status of this dialog - one of RET_OK or RET_CANCEL
+     */
+    public int getReturnStatus() {
+        return returnStatus;
     }
 
     /**
@@ -90,28 +108,29 @@ public class MyDialog extends javax.swing.JFrame {
         btnOK = new beatalbumshop.componment.MyButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtMessage = new javax.swing.JTextArea();
+        btnCancel = new beatalbumshop.componment.MyButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setAlwaysOnTop(true);
-        setMaximumSize(new java.awt.Dimension(400, 200));
-        setMinimumSize(new java.awt.Dimension(400, 200));
         setUndecorated(true);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                closeDialog(evt);
+            }
+        });
 
         pnlMain.setBackground(new java.awt.Color(255, 255, 255));
         pnlMain.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(80, 80, 80)));
         pnlMain.setMaximumSize(new java.awt.Dimension(398, 198));
         pnlMain.setMinimumSize(new java.awt.Dimension(398, 198));
-        pnlMain.setPreferredSize(new java.awt.Dimension(398, 198));
 
         pnlTitleBar.setBackground(new java.awt.Color(255, 255, 255));
         pnlTitleBar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         pnlTitleBar.setMaximumSize(new java.awt.Dimension(397, 41));
         pnlTitleBar.setMinimumSize(new java.awt.Dimension(397, 41));
-        pnlTitleBar.setPreferredSize(new java.awt.Dimension(397, 41));
 
         lblClose.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblClose.setIcon(new javax.swing.ImageIcon(getClass().getResource("/beatalbumshop/resources/images/icons/close-16x16.png"))); // NOI18N
         lblClose.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblClose.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         lblClose.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 lblCloseMousePressed(evt);
@@ -144,7 +163,9 @@ public class MyDialog extends javax.swing.JFrame {
                 .addContainerGap(11, Short.MAX_VALUE))
         );
 
-        btnOK.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnOK.setBackground(new java.awt.Color(0, 162, 47));
+        btnOK.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 162, 47)));
+        btnOK.setForeground(new java.awt.Color(255, 255, 255));
         btnOK.setText("OK");
         btnOK.setFont(new java.awt.Font("Open Sans", 0, 14)); // NOI18N
         btnOK.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -166,23 +187,35 @@ public class MyDialog extends javax.swing.JFrame {
         txtMessage.setBorder(null);
         jScrollPane1.setViewportView(txtMessage);
 
+        btnCancel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnCancel.setText("Cancel");
+        btnCancel.setFont(new java.awt.Font("Open Sans", 0, 14)); // NOI18N
+        btnCancel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlMainLayout = new javax.swing.GroupLayout(pnlMain);
         pnlMain.setLayout(pnlMainLayout);
         pnlMainLayout.setHorizontalGroup(
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMainLayout.createSequentialGroup()
-                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(pnlMainLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnOK, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlMainLayout.createSequentialGroup()
                         .addGap(20, 20, 20)
-                        .addComponent(lblIcon, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                        .addComponent(lblIcon, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlMainLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20)
+                        .addComponent(btnOK, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(20, 20, 20))
             .addGroup(pnlMainLayout.createSequentialGroup()
-                .addComponent(pnlTitleBar, javax.swing.GroupLayout.PREFERRED_SIZE, 390, Short.MAX_VALUE)
+                .addComponent(pnlTitleBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         pnlMainLayout.setVerticalGroup(
@@ -196,7 +229,9 @@ public class MyDialog extends javax.swing.JFrame {
                         .addComponent(lblIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnOK, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnOK, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(12, 12, 12))
         );
 
@@ -212,20 +247,32 @@ public class MyDialog extends javax.swing.JFrame {
         );
 
         pack();
-        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Closes the dialog
+     */
+    private void closeDialog(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_closeDialog
+        doClose(RET_CANCEL);
+    }//GEN-LAST:event_closeDialog
+
     private void lblCloseMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblCloseMousePressed
-        dispose();
+        doClose(RET_CANCEL);
     }//GEN-LAST:event_lblCloseMousePressed
 
-    private void btnOKMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnOKMouseClicked
-        dispose();
-    }//GEN-LAST:event_btnOKMouseClicked
-
     private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
-        dispose();
+        doClose(RET_OK);
     }//GEN-LAST:event_btnOKActionPerformed
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        doClose(RET_CANCEL);
+    }//GEN-LAST:event_btnCancelActionPerformed
+    
+    private void doClose(int retStatus) {
+        returnStatus = retStatus;
+        setVisible(false);
+        dispose();
+    }
 
     /**
      * @param args the command line arguments
@@ -244,26 +291,33 @@ public class MyDialog extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MyDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MyOkCancelDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MyDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MyOkCancelDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MyDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MyOkCancelDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MyDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MyOkCancelDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-//                new MyDialog().setVisible(true);
-            }
-        });
+        /* Create and display the dialog */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                NewOkCancelDialog dialog = new NewOkCancelDialog(new javax.swing.JFrame(), true);
+//                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+//                    @Override
+//                    public void windowClosing(java.awt.event.WindowEvent e) {
+//                        System.exit(0);
+//                    }
+//                });
+//                dialog.setVisible(true);
+//            }
+//        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private beatalbumshop.componment.MyButton btnCancel;
     private beatalbumshop.componment.MyButton btnOK;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblClose;
@@ -273,4 +327,6 @@ public class MyDialog extends javax.swing.JFrame {
     private javax.swing.JPanel pnlTitleBar;
     private static javax.swing.JTextArea txtMessage;
     // End of variables declaration//GEN-END:variables
+
+    private int returnStatus = RET_CANCEL;
 }
