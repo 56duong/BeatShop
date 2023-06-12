@@ -105,9 +105,10 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="txtEmail" max="32767" attributes="0"/>
                               <Group type="102" alignment="1" attributes="0">
                                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                   <Component id="lblForgotPassword" min="-2" max="-2" attributes="0"/>
@@ -115,7 +116,6 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="2" attributes="0">
                                       <Component id="lblTitle" alignment="2" min="-2" max="-2" attributes="0"/>
-                                      <Component id="txtEmail" alignment="2" min="-2" pref="400" max="-2" attributes="0"/>
                                       <Component id="txtPassword" alignment="2" min="-2" pref="400" max="-2" attributes="0"/>
                                       <Component id="lblSignUp" alignment="2" min="-2" max="-2" attributes="0"/>
                                       <Component id="lblContinueAs" alignment="2" min="-2" max="-2" attributes="0"/>

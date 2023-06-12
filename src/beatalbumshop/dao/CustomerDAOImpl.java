@@ -12,6 +12,7 @@ import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.WriteResult;
@@ -227,4 +228,30 @@ public class CustomerDAOImpl implements CustomerDAO {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
+    
+    
+    public int updateByEmail(String password ,String email) {
+        Firestore db = (Firestore) Firebase.getFirestore(projectId);
+        CollectionReference colRef = db.collection("customers");
+
+        Query query = colRef.whereEqualTo("email", email);
+
+        try {
+            QuerySnapshot querySnapshot = query.get().get();
+            List<QueryDocumentSnapshot> customers = querySnapshot.getDocuments();
+
+            for (QueryDocumentSnapshot customer : customers) {
+                // Lấy reference của document để thực hiện cập nhật
+                DocumentReference docRef = colRef.document(customer.getId());
+
+                // Cập nhật dữ liệu
+                docRef.update("password", password);
+                
+            }
+            return 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
 }

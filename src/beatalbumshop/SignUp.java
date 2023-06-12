@@ -10,6 +10,7 @@ import beatalbumshop.model.AddressBook;
 import beatalbumshop.model.Customer;
 import beatalbumshop.model.Item;
 import beatalbumshop.model.User;
+import beatalbumshop.utils.SendEmail;
 import beatalbumshop.utils.TextHelper;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
@@ -34,6 +35,7 @@ public class SignUp extends javax.swing.JFrame {
     ArrayList<User> listUser = new ArrayList<>();
     UserDAO userDAO = new UserDAOImpl();
     CustomerDAO customerDAO = new CustomerDAOImpl();
+    int otp = -1;
 
     public SignUp() {
         initComponents();
@@ -49,6 +51,7 @@ public class SignUp extends javax.swing.JFrame {
         addPlaceholderText(txtPassword2, "Password");
         
         txtEmail.requestFocus();
+        txtOTP.setVisible(false);
     }
     
     
@@ -198,6 +201,7 @@ public class SignUp extends javax.swing.JFrame {
         btnSignup = new beatalbumshop.componment.MyButton();
         lblLogin = new javax.swing.JLabel();
         lblContinueAs = new javax.swing.JLabel();
+        txtOTP = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(1280, 720));
@@ -265,6 +269,11 @@ public class SignUp extends javax.swing.JFrame {
             }
         });
 
+        txtOTP.setFont(new java.awt.Font("Open Sans", 0, 16)); // NOI18N
+        txtOTP.setForeground(new java.awt.Color(82, 82, 82));
+        txtOTP.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
+        txtOTP.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+
         javax.swing.GroupLayout pnlFormLayout = new javax.swing.GroupLayout(pnlForm);
         pnlForm.setLayout(pnlFormLayout);
         pnlFormLayout.setHorizontalGroup(
@@ -283,6 +292,11 @@ public class SignUp extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(btnSignup, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
+            .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlFormLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(txtOTP, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(7, Short.MAX_VALUE)))
         );
         pnlFormLayout.setVerticalGroup(
             pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -302,6 +316,11 @@ public class SignUp extends javax.swing.JFrame {
                 .addGap(10, 10, 10)
                 .addComponent(lblContinueAs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(20, 20, 20))
+            .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlFormLayout.createSequentialGroup()
+                    .addGap(211, 211, 211)
+                    .addComponent(txtOTP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(212, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout pnlContentLayout = new javax.swing.GroupLayout(pnlContent);
@@ -365,6 +384,7 @@ public class SignUp extends javax.swing.JFrame {
         String errorMessage = validateFormSigup(email, password, confirmpassword);
         ArrayList<AddressBook> lAddressBook = new ArrayList<>();
         ArrayList<Item> lBagItem = new ArrayList<>();
+        String btnType = evt.getActionCommand();
         
         // co loi
         if (errorMessage != null) {
@@ -372,21 +392,63 @@ public class SignUp extends javax.swing.JFrame {
         }
         else {
             // kiem tra ton tai
-            if (customerDAO.checkExitByEmail(email) && userDAO.checkExitByEmail(email)) {
-                Firestore db = Firebase.getFirestore("beat-75a88");
-                CollectionReference colRef = db.collection("customers");
-                
-                // hash password
-                password = TextHelper.HashPassword(password);
-
-                boolean result = customerDAO.add(new Customer(lAddressBook, lBagItem, getMaxID(colRef, "id"), email, password));
-                if(result) {
-                    dispose();
-                    new LogIn().setVisible(true);
-                    MyDialog.display(0, "Đăng ký thành công!");
+            if (btnType.equalsIgnoreCase("Sign up") && customerDAO.checkExitByEmail(email) && userDAO.checkExitByEmail(email)) {
+                int o = (int) (Math.random() * 900000) + 100000;
+                otp = o;
+                String subject = "WELCOME TO BEAT";
+                String recipientName = email;
+                String content = "<tr>\n"
+                          + "<td class=\"text-center\" style=\"padding: 80px 0 !important;\">\n"
+                          + "<h4>" + subject + "</h4>\n"
+                          + "<br>\n"
+                          + "Dear " + recipientName + ",<br>\n"
+                          + "Thank you for creating your personal account on BEAT.<br>\n"
+                          + "<br><br>\n"
+                          + "Your OTP code is:\n"
+                          + "<br><br>\n"
+                          + "<h2>" + o + "</h2>\n"
+                          + "</td>\n"
+                          + "</tr>\n"
+                          + "<tr>\n"
+                          + "<td>\n"
+                          + "<p class=\"text-center\">If you did not request to create an account, please ignore this email, no changes will be made to your account. Another user may have entered your username by mistake, but we encourage you to view our tips for Protecting Your Account if you have any concerns.</p>\n"
+                          + "</td>\n"
+                          + "</tr>\n";
+                System.out.println("1");
+                boolean sendStatus = SendEmail.sendFormat(email, email, subject, content);
+                //insert OTP into user
+                if (!sendStatus) {
+                    MyDialog.display(1, "Có lỗi xảy ra trong quá trình gửi email");
+                    return;
                 }
-            }
-            else {
+                //sau khi gui => chuyen sang xac nhan otp
+                txtEmail.setEnabled(true);
+                txtPassword.setVisible(false);
+                txtPassword2.setVisible(false);
+                txtOTP.setVisible(true);
+                txtOTP.requestFocus();
+                btnSignup.setText("Verify Code");
+            } else if (btnType.equalsIgnoreCase("Verify Code")) {
+                if (txtOTP.getText().equals(otp + "") && txtOTP.getText().matches("[0-9]{6}")) {
+                    Firestore db = Firebase.getFirestore("beat-75a88");
+                    CollectionReference colRef = db.collection("customers");
+
+                    // hash password
+                    password = TextHelper.HashPassword(password);
+
+                    boolean result = customerDAO.add(new Customer(lAddressBook, lBagItem, getMaxID(colRef, "id"), email, password));
+                    if (result) {
+                        dispose();
+                        new LogIn().setVisible(true);
+                        MyDialog.display(0, "Đăng ký thành công!");
+                    }
+                } else {
+
+                    MyDialog.display(1, "Wrong code. Try again.");
+                    txtOTP.requestFocus();
+                }
+
+            } else {
                 txtEmail.requestFocus();
                 MyDialog.display(1, "Email đã tồn tại vui lòng thử lại");
             }
@@ -420,6 +482,12 @@ public class SignUp extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -438,6 +506,7 @@ public class SignUp extends javax.swing.JFrame {
     private javax.swing.JPanel pnlForm;
     private javax.swing.JPanel pnlMain;
     private javax.swing.JTextField txtEmail;
+    private javax.swing.JTextField txtOTP;
     private javax.swing.JPasswordField txtPassword;
     private javax.swing.JPasswordField txtPassword2;
     private beatalbumshop.componment.WindowTitleBar windowTitleBar1;

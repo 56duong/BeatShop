@@ -208,13 +208,13 @@ public class LogIn extends javax.swing.JFrame {
             .addGroup(pnlFormLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtEmail)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlFormLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(lblForgotPassword))
                     .addGroup(pnlFormLayout.createSequentialGroup()
                         .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                             .addComponent(lblTitle)
-                            .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblSignUp)
                             .addComponent(lblContinueAs))
@@ -369,7 +369,8 @@ public class LogIn extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLogInActionPerformed
 
     private void lblForgotPasswordMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblForgotPasswordMousePressed
-
+        dispose();
+        new Forgot().setVisible(true);
     }//GEN-LAST:event_lblForgotPasswordMousePressed
 
     /**
