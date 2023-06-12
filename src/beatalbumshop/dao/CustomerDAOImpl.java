@@ -254,4 +254,44 @@ public class CustomerDAOImpl implements CustomerDAO {
             return 0;
         }
     }
+
+    
+    
+    @Override
+    public Customer getByEmail(String email) {
+        Firestore db = (Firestore) Firebase.getFirestore(projectId);
+        CollectionReference colRef = db.collection("customers");
+        Customer c;
+        
+        ApiFuture<QuerySnapshot> query = colRef.get();
+        try {
+            QuerySnapshot querySnapshot = query.get();
+            List<QueryDocumentSnapshot> customers = querySnapshot.getDocuments();
+            
+            for (QueryDocumentSnapshot customer : customers) {
+                if(customer.getString("email").equalsIgnoreCase(email)) {
+                    DocumentSnapshot customerSnapshot = customer;
+                    // Convert the document snapshot to a custom class
+                    Customer customerData = customerSnapshot.toObject(Customer.class);
+                    // Extract the lTrack field from the custom class
+                    ArrayList<AddressBook> lAddressBook = customerData.getlAddressBook();
+                    ArrayList<Item> lBagItem = customerData.getlBagItem();
+                    
+                    c = new Customer(
+                        lAddressBook,
+                        lBagItem,
+                        customer.getLong("id"),
+                        customer.getString("email"),
+                        customer.getString("password")
+                    );
+                    
+                    return c;
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        
+        return null;
+    }
 }

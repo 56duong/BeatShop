@@ -11,6 +11,7 @@ import beatalbumshop.model.Customer;
 import beatalbumshop.model.Track;
 import beatalbumshop.utils.ClearComponent;
 import beatalbumshop.utils.ImageHelper;
+import beatalbumshop.utils.SendEmail;
 import beatalbumshop.utils.TextHelper;
 import beatalbumshop.utils.TimeHelper;
 import beatalbumshop.utils.Validator;
@@ -96,6 +97,12 @@ public class ManagementCustomer extends javax.swing.JPanel {
             //scroll toi dong duoc chon
             tblCustomer.scrollRectToVisible(new Rectangle(tblCustomer.getCellRect(index, 0, true)));
             
+            if(tblCustomer.getValueAt(index, 2).toString().equals("")) {
+                btnDelete.setText("Active");
+            }
+            else {
+                btnDelete.setText("Inactive");
+            }
             txtEmail.setEditable(false);
             txtPassword.setEditable(false);
         }
@@ -252,7 +259,7 @@ public class ManagementCustomer extends javax.swing.JPanel {
         btnDelete.setBackground(new java.awt.Color(215, 46, 46));
         btnDelete.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(215, 46, 46)));
         btnDelete.setForeground(new java.awt.Color(255, 255, 255));
-        btnDelete.setText("Delete");
+        btnDelete.setText("Inactive");
         btnDelete.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -500,25 +507,88 @@ public class ManagementCustomer extends javax.swing.JPanel {
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        //delete
-        String id = tblCustomer.getValueAt(tblCustomer.getSelectedRow(), 0).toString();
- 
-        boolean result = customerDAO.deleteByID(id);
+        long id = Long.parseLong(tblCustomer.getValueAt(tblCustomer.getSelectedRow(), 0).toString());
+        Customer c = customerDAO.getByID(id);
+        int otp = 0;
+        String pass = "";
         
-        if(result) {
-            //delete thanh cong
-            fillToTable();
-            
-            //xoa 1 dong cuoi
-            if(lCustomer.size() == 0) clearForm();
-            //xoa dong cuoi
-            else if(index == lCustomer.size()) selectRow(index - 1);
-            else selectRow(index);
+        int active = 0; //0:inactive    1:active
+        if(btnDelete.getText().equalsIgnoreCase("inactive")) {
+            c.setPassword(pass);
+            btnDelete.setText("Active");
         }
-        else {
-            //delete that bai
+        else if(btnDelete.getText().equalsIgnoreCase("active")) {
+            otp = (int) (Math.random() * 900000) + 100000;
+            String o = TextHelper.HashPassword(otp + "");
+            pass = o;
+            c.setPassword(o);
+            btnDelete.setText("Inactive");
+            active = 1;
+        }
+        
+        boolean result = customerDAO.updateByID(new Customer(c.getlAddressBook(), c.getlBagItem(), c.getID(), c.getEmail(), pass));
+
+        if (result) {
+            //update thanh cong
+            fillToTable();
+            selectRow(findCustomerIndex(id));
+            
+            String subject = "";
+            String recipient = "";
+            String content = "";
+            
+            if(active == 0) {
+                // send email order has been changed
+                subject = "YOUR EMAIL " + c.getEmail() + " HAS BEEN INACTIVE";
+                recipient = c.getEmail();
+
+                content = "" +
+                    "<p>Dear " + c.getEmail() + ",</p>\n" +
+                    "<p>We hope this email finds you well. We would like to inform you that your account with us has been inactive for an extended period of time. We value your participation and want to ensure that you have the opportunity to continue enjoying our services.</p> <br>\n" +
+                    "<p>To reactivate your account, we kindly request you to contact our Client service team. They will guide you through the reactivation process and assist you with any queries or concerns you may have.</p> <br>\n";
+            }
+            else if(active == 1) {
+                // send email order has been changed
+                subject = "YOUR EMAIL " + c.getEmail() + " HAS BEEN ACTIVE";
+                recipient = c.getEmail();
+
+                content = "" +
+                    "<p>Dear " + c.getEmail() + ",</p>\n" +
+                    "<p>We are pleased to inform you that your account with us has been successfully reactivated. We appreciate your prompt action and are delighted to have you back as an active member of our community.</p> <br>\n" +
+                    "<p>As a part of the reactivation process, we have generated a new password for your account. Please find your new password below:</p> <br>\n" +
+                    "<br><br>\n" +
+                    "<h2>" + otp + "</h2>\n";
+            }
+
+            boolean sendStatus = SendEmail.sendOrderStatusEmail(recipient, recipient, subject, content); 
+            if(!sendStatus) {
+                MyDialog.display(1, "Có lỗi trong quá trình gửi Email");
+            }
+        } else {
+            //update that bai
             MyDialog.display(1, "Có lỗi xảy ra.");
         }
+
+//        //delete
+//        String id = tblCustomer.getValueAt(tblCustomer.getSelectedRow(), 0).toString();
+// 
+//        boolean result = customerDAO.deleteByID(id);
+//        
+//        if(result) {
+//            //delete thanh cong
+//            fillToTable();
+//            
+//            //xoa 1 dong cuoi
+//            if(lCustomer.size() == 0) clearForm();
+//            //xoa dong cuoi
+//            else if(index == lCustomer.size()) selectRow(index - 1);
+//            else selectRow(index);
+//        }
+//        else {
+//            //delete that bai
+//            MyDialog.display(1, "Có lỗi xảy ra.");
+//        }
+
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed

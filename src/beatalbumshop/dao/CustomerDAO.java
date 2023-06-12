@@ -7,4 +7,5 @@ public interface CustomerDAO extends DAO<Customer> {
     public boolean checkExitByEmail(String email);
     public Customer getByID(long customerID);
     public int updateByEmail(String password ,String email);
+    public Customer getByEmail(String email);
 }

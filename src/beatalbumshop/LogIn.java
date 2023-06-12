@@ -311,6 +311,15 @@ public class LogIn extends javax.swing.JFrame {
                 MyDialog.display(1, "Email này chưa đăng ký");
             }
             else {
+                // da dang ky
+                //inactive
+                Customer cus = customerDAO.getByEmail(email);
+                if(cus != null && cus.getPassword().equals("")) {
+                    txtEmail.requestFocus();
+                    MyDialog.display(1, "Email này đã bị vô hiệu hóa, hãy liên hệ Client service team để khôi phục");
+                    return;
+                }
+                
                 if(customerDAO.authentication(email, password) != null) {
                     dispose();
                     

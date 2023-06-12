@@ -393,6 +393,9 @@ public class SignUp extends javax.swing.JFrame {
         else {
             // kiem tra ton tai
             if (btnType.equalsIgnoreCase("Sign up") && customerDAO.checkExitByEmail(email) && userDAO.checkExitByEmail(email)) {
+                //chua ton tai - dang signup
+                
+                //gui email
                 int o = (int) (Math.random() * 900000) + 100000;
                 otp = o;
                 String subject = "WELCOME TO BEAT";
@@ -428,7 +431,8 @@ public class SignUp extends javax.swing.JFrame {
                 txtOTP.setVisible(true);
                 txtOTP.requestFocus();
                 btnSignup.setText("Verify Code");
-            } else if (btnType.equalsIgnoreCase("Verify Code")) {
+            }
+            else if (btnType.equalsIgnoreCase("Verify Code")) {
                 if (txtOTP.getText().equals(otp + "") && txtOTP.getText().matches("[0-9]{6}")) {
                     Firestore db = Firebase.getFirestore("beat-75a88");
                     CollectionReference colRef = db.collection("customers");
@@ -448,9 +452,18 @@ public class SignUp extends javax.swing.JFrame {
                     txtOTP.requestFocus();
                 }
 
-            } else {
-                txtEmail.requestFocus();
-                MyDialog.display(1, "Email đã tồn tại vui lòng thử lại");
+            }
+            else {
+                //da ton tai
+                Customer c = customerDAO.getByEmail(email);
+                if(c.getPassword() == "") {
+                    txtEmail.requestFocus();
+                    MyDialog.display(1, "Email này đã bị vô hiệu hóa, hãy liên hệ Client service team để khôi phục");
+                }
+                else {
+                    txtEmail.requestFocus();
+                    MyDialog.display(1, "Email đã tồn tại vui lòng thử lại");
+                }
             }
         }
     }//GEN-LAST:event_btnSignupActionPerformed

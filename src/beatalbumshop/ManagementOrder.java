@@ -241,7 +241,7 @@ public class ManagementOrder extends javax.swing.JPanel {
                 if(order.getStaffID() == user.getID()) {
                     String selectedItem = cboStatusFilterAssignToMe.getSelectedItem().toString();
                     
-                    if(selectedItem.equalsIgnoreCase("all")) {System.out.println("all");
+                    if(selectedItem.equalsIgnoreCase("all")) {
                         orderAssignToMeModel.addRow(new Object[] {order.getOrderID(), order.getFullName(), order.getDateCreated(), items, total, status});
                     }
                     else {
@@ -524,9 +524,26 @@ public class ManagementOrder extends javax.swing.JPanel {
                 }
             }
             
+            //khong the take order da bi cancelled
             if(order.getStatus() == OrderStatus.CANCELLED) {
                 MyDialog.display(1, "You are unable to take this order as it has been cancelled");
                 return;
+            }
+            else {
+                ArrayList<Album> lA = (ArrayList<Album>) albumDAO.getAll();
+                ArrayList<Item> lI = (ArrayList<Item>) order.getlOrderItem();
+                
+                for(Item i : lI) {
+                    for(Album a : lA) {
+                        if(i.getAlbumID().equals(a.getAlbumID())) {
+                            a.setInStock(a.getInStock() - i.getQuantity());
+                            boolean re = albumDAO.add(a);
+                            if(!re) {
+                                MyDialog.display(1, "Có lỗi xảy ra khi cập nhật số lượng InStock");
+                            }
+                        }
+                    }
+                }
             }
 
             order.setStaffID(user.getID());

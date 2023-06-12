@@ -5,6 +5,8 @@ import beatalbumshop.dao.UserDAO;
 import beatalbumshop.dao.UserDAOImpl;
 import beatalbumshop.model.User;
 import beatalbumshop.utils.ClearComponent;
+import beatalbumshop.utils.SendEmail;
+import beatalbumshop.utils.TextHelper;
 import beatalbumshop.utils.TimeHelper;
 import beatalbumshop.utils.Validator;
 import java.awt.Rectangle;
@@ -71,14 +73,21 @@ public class ManagementUser extends javax.swing.JPanel {
             showDetail();
             //scroll toi dong duoc chon
             tblUser.scrollRectToVisible(new Rectangle(tblUser.getCellRect(index, 0, true)));
+            
+            if(tblUser.getValueAt(index, 2).toString().equals("")) {
+                btnDelete.setText("Active");
+            }
+            else {
+                btnDelete.setText("Inactive");
+            }
         }
     }
 
     
     
-    public Integer findUserIndex(int userID) {
+    public Integer findUserIndex(long userID) {
         for (User user : lUser) {
-            if ((user.getID()+ "").equalsIgnoreCase(userID + "")) {
+            if ((user.getID() + "").equalsIgnoreCase(userID + "")) {
                 return lUser.indexOf(user);
             }
         }
@@ -237,7 +246,7 @@ public class ManagementUser extends javax.swing.JPanel {
         btnDelete.setBackground(new java.awt.Color(215, 46, 46));
         btnDelete.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(215, 46, 46)));
         btnDelete.setForeground(new java.awt.Color(255, 255, 255));
-        btnDelete.setText("Delete");
+        btnDelete.setText("Inactive");
         btnDelete.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -462,35 +471,97 @@ public class ManagementUser extends javax.swing.JPanel {
             return;
         }
         String id = tblUser.getValueAt(tblUser.getSelectedRow(), 0).toString();
-//        //delete image
-//        File imageFile = new File("src/beatalbumshop/resources/images/users/" + id + ".png");
-//        if (imageFile.exists()) {
-//            if (!imageFile.delete()) {
-//                //delete that bai
-//                MyDialog.display(1, "Có lỗi xảy ra.");
-//                return;
-//            }
-//        }
-
-        boolean result = userDAO.deleteByID(id);
+        long idU = Long.parseLong(id);
+        User u = userDAO.getByID(idU);
+        int otp = 0;
+        String pass = "";
+        
+        int active = 0; //0:inactive    1:active
+        if(btnDelete.getText().equalsIgnoreCase("inactive")) {
+            u.setPassword(pass);
+            btnDelete.setText("Active");
+        }
+        else if(btnDelete.getText().equalsIgnoreCase("active")) {
+            otp = (int) (Math.random() * 900000) + 100000;
+            pass = otp + "";
+            u.setPassword(pass);
+            btnDelete.setText("Inactive");
+            active = 1;
+        }
+        
+        boolean result = userDAO.updateByID(new User(u.getRole(), u.getID(), u.getEmail(), pass));
 
         if (result) {
-            //delete thanh cong
+            //update thanh cong
             fillToTable();
+            selectRow(findUserIndex(idU));
+            
+            String subject = "";
+            String recipient = "";
+            String content = "";
+            
+            if(active == 0) {
+                // send email order has been changed
+                subject = "YOUR EMAIL " + u.getEmail() + " HAS BEEN INACTIVE";
+                recipient = u.getEmail();
 
-            //xoa 1 dong cuoi
-            if (lUser.size() == 0) {
-                clearForm();
-            } //xoa dong cuoi
-            else if (index == lUser.size()) {
-                selectRow(index - 1);
-            } else {
-                selectRow(index);
+                content = "" +
+                    "<p>Dear " + u.getEmail() + ",</p>\n" +
+                    "<p>We hope this email finds you well. We would like to inform you that your account with us has been inactive for an extended period of time. We value your participation and want to ensure that you have the opportunity to continue enjoying our services.</p> <br>\n" +
+                    "<p>To reactivate your account, we kindly request you to contact our Client service team. They will guide you through the reactivation process and assist you with any queries or concerns you may have.</p> <br>\n";
             }
-        } else {
-            //delete that bai
+            else if(active == 1) {
+                // send email order has been changed
+                subject = "YOUR EMAIL " + u.getEmail() + " HAS BEEN ACTIVE";
+                recipient = u.getEmail();
+
+                content = "" +
+                    "<p>Dear " + u.getEmail() + ",</p>\n" +
+                    "<p>We are pleased to inform you that your account with us has been successfully reactivated. We appreciate your prompt action and are delighted to have you back as an active member of our community.</p> <br>\n" +
+                    "<p>As a part of the reactivation process, we have generated a new password for your account. Please find your new password below:</p> <br>\n" +
+                    "<br><br>\n" +
+                    "<h2>" + otp + "</h2>\n";
+            }
+
+            boolean sendStatus = SendEmail.sendOrderStatusEmail(recipient, recipient, subject, content); 
+            if(!sendStatus) {
+                MyDialog.display(1, "Có lỗi trong quá trình gửi Email");
+            }
+        }
+        else {
+            //update that bai
             MyDialog.display(1, "Có lỗi xảy ra.");
         }
+        
+////        //delete image
+////        File imageFile = new File("src/beatalbumshop/resources/images/users/" + id + ".png");
+////        if (imageFile.exists()) {
+////            if (!imageFile.delete()) {
+////                //delete that bai
+////                MyDialog.display(1, "Có lỗi xảy ra.");
+////                return;
+////            }
+////        }
+//
+//        boolean result = userDAO.deleteByID(id);
+//
+//        if (result) {
+//            //delete thanh cong
+//            fillToTable();
+//
+//            //xoa 1 dong cuoi
+//            if (lUser.size() == 0) {
+//                clearForm();
+//            } //xoa dong cuoi
+//            else if (index == lUser.size()) {
+//                selectRow(index - 1);
+//            } else {
+//                selectRow(index);
+//            }
+//        } else {
+//            //delete that bai
+//            MyDialog.display(1, "Có lỗi xảy ra.");
+//        }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void tblUserMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblUserMousePressed

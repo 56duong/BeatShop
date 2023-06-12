@@ -106,6 +106,7 @@ public class OrderDetail extends javax.swing.JPanel {
         
         cboStatus.removeAllItems();
         
+        //chi cancelled khi pending || processing
         if(order.getStatus() == OrderStatus.PENDING) {
             lblStatusIcon.setBackground(new Color(131, 192, 213));
             cboStatus.addItem(OrderStatus.getStatusNameByLongValue(OrderStatus.PENDING));
@@ -765,8 +766,6 @@ public class OrderDetail extends javax.swing.JPanel {
             enableField(true);
             btnEdit.setText("Save");
             txtFullName.requestFocus();
-            
-            oldOrder = new Order(order.getOrderID(), order.getFullName(), order.getAddress(), order.getPhoneNumber(), order.getMessage(), order.getShipping(), order.getStatus(), order.getlOrderItem(), order.getCustomerID(), order.getStaffID(), order.getDateCreated());
         }
         else {
             //save
@@ -778,8 +777,11 @@ public class OrderDetail extends javax.swing.JPanel {
             long status = OrderStatus.getLongValueByName(cboStatus.getSelectedItem().toString());
             ArrayList<Item> lOrderItem = new ArrayList<>();
             lOrderItem = order.getlOrderItem();
-            long staffID = (cboTitleStaffEmail.getSelectedItem() == null) ? -1 : userDAO.getByEmail(cboTitleStaffEmail.getSelectedItem().toString()).getID();
-
+            long staffID = -1;
+            if(cboTitleStaffEmail.getSelectedItem() != null) {
+                staffID = userDAO.getByEmail(cboTitleStaffEmail.getSelectedItem().toString()).getID();
+            }
+            
             //validate
             ArrayList<String> errors = new ArrayList<>();
 
@@ -804,14 +806,15 @@ public class OrderDetail extends javax.swing.JPanel {
                 btnEdit.setText("Edit");
             }
 
+            oldOrder = new Order(order.getOrderID(), order.getFullName(), order.getAddress(), order.getPhoneNumber(), order.getMessage(), order.getShipping(), order.getStatus(), order.getlOrderItem(), order.getCustomerID(), order.getStaffID(), order.getDateCreated());
+            
             //updates
             order.setFullName(fullName);
             order.setAddress(address);
             order.setMessage(message);
             order.setlOrderItem(lOrderItem);
             order.setStatus(status);
-            order.setStaffID(staffID);
-     
+            order.setStaffID(staffID); 
             
             // assign to staff by admin - send mail to staff
             if(order.getStaffID() != oldOrder.getStaffID() && staffID != -1) {
@@ -854,6 +857,7 @@ public class OrderDetail extends javax.swing.JPanel {
                 }
             }
 
+
             
             // thay doi cac truong thong tin - send email to customer
             if(!order.getFullName().equalsIgnoreCase(oldOrder.getFullName()) ||
@@ -895,6 +899,7 @@ public class OrderDetail extends javax.swing.JPanel {
                 }
             }
             
+
             
             //shipped - doi status thanh shipped - send email to customer
             if(order.getStatus() == OrderStatus.SHIPPED && oldOrder.getStatus() == OrderStatus.PROCESSING) {
@@ -931,6 +936,7 @@ public class OrderDetail extends javax.swing.JPanel {
                 }
             }
             
+
             
             //cancelled - doi status thanh cancelled - send email to customer
             if(order.getStatus() == OrderStatus.CANCELLED && oldOrder.getStatus() != OrderStatus.CANCELLED) {
@@ -942,6 +948,24 @@ public class OrderDetail extends javax.swing.JPanel {
 
                 if(result) {
                     //update order thanh cong
+                    
+                    if(oldOrder.getStatus() == OrderStatus.PROCESSING) {
+                        //cong lai vao album
+                        ArrayList<Album> lA = (ArrayList<Album>) albumDAO.getAll();
+                        ArrayList<Item> lI = (ArrayList<Item>) order.getlOrderItem();
+
+                        for(Item i : lI) {
+                            for(Album a : lA) {
+                                if(i.getAlbumID().equals(a.getAlbumID())) {
+                                    a.setInStock(a.getInStock() + i.getQuantity());
+                                    boolean re = albumDAO.add(a);
+                                    if(!re) {
+                                        MyDialog.display(1, "Có lỗi xảy ra khi cập nhật số lượng InStock");
+                                    }
+                                }
+                            }
+                        }
+                    }
 
                     // send email order has been changed
                     String subject = "YOUR ORDER #" + order.getOrderID() + " HAS BEEN CANCELED";

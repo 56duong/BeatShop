@@ -7,6 +7,7 @@ import beatalbumshop.dao.CustomerDAOImpl;
 import beatalbumshop.dao.Firebase;
 import beatalbumshop.dao.UserDAO;
 import beatalbumshop.dao.UserDAOImpl;
+import beatalbumshop.model.Customer;
 import beatalbumshop.utils.SendEmail;
 import beatalbumshop.utils.TextHelper;
 import com.google.api.core.ApiFuture;
@@ -331,6 +332,16 @@ public class Forgot extends javax.swing.JFrame {
                 boolean check = customerDAO.checkExitByEmail(email);
 
                 if (!check) {
+                    //co
+                    //inactive
+                    //inactive
+                    Customer cus = customerDAO.getByEmail(email);
+                    if(cus.getPassword().equals("")) {
+                        txtEmail.requestFocus();
+                        MyDialog.display(1, "Email này đã bị vô hiệu hóa, hãy liên hệ Client service team để khôi phục");
+                        return;
+                    }
+
                     int o = (int) (Math.random() * 900000) + 100000;
                     otp = o;
                     String subject = "RESET PASSWORD";

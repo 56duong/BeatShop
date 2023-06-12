@@ -132,7 +132,7 @@ public class OrderDAOImpl implements OrderDAO {
             updates.put("shipping", order.getShipping());
             updates.put("staffID", order.getStaffID());
             updates.put("status", order.getStatus());
-
+            
             // (async) Update the document with the new field values
             ApiFuture<WriteResult> result = docRef.update(updates);
             System.out.println("Update time: " + result.get().getUpdateTime());
