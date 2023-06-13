@@ -1,6 +1,10 @@
 package beatalbumshop.model;
 
+import beatalbumshop.SelectionProduct;
+import beatalbumshop.dao.AlbumDAO;
+import beatalbumshop.dao.AlbumDAOImpl;
 import beatalbumshop.utils.TimeHelper;
+import java.awt.Dimension;
 import java.util.ArrayList;
 
 public class Order {
@@ -171,4 +175,25 @@ public class Order {
         this.paymentOption = paymentOption;
     }
     
+    
+    
+    public Double getTotal() {
+        Double total = 0.0;
+        AlbumDAO albumDAO = new AlbumDAOImpl();
+        
+        for(Item item : lOrderItem) {
+            Album album = albumDAO.getByID(item.getAlbumID());
+            if(album.getInStock() > 0) {
+                total += item.getQuantity() * album.getPrice();
+            }
+        }
+        
+        return total;
+    }
+    
+    
+    
+    public String getDate() {
+        return getDateCreated().substring(0, 10);
+    }
 }

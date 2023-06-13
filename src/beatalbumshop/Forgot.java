@@ -364,7 +364,7 @@ public class Forgot extends javax.swing.JFrame {
                               + "</td>\n"
                               + "</tr>\n";
                     System.out.println("1");
-                    boolean sendStatus = SendEmail.send(email, email, subject, content);
+                    boolean sendStatus = SendEmail.sendFormat(email, email, subject, content);
                     
                     //insert OTP into user
                     if (!sendStatus) {

@@ -553,6 +553,11 @@ public class OrderDetail extends javax.swing.JPanel {
         btnPrint.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnPrint.setText("Print");
         btnPrint.setFont(new java.awt.Font("Open Sans", 0, 14)); // NOI18N
+        btnPrint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrintActionPerformed(evt);
+            }
+        });
 
         cboStatus.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), javax.swing.BorderFactory.createEmptyBorder(3, 5, 3, 5)));
         cboStatus.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2" }));
@@ -1050,6 +1055,10 @@ public class OrderDetail extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_cboProductListActionPerformed
+
+    private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
+        if(btnEdit.getText().equalsIgnoreCase("Edit")) OtherHelper.panelToImage(pnlContent, "OrderID" + order.getOrderID());
+    }//GEN-LAST:event_btnPrintActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

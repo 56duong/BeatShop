@@ -27,14 +27,15 @@ public class MainAdmin extends javax.swing.JFrame {
         // tab
         managementOrder = new ManagementOrder();
         pnlTabContent.setLayout(new CardLayout());
+        pnlTabContent.add(new Dashboard(), "dashboard");
         pnlTabContent.add(new ManagementAlbum(), "album");
         pnlTabContent.add(new ManagementCustomer(), "customer");
         pnlTabContent.add(managementOrder, "order");
         pnlTabContent.add(new ManagementUser(), "user");
-        pnlTabContent.add(new ManagementReport(), "report");
+        pnlTabContent.add(new Dashboard(), "report");
         pnlTabContent.add(new Account(), "account");
         
-        btnMenuList = new JButton[] {btnAlbum, btnCustomer, btnOrder, btnUser, btnReport, btnLogIn};
+        btnMenuList = new JButton[] {btnAlbum, btnCustomer, btnOrder, btnUser, btnDashboard, btnLogIn};
         for(JButton btn : btnMenuList) {
             btn.addActionListener(new ActionListener() {
                 @Override
@@ -63,7 +64,7 @@ public class MainAdmin extends javax.swing.JFrame {
         //check admin or staff
         if(LoggedInUser.isStaff()) {
             btnUser.setVisible(false);
-            btnReport.setVisible(false);
+            btnDashboard.setVisible(false);
         }
     }
     
@@ -100,11 +101,11 @@ public class MainAdmin extends javax.swing.JFrame {
         pnlMain = new javax.swing.JPanel();
         windowTitleBar = new beatalbumshop.componment.WindowTitleBar();
         pnlSideBar = new javax.swing.JPanel();
+        btnDashboard = new beatalbumshop.componment.MyButton();
         btnAlbum = new beatalbumshop.componment.MyButton();
         btnCustomer = new beatalbumshop.componment.MyButton();
         btnOrder = new beatalbumshop.componment.MyButton();
         btnUser = new beatalbumshop.componment.MyButton();
-        btnReport = new beatalbumshop.componment.MyButton();
         btnLogIn = new beatalbumshop.componment.MyButton();
         pnlTabContent = new javax.swing.JPanel();
 
@@ -128,6 +129,17 @@ public class MainAdmin extends javax.swing.JFrame {
         pnlSideBar.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 1, 1, 1, new java.awt.Color(0, 0, 0)));
         pnlSideBar.setPreferredSize(new java.awt.Dimension(250, 658));
         pnlSideBar.setLayout(new javax.swing.BoxLayout(pnlSideBar, javax.swing.BoxLayout.Y_AXIS));
+
+        btnDashboard.setBackground(null);
+        btnDashboard.setBorder(javax.swing.BorderFactory.createEmptyBorder(25, 20, 0, 0));
+        btnDashboard.setText("Dashboard");
+        btnDashboard.setFont(new java.awt.Font("Open Sans", 0, 18)); // NOI18N
+        btnDashboard.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnDashboard.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnDashboard.setMargin(new java.awt.Insets(2, 20, 3, 14));
+        btnDashboard.setMaximumSize(new java.awt.Dimension(248, 50));
+        btnDashboard.setMinimumSize(new java.awt.Dimension(248, 50));
+        pnlSideBar.add(btnDashboard);
 
         btnAlbum.setBackground(null);
         btnAlbum.setBorder(javax.swing.BorderFactory.createEmptyBorder(25, 20, 0, 0));
@@ -174,17 +186,6 @@ public class MainAdmin extends javax.swing.JFrame {
         btnUser.setMinimumSize(new java.awt.Dimension(248, 50));
         pnlSideBar.add(btnUser);
 
-        btnReport.setBackground(null);
-        btnReport.setBorder(javax.swing.BorderFactory.createEmptyBorder(25, 20, 0, 0));
-        btnReport.setText("Report");
-        btnReport.setFont(new java.awt.Font("Open Sans", 0, 18)); // NOI18N
-        btnReport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnReport.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnReport.setMargin(new java.awt.Insets(2, 20, 3, 14));
-        btnReport.setMaximumSize(new java.awt.Dimension(248, 50));
-        btnReport.setMinimumSize(new java.awt.Dimension(248, 50));
-        pnlSideBar.add(btnReport);
-
         btnLogIn.setBackground(null);
         btnLogIn.setBorder(javax.swing.BorderFactory.createEmptyBorder(25, 20, 0, 0));
         btnLogIn.setText("Log In");
@@ -220,7 +221,7 @@ public class MainAdmin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        btnAlbum.doClick();
+        btnDashboard.doClick();
     }//GEN-LAST:event_formWindowOpened
 
     /**
@@ -270,9 +271,9 @@ public class MainAdmin extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private beatalbumshop.componment.MyButton btnAlbum;
     private beatalbumshop.componment.MyButton btnCustomer;
+    private beatalbumshop.componment.MyButton btnDashboard;
     private beatalbumshop.componment.MyButton btnLogIn;
     private beatalbumshop.componment.MyButton btnOrder;
-    private beatalbumshop.componment.MyButton btnReport;
     private beatalbumshop.componment.MyButton btnUser;
     private javax.swing.JPanel pnlMain;
     private javax.swing.JPanel pnlSideBar;

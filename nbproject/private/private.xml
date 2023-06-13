@@ -3,16 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/SignUp.java</file>
-            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/LogIn.java</file>
-            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/Forgot.java</file>
-            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/dao/CustomerDAO.java</file>
-            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/dao/UserDAO.java</file>
-            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/ManagementCustomer.java</file>
-            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/ManagementUser.java</file>
-            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/dao/CustomerDAOImpl.java</file>
-            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/dao/UserDAOImpl.java</file>
-            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/OrderDetail.java</file>
+            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/Checkout.java</file>
+            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/MainAdmin.java</file>
+            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/utils/OtherHelper.java</file>
+            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/utils/ChartHelper.java</file>
+            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/model/Order.java</file>
+            <file>file:/D:/FPT%20POLYTECHNIC/Du%20An%20Mau%20(SOF204)/Bai%20Tap/BeatAlbumShop/src/beatalbumshop/Dashboard.java</file>
         </group>
     </open-files>
 </project-private>
