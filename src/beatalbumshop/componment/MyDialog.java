@@ -2,7 +2,12 @@ package beatalbumshop.componment;
 
 import java.awt.Font;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  * MyDialog is a custom dialog box that displays different types of messages
@@ -44,6 +49,56 @@ public class MyDialog extends javax.swing.JFrame {
      * 2 = question, 3 = warning, 4 = success.
      * @param message The message to display in the dialog.
      */
+    public MyDialog(int type, String message) {
+        initComponents();
+        txtMessage.setFont(new Font("Open Sans", 0, 16));
+        
+        // When the Enter key is pressed, close the dialog
+        txtMessage.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+                    dispose();
+                }
+            }
+        });
+        
+        
+        String title = "";
+                
+        switch(type) {
+            case MyDialog.INFORMATION:
+                title = "Infomation";
+                break;
+            case MyDialog.ERROR:
+                title = "Error";
+                break;
+            case MyDialog.QUESTION:
+                title = "Question";
+                break;
+            case MyDialog.WARNING:
+                title = "Warning";
+                break;
+            case MyDialog.SUCCESS:
+                title = "Success";
+                break;
+        }
+
+        lblIcon.setIcon(new ImageIcon(getClass().getResource("/beatalbumshop/resources/images/icons/" + title.toLowerCase() + ".png")));
+        lblTitleBarName.setText(title);
+        txtMessage.setText(message);
+
+        setVisible(true);
+    }
+    
+    
+    
+    /**
+     * Displays a MyDialog with the specified type and message.
+     * @param type The type of message to display. 0 = information, 1 = error,
+     * 2 = question, 3 = warning, 4 = success.
+     * @param message The message to display in the dialog.
+     */
     public static void display(int type, String message) {
         String title = "";
                 
@@ -66,7 +121,7 @@ public class MyDialog extends javax.swing.JFrame {
         }
         
         MyDialog dialog = new MyDialog();
-        dialog.lblIcon.setIcon(new ImageIcon(MyDialog.class.getResource("/beatalbumshop/resources/images/icons/" + title + ".png")));
+        dialog.lblIcon.setIcon(new ImageIcon(MyDialog.class.getResource("/beatalbumshop/resources/images/icons/" + title.toLowerCase() + ".png")));
         dialog.lblTitleBarName.setText(title);
         dialog.txtMessage.setText(message);
 

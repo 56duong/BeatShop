@@ -15,7 +15,19 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
+/**
+ * The SpotifyApi class provides methods for interacting with the Spotify API.
+ */
 public class SpotifyApi {
+    
+    /**
+     * Retrieves the access token from the Spotify API using the provided client ID and client secret.
+     *
+     * @param clientId     the client ID for authentication
+     * @param clientSecret the client secret for authentication
+     * @return the access token
+     * @throws IOException if an I/O error occurs while making the API request
+     */
     public static String getAccessToken(String clientId, String clientSecret) throws IOException {
         String authEndpoint = "https://accounts.spotify.com/api/token";
         String credentials = clientId + ":" + clientSecret;
@@ -34,6 +46,14 @@ public class SpotifyApi {
         return jsonResponse.get("access_token").getAsString();
     }
 
+    /**
+     * Makes a request to the Spotify API endpoint using the provided access token.
+     *
+     * @param endpoint    the endpoint URL
+     * @param accessToken the access token for authentication
+     * @return the JSON response from the API
+     * @throws IOException if an I/O error occurs while making the API request
+     */
     public static JsonObject makeRequest(String endpoint, String accessToken) throws IOException {
         HttpClient client = HttpClientBuilder.create().build();
         HttpUriRequest request = new HttpGet(endpoint);

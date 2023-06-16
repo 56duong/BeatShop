@@ -7,7 +7,20 @@ import java.nio.charset.StandardCharsets;
 import java.time.Year;
 import java.util.Base64;
 
+/**
+ * Utility class for sending emails using the Elastic Email API.
+ */
 public class SendEmail {
+    
+    /**
+     * Sends an email using the Elastic Email API.
+     *
+     * @param toRecipient    the email address of the recipient
+     * @param recipientName  the name of the recipient
+     * @param subject        the subject of the email
+     * @param body           the HTML body of the email
+     * @return true if the email is sent successfully, false otherwise
+     */
     public static boolean send(String toRecipient, String recipientName, String subject, String body) {
         String url = "https://api.elasticemail.com/v2/email/send";
         String apiKey = "FEE7C772E79AA83098363CEB89509257DE0C13DE3DE0D6E627CAA04E1F0FBB47494CE49E178799D17AB2E0BFA61B1BB9";
@@ -53,6 +66,15 @@ public class SendEmail {
     
     
     
+    /**
+     * Sends an email for order status using the Elastic Email API.
+     *
+     * @param toRecipient    the email address of the recipient
+     * @param recipientName  the name of the recipient
+     * @param subject        the subject of the email
+     * @param content        the content of the email
+     * @return true if the email is sent successfully, false otherwise
+     */
     public static boolean sendOrderStatusEmail(String toRecipient, String recipientName, String subject, String content) {
         String url = "https://api.elasticemail.com/v2/email/send";
         String apiKey = "FEE7C772E79AA83098363CEB89509257DE0C13DE3DE0D6E627CAA04E1F0FBB47494CE49E178799D17AB2E0BFA61B1BB9";
@@ -208,6 +230,15 @@ public class SendEmail {
     
     
     
+    /**
+     * Sends an email with a custom content format using the Elastic Email API.
+     *
+     * @param toRecipient    the email address of the recipient
+     * @param recipientName  the name of the recipient
+     * @param subject        the subject of the email
+     * @param content        the content of the email
+     * @return true if the email is sent successfully, false otherwise
+     */
     public static boolean sendFormat(String toRecipient, String recipientName, String subject, String content) {
         String url = "https://api.elasticemail.com/v2/email/send";
         String apiKey = "FEE7C772E79AA83098363CEB89509257DE0C13DE3DE0D6E627CAA04E1F0FBB47494CE49E178799D17AB2E0BFA61B1BB9";
@@ -286,7 +317,7 @@ public class SendEmail {
                     "        <table>\n" +
                     "            <tbody>\n" +
                     "                <tr>\n" +
-                    "                    <th>LOL MANAGEMENT</th>\n" +
+                    "                    <th>BEAT</th>\n" +
                     "                </tr>\n" +
                     "\n" +
                         content +
@@ -294,7 +325,7 @@ public class SendEmail {
                     "\n" +
                     "                <tr>\n" +
                     "                    <td class=\"text-center\">\n" +
-                    "                        <small>© 2023 LOL MANAGEMENT</small>\n" +
+                    "                        <small>© 2023 BEAT</small>\n" +
                     "                    </td>\n" +
                     "                </tr>\n" +
                     "            </tbody>\n" +

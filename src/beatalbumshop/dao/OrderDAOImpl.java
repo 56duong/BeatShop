@@ -29,6 +29,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The OrderDAOImpl class provides implementation for accessing and manipulating order data.
+ */
 public class OrderDAOImpl implements OrderDAO {
     String projectId = Account.FIREBASE_PROJECT_ID;
 

@@ -8,7 +8,19 @@ import java.awt.geom.RoundRectangle2D;
 import javax.swing.JLabel;
 import javax.swing.border.EmptyBorder;
 
+/**
+ * A custom notification dialog.
+ */
 public class MyNotification extends javax.swing.JDialog {
+    
+    /**
+     * Creates a new instance of MyNotification with a custom size and message.
+     * 
+     * @param parent  the parent frame
+     * @param modal   specifies if the dialog should be modal
+     * @param size    the width of the dialog
+     * @param message the message to display in the dialog
+     */
     public MyNotification(java.awt.Frame parent, boolean modal, int size, String message) {
         super(parent, modal);
         initComponents();
@@ -49,6 +61,13 @@ public class MyNotification extends javax.swing.JDialog {
     
     
     
+    /**
+     * Creates a new instance of MyNotification with a default size and the provided message.
+     * 
+     * @param parent  the parent frame
+     * @param modal   specifies if the dialog should be modal
+     * @param message the message to display in the dialog
+     */
     public MyNotification(java.awt.Frame parent, boolean modal, String message) {
         super(parent, modal);
         initComponents();
@@ -89,6 +108,12 @@ public class MyNotification extends javax.swing.JDialog {
     
     
     
+    /**
+     * Creates a new instance of MyNotification with a default size and a default message.
+     * 
+     * @param parent the parent frame
+     * @param modal  specifies if the dialog should be modal
+     */
     public MyNotification(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();

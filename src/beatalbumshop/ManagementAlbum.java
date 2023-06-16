@@ -24,6 +24,10 @@ import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+/**
+ * This class represents the management of albums in the Beat Album Shop application.
+ * It provides functionality to display and modify albums and their tracks.
+ */
 public class ManagementAlbum extends javax.swing.JPanel {
 
     ArrayList<Album> lAlbum = new ArrayList<>(); //List Album
@@ -34,6 +38,9 @@ public class ManagementAlbum extends javax.swing.JPanel {
     int index = -1;
     BufferedImage albumImage;
     
+    /**
+     * Creates a new instance of ManagementAlbum.
+     */
     public ManagementAlbum() {
         initComponents();
         
@@ -82,6 +89,11 @@ public class ManagementAlbum extends javax.swing.JPanel {
     
     //XAY DUNG CAC HAM
 
+    /**
+     * Selects the specified row in the tblAlbum table and shows the details of the selected album.
+     *
+     * @param i The index of the row to be selected.
+     */
     public void selectRow(int i) {
         if(i >= 0 && tblAlbum.getRowCount() > 0) {
             index = i;
@@ -95,6 +107,9 @@ public class ManagementAlbum extends javax.swing.JPanel {
     
     
     
+    /**
+     * Fills the tblAlbum table with data from the album list.
+     */
     public void fillToTable() {
         lAlbum = (ArrayList<Album>) albumDAO.getAll();
         
@@ -110,6 +125,11 @@ public class ManagementAlbum extends javax.swing.JPanel {
     
     
     
+    /**
+     * Fills the tblTrack table with the provided list of tracks.
+     *
+     * @param list The list of tracks to be displayed.
+     */
     public void fillToTrack(ArrayList<Track> list) {
         lTrack = list;
         
@@ -126,6 +146,12 @@ public class ManagementAlbum extends javax.swing.JPanel {
     
     
     
+    /**
+     * Finds the index of the album with the specified album ID in the album list.
+     *
+     * @param albumID The ID of the album to search for.
+     * @return The index of the album in the list, or -1 if the album is not found.
+     */
     public Integer findAlbumIndex(String albumID) {
         for(Album album : lAlbum) {
             if((album.getAlbumID()).equalsIgnoreCase(albumID)) {
@@ -137,6 +163,9 @@ public class ManagementAlbum extends javax.swing.JPanel {
     
     
     
+    /**
+     * Shows the details of the selected album in the form.
+     */
     public void showDetail() {
         Album album = new Album();
         
@@ -168,6 +197,9 @@ public class ManagementAlbum extends javax.swing.JPanel {
     
     
     
+    /**
+     * Clears the form by resetting the index, clearing the table selection, and resetting the form fields.
+     */
     public void clearForm() {
         index = -1;
         tblAlbum.getSelectionModel().clearSelection(); //bo chon tren table

@@ -13,12 +13,18 @@ import java.awt.geom.RoundRectangle2D;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+/**
+ * The main frame for Customer of the Beat Album Shop application.
+ */
 public class Main extends javax.swing.JFrame {
     JButton [] btnMenuList;
     Color gray = new Color(50, 50, 50);
     public ShoppingBag tabSP;
     public static String prevTab, curTab;
     
+    /**
+     * Constructs a new instance of the Main class.
+     */
     public Main() {
         initComponents();
         
@@ -78,6 +84,11 @@ public class Main extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Shows the specified tab.
+     * 
+     * @param newTab The name of the tab to be shown.
+     */
     public static void showTab(String newTab) {
         prevTab = curTab;
         curTab = newTab;
@@ -88,26 +99,56 @@ public class Main extends javax.swing.JFrame {
     
  
     // open login from buy now button
+    /**
+     * Sets the ShoppingBag instance for the Main frame.
+     *
+     * @param sp The ShoppingBag instance.
+     */
     public void setTabSP(ShoppingBag sp) {
         this.tabSP = sp;
     }
     
+    /**
+     * Retrieves the JPanel that contains the tab content.
+     *
+     * @return The JPanel instance.
+     */
     public JPanel getPnlTabContent() {
         return pnlTabContent;
     }
     
+    /**
+     * Retrieves the button for the Home tab.
+     *
+     * @return The MyButton instance.
+     */
     public MyButton getBtnHome() {
         return btnHome;
     }
     
+    /**
+     * Retrieves the button for the Shop tab.
+     *
+     * @return The MyButton instance.
+     */
     public MyButton getBtnShop() {
         return btnShop;
     }
     
+    /**
+     * Retrieves the button for the ShoppingBag tab.
+     *
+     * @return The MyButton instance.
+     */
     public MyButton getBtnShoppingBag() {
         return btnShoppingBag;
     }
     
+    /**
+     * Retrieves the button for the LogIn tab.
+     *
+     * @return The MyButton instance.
+     */
     public MyButton getBtnLogIn() {
         return btnLogIn;
     }

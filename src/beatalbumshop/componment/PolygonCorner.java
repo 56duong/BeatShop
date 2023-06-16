@@ -5,8 +5,18 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 import java.util.List;
 
+/**
+ * Utility class for generating a rounded GeneralPath from a list of points, creating a polygon with rounded corners.
+ */
 public class PolygonCorner {
 
+    /**
+     * Generates a rounded GeneralPath from a list of points.
+     *
+     * @param points   The list of points defining the polygon.
+     * @param arcSize  The size of the corner arcs.
+     * @return A rounded GeneralPath representing the polygon with rounded corners.
+     */
     public GeneralPath getRoundedGeneralPathFromPoints(List<Point2D> l, float arcSize) {
         l.add(l.get(0));
         l.add(l.get(1));
@@ -25,6 +35,14 @@ public class PolygonCorner {
         return p;
     }
 
+    /**
+     * Calculates the point on the curve based on the given points and arc size.
+     *
+     * @param p1      The previous point.
+     * @param p2      The current point.
+     * @param arcSize The size of the corner arc.
+     * @return The calculated point on the curve.
+     */
     private Point2D calculatePoint(Point2D p1, Point2D p2, float arcSize) {
         double d1 = Math.sqrt(Math.pow(p1.getX() - p2.getX(), 2f) + Math.pow(p1.getY() - p2.getY(), 2f));
         double per = arcSize / d1;

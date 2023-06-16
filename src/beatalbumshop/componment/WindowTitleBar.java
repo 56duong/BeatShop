@@ -2,14 +2,26 @@ package beatalbumshop.componment;
 
 import javax.swing.JFrame;
 
+/**
+ * The WindowTitleBar class represents a custom title bar for a JFrame window.
+ * It provides buttons for closing, resizing, and minimizing the window.
+ */
 public class WindowTitleBar extends javax.swing.JPanel {
 
     private JFrame frame;
     
+    /**
+     * Constructs a new instance of the WindowTitleBar.
+     */
     public WindowTitleBar() {
         initComponents();
     }
     
+    /**
+     * Sets the JFrame associated with the title bar.
+     * 
+     * @param frame the JFrame to be associated with the title bar
+     */
     public void setFrame(JFrame frame) {
         this.frame = frame;
     }

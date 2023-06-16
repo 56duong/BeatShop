@@ -1,7 +1,14 @@
 package beatalbumshop;
 
+/**
+ * The AboutUs class represents the "About Us" panel in the Beat Album Shop application.
+ * It provides information about the company.
+ */
 public class AboutUs extends javax.swing.JPanel {
 
+    /**
+     * Constructor for the AboutUs panel.
+     */
     public AboutUs() {
         initComponents();
     }

@@ -34,6 +34,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+/**
+ * The Forgot class represents a simple password recovery system.
+ */
 public class Forgot extends javax.swing.JFrame {
 
     UserDAO userDAO = new UserDAOImpl();
@@ -41,6 +44,9 @@ public class Forgot extends javax.swing.JFrame {
     int otp = -1;
     String emailGLOBAL = null;
 
+    /**
+     * Creates new form Forgot.
+     */
     public Forgot() {
         initComponents();
         setLocationRelativeTo(null);
@@ -63,6 +69,14 @@ public class Forgot extends javax.swing.JFrame {
         txtConfirmPassword.setVisible(false);
     }
 
+    
+    
+    /**
+     * Adds placeholder text to the specified text field.
+     *
+     * @param textField       the text field to add placeholder text to
+     * @param placeholderText the placeholder text to be displayed
+     */
     private void addPlaceholderText(JTextField textField, String placeholderText) {
         // Save the default foreground color of the text field
         Color defaultColor = textField.getForeground();
@@ -89,7 +103,15 @@ public class Forgot extends javax.swing.JFrame {
             }
         });
     }
+    
+    
 
+    /**
+     * Checks if the given email address is valid.
+     *
+     * @param email the email address to check
+     * @return true if the email is valid, false otherwise
+     */
     public static boolean isValidEmail(String email) {
         String emailRegex = "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}$";
         return email.matches(emailRegex);
@@ -486,12 +508,6 @@ public class Forgot extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Forgot.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 

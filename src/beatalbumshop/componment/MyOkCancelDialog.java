@@ -10,6 +10,9 @@ import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
+/**
+ * A custom dialog that displays a message with an OK and Cancel button.
+ */
 public class MyOkCancelDialog extends javax.swing.JDialog {
 
     public static final int INFORMATION = 0;
@@ -28,7 +31,12 @@ public class MyOkCancelDialog extends javax.swing.JDialog {
     public static final int RET_OK = 1;
 
     /**
-     * Creates new form NewOkCancelDialog
+     * Creates a new instance of the MyOkCancelDialog class.
+     * 
+     * @param parent the parent frame
+     * @param modal specifies whether the dialog should be modal or not
+     * @param type the type of the dialog (INFORMATION, ERROR, QUESTION, WARNING, SUCCESS)
+     * @param message the message to be displayed in the dialog
      */
     public MyOkCancelDialog(java.awt.Frame parent, boolean modal, int type, String message) {
         super(parent, modal);
@@ -68,7 +76,7 @@ public class MyOkCancelDialog extends javax.swing.JDialog {
                 break;
         }
         
-        lblIcon.setIcon(new ImageIcon(MyOkCancelDialog.class.getResource("/beatalbumshop/resources/images/icons/" + title + ".png")));
+        lblIcon.setIcon(new ImageIcon(MyDialog.class.getResource("/beatalbumshop/resources/images/icons/" + title.toLowerCase() + ".png")));
         lblTitleBarName.setText(title);
         txtMessage.setText(message);
 
@@ -84,6 +92,8 @@ public class MyOkCancelDialog extends javax.swing.JDialog {
         });
     }
 
+    
+    
     /**
      * @return the return status of this dialog - one of RET_OK or RET_CANCEL
      */

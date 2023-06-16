@@ -63,8 +63,8 @@
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="btnOrderh" alignment="0" pref="127" max="32767" attributes="0"/>
-                                  <Component id="btnChange" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="txtLogOut" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="btnChange" alignment="0" pref="127" max="32767" attributes="0"/>
+                                  <Component id="txtLogOut" alignment="0" pref="127" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>

@@ -1,17 +1,11 @@
 package beatalbumshop.utils;
 
-/**
- * The Chart class provides static methods to create charts for displaying data
- * in a graphical format. It supports two types of charts: column charts and
- * bar charts.
- */
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -19,6 +13,9 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
+/**
+ * Utility class for creating a chart with columns based on provided data.
+ */
 public class ChartHelper {
 
     /**
@@ -74,15 +71,10 @@ public class ChartHelper {
     
     
     /**
-     * Creates a bar chart with the specified column values and names and
-     * displays it in the specified panel.
+     * Creates a chart with columns based on the provided data.
      *
-     * @param lColValue   an ArrayList of double values representing the values
-     *                    of the columns in the chart; each value should be in
-     *                    the range [0, 10]
-     * @param colNames    an array of Strings representing the names of the
-     *                    columns in the chart; the length of this array should
-     *                    match the size of lColValue
+     * @param lColValue   the list of column values
+     * @param colNames    the list of column names
      * @param chartPanel  the JPanel where the chart will be displayed
      */
     public static void createChart(ArrayList<Double> lColValue, ArrayList<String> colNames, JPanel chartPanel) {
@@ -109,12 +101,12 @@ public class ChartHelper {
             lbl.setPreferredSize(new Dimension(colWidth, ((int)percentHeight)));
             System.out.println(percentHeight);
             //col background
-            colBackground = new Color(208, 23, 45);
+            colBackground = new Color(238, 84, 102);
 
             lbl.setOpaque(true);
             lbl.setBackground(colBackground);
-            lbl.setBorder(new CompoundBorder(new TitledBorder(new EmptyBorder(0, 0, 0, 0), "$" + String.format("%.2f", i), TitledBorder.CENTER, TitledBorder.ABOVE_TOP, new Font("Open Sans", 0, 16), Color.WHITE), 
-                                            new TitledBorder(new EmptyBorder(0, 0, 0, 0), colNames.get(lColValue.indexOf(i)), TitledBorder.CENTER, TitledBorder.ABOVE_TOP, new Font("Open Sans", 0, 16), Color.WHITE)));
+            lbl.setBorder(new CompoundBorder(new TitledBorder(new EmptyBorder(0, 0, 0, 0), "$" + String.format("%.2f", i), TitledBorder.CENTER, TitledBorder.ABOVE_TOP, new Font("Open Sans", 0, 16), Color.BLACK), 
+                                            new TitledBorder(new EmptyBorder(0, 0, 0, 0), colNames.get(lColValue.indexOf(i)), TitledBorder.CENTER, TitledBorder.ABOVE_TOP, new Font("Open Sans", 0, 16), Color.BLACK)));
             
             //add to panel
             JPanel pnl = new JPanel(new BorderLayout());

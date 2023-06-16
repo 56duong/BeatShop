@@ -13,6 +13,7 @@ import beatalbumshop.model.AddressBook;
 import beatalbumshop.model.Album;
 import beatalbumshop.model.Customer;
 import beatalbumshop.model.LoggedInUser;
+import beatalbumshop.model.User;
 import beatalbumshop.utils.ImageHelper;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
@@ -68,6 +69,12 @@ public class Account extends javax.swing.JPanel {
 
     public Account() {
         initComponents();
+        
+        if(LoggedInUser.isAdmin() || LoggedInUser.isStaff()) {
+            btnOrderh.setVisible(false);
+            btnNew.setVisible(false);
+            pnlListAddressBook.setVisible(false);
+        }
 
         //check admin or staff
         if (LoggedInUser.isCustomer()) {
@@ -171,25 +178,34 @@ public class Account extends javax.swing.JPanel {
 
         // Get the currently logged-in user
         // Display user information
-        txtEmail.setText(cus.getEmail());
-        txtPassword.setText(cus.getPassword());
-        txtDateCreated.setText(cus.getDateCreated());
+        
+        if(LoggedInUser.isCustomer()) {
+            txtEmail.setText(cus.getEmail());
+            txtPassword.setText(cus.getPassword());
+            txtDateCreated.setText(cus.getDateCreated());
 
-        lAddressBook = (ArrayList<AddressBook>) addressbookDAO.getAll();
+            lAddressBook = (ArrayList<AddressBook>) addressbookDAO.getAll();
 
-        addressbookModel.setRowCount(0); // Xóa các hàng trong bảng
+            addressbookModel.setRowCount(0); // Xóa các hàng trong bảng
 
-        if (lAddressBook != null) {
-            for (AddressBook address : lAddressBook) {
+            if (lAddressBook != null) {
+                for (AddressBook address : lAddressBook) {
 
-                // Thêm hàng vào bảng với các cột và các button tương ứng
-                addressbookModel.addRow(new Object[]{
-                    address.getAddressType(),
-                    address.getAddress(),
-                    address.getFullName(),
-                    address.getPhoneNumber()
-                });
+                    // Thêm hàng vào bảng với các cột và các button tương ứng
+                    addressbookModel.addRow(new Object[]{
+                        address.getAddressType(),
+                        address.getAddress(),
+                        address.getFullName(),
+                        address.getPhoneNumber()
+                    });
+                }
             }
+        }
+        else {
+            User a = (User) LoggedInUser.getCurrentUser();
+            txtEmail.setText(a.getEmail());
+            txtPassword.setText(a.getPassword());
+            txtDateCreated.setText(a.getDateCreated());
         }
     }
 
@@ -335,8 +351,8 @@ public class Account extends javax.swing.JPanel {
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(btnOrderh, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
-                                    .addComponent(btnChange, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(txtLogOut, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                                    .addComponent(btnChange, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
+                                    .addComponent(txtLogOut, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE))))))
                 .addContainerGap(41, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(

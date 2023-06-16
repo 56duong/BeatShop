@@ -8,19 +8,36 @@ import java.util.Objects;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneLayout;
 
+/**
+ * A custom scroll pane with a Windows 11-style scroll bar and a modified layout behavior.
+ */
 public class MyScrollPane extends JScrollPane {
 
+    /**
+     * Creates a new instance of the MyScrollPane class.
+     * Configures the scroll bars with the Windows 11-style UI, sets a custom layout,
+     * and modifies the painting order of the components.
+     */
     public MyScrollPane() {
         getVerticalScrollBar().setUI(new ScrollBarWin11UI());
         getHorizontalScrollBar().setUI(new ScrollBarWin11UI());
         setLayout(new ScrollLayout());
     }
 
+    /**
+     * Overrides the isOptimizedDrawingEnabled method to disable optimized drawing for the scroll pane.
+     * This ensures that the custom scroll bar UI is properly rendered.
+     *
+     * @return false to disable optimized drawing for the scroll pane
+     */
     @Override
     public boolean isOptimizedDrawingEnabled() {
         return false;
     }
 
+    /**
+     * Overrides the updateUI method to update the scroll pane's UI and modify the component painting order.
+     */
     @Override
     public void updateUI() {
         super.updateUI();
@@ -33,8 +50,18 @@ public class MyScrollPane extends JScrollPane {
         });
     }
 
+    
+    
+    /**
+     * A custom layout manager for the scroll pane that modifies the layout behavior.
+     */
     private class ScrollLayout extends ScrollPaneLayout {
 
+        /**
+         * Overrides the layoutContainer method to adjust the layout of the scroll pane's components.
+         *
+         * @param parent the parent container (scroll pane) to be laid out
+         */
         @Override
         public void layoutContainer(Container parent) {
             super.layoutContainer(parent);

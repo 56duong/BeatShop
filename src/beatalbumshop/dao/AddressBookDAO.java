@@ -6,10 +6,6 @@ package beatalbumshop.dao;
 
 import beatalbumshop.model.AddressBook;
 
-/**
- *
- * @author conro
- */
 public interface AddressBookDAO extends DAO<AddressBook>{
     
 }

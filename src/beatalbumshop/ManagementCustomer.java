@@ -34,6 +34,15 @@ import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+/**
+ * The ManagementCustomer class represents the customer management functionality
+ * in the Beat Album Shop application.
+ * It provides methods to add, update, and delete customer information,
+ * as well as view customer details and addresses.
+ * 
+ * This class interacts with the Customer and AddressBook classes to retrieve and update customer information.
+ * 
+ */
 public class ManagementCustomer extends javax.swing.JPanel {
 
     ArrayList<Customer> lCustomer = new ArrayList<>(); //List Customer
@@ -44,6 +53,9 @@ public class ManagementCustomer extends javax.swing.JPanel {
     UserDAO userDAO = new UserDAOImpl();
     int index = -1;
     
+    /**
+     * Creates new form ManagementCustomer.
+     */
     public ManagementCustomer() {
         initComponents();
         
@@ -89,6 +101,11 @@ public class ManagementCustomer extends javax.swing.JPanel {
     
     //XAY DUNG CAC HAM
 
+    /**
+     * Selects the specified row in the tblAlbum table and shows the details of the selected album.
+     *
+     * @param i The index of the row to be selected.
+     */
     public void selectRow(int i) {
         if(i >= 0 && tblCustomer.getRowCount() > 0) {
             index = i;
@@ -110,6 +127,9 @@ public class ManagementCustomer extends javax.swing.JPanel {
     
     
     
+    /**
+     * Fills the tblCustomer table with data from the customer list.
+     */
     public void fillToTable() {
         lCustomer = (ArrayList<Customer>) customerDAO.getAll();
         
@@ -125,6 +145,12 @@ public class ManagementCustomer extends javax.swing.JPanel {
     
     
     
+    /**
+     * Fills the address book data from the list into the address book table.
+     * It clears the existing rows in the table and adds each address book entry as a new row.
+     *
+     * @param list The list of address book entries.
+     */
     public void fillToAddressBook(ArrayList<AddressBook> list) {
         lAddressBook = list;
         
@@ -140,6 +166,12 @@ public class ManagementCustomer extends javax.swing.JPanel {
     
     
     
+    /**
+     * Finds the index of a customer with the specified customer ID in the list of customers.
+     *
+     * @param customerID The ID of the customer to find.
+     * @return The index of the customer in the list, or -1 if not found.
+     */
     public Integer findCustomerIndex(long customerID) {
         for(Customer customer : lCustomer) {
             if(customer.getID() == customerID) {
@@ -151,6 +183,12 @@ public class ManagementCustomer extends javax.swing.JPanel {
     
     
     
+    /**
+     * Displays the details of the selected customer in the UI components.
+     * It retrieves the customer ID from the selected row and finds the corresponding customer object.
+     * The customer's details are then displayed in the appropriate UI fields.
+     * It also fills the address book table with the customer's address book entries.
+     */
     public void showDetail() {
         Customer customer = new Customer();
         
@@ -177,6 +215,10 @@ public class ManagementCustomer extends javax.swing.JPanel {
     
     
     
+    /**
+     * Clears the form by resetting the index, clearing the selection in the customer and address book tables,
+     * and clearing the text fields.
+     */
     public void clearForm() {
         index = -1;
         tblCustomer.getSelectionModel().clearSelection(); //bo chon tren table
@@ -186,6 +228,12 @@ public class ManagementCustomer extends javax.swing.JPanel {
     
     
     
+    /**
+     * Returns the maximum customer ID from the customer table.
+     * It iterates over each row in the table and compares the IDs to find the maximum value.
+     *
+     * @return The maximum customer ID.
+     */
     public long getMaxID() {
         long id = 1;
         for(int i = 0; i < tblCustomer.getRowCount(); i++) {

@@ -21,6 +21,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+/**
+ * The CustomerDAOImpl class provides implementation for accessing and manipulating customer data.
+ */
 public class CustomerDAOImpl implements CustomerDAO {
     String projectId = Account.FIREBASE_PROJECT_ID;
 

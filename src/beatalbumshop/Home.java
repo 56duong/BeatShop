@@ -5,6 +5,7 @@ import beatalbumshop.componment.MyScrollPane;
 import beatalbumshop.dao.AlbumDAO;
 import beatalbumshop.dao.AlbumDAOImpl;
 import beatalbumshop.model.Album;
+import beatalbumshop.utils.ImageHelper;
 import beatalbumshop.utils.ImageResizing;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -29,6 +30,9 @@ import javax.swing.LayoutStyle;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 
+/**
+ * Represents the Home panel of the Beat Album Shop application.
+ */
 public class Home extends javax.swing.JPanel {
 
     AlbumDAO albumDAO = new AlbumDAOImpl();
@@ -41,14 +45,17 @@ public class Home extends javax.swing.JPanel {
     public Home() {
         initComponents();
 
+        // Configure panel layouts
         pnlListAlbum2.setLayout(new GridLayout(0, 4, 20, 20)); // 1028
         pnlListAlbum2.setBorder(new EmptyBorder(5, 20, 20, 20));
         
         pnlListAlbum4.setLayout(new GridLayout(0, 4, 20, 20)); // 1028
         pnlListAlbum4.setBorder(new EmptyBorder(5, 20, 20, 20));
+        
+        // Get all albums from the DAO
         lAlbum = (ArrayList<Album>) albumDAO.getAll();
         
-        // radom album
+        // Radom album
         Collections.shuffle(lAlbum);
         int count1 = 4;
         for (int i = 0; i < count1 && i < lAlbum.size(); i++) {
@@ -61,7 +68,7 @@ public class Home extends javax.swing.JPanel {
             }
         }
         
-        // newest album
+        // Newest albums
         sortByReleaseDate(lAlbum);
         int count2 = 4;
         for (int i = 0; i < count2 && i < lAlbum.size(); i++) {
@@ -75,6 +82,12 @@ public class Home extends javax.swing.JPanel {
         }
     }
     
+    
+    
+    /**
+     * Sorts the albums by release date in descending order.
+     * @param lAlbum The list of albums to be sorted.
+     */
     public static void sortByReleaseDate(ArrayList<Album> lAlbum) {
         Collections.sort(lAlbum, new Comparator<Album>() {
             @Override
@@ -86,6 +99,10 @@ public class Home extends javax.swing.JPanel {
     
     
     
+    /**
+     * Displays an album card for newest albums.
+     * @param album The album to be displayed.
+     */
     public void showAlbumCard(Album album) {
         JPanel pnl = new JPanel();
         pnl.setLayout(new BoxLayout(pnl, BoxLayout.Y_AXIS));
@@ -97,7 +114,7 @@ public class Home extends javax.swing.JPanel {
         try {
             URL url = new URL("https://firebasestorage.googleapis.com/v0/b/beat-75a88.appspot.com/o/albums%2F" + album.getAlbumID() + ".png?alt=media");
             Image image = ImageIO.read(url);
-            lblImage.setIcon(ImageResizing.ImageResizing(image, 227, 227));
+            lblImage.setIcon(ImageHelper.resizing(image, 227, 227));
         } catch (Exception ex) {
             lblImage.setIcon(null);
             ex.printStackTrace();
@@ -139,6 +156,10 @@ public class Home extends javax.swing.JPanel {
     
     
     
+    /**
+     * Displays an album card for random albums.
+     * @param album The album to be displayed.
+     */
     public void showAlbumCard2(Album album) {
         JPanel pnl = new JPanel();
         pnl.setLayout(new BoxLayout(pnl, BoxLayout.Y_AXIS));
@@ -150,7 +171,7 @@ public class Home extends javax.swing.JPanel {
         try {
             URL url = new URL("https://firebasestorage.googleapis.com/v0/b/beat-75a88.appspot.com/o/albums%2F" + album.getAlbumID() + ".png?alt=media");
             Image image = ImageIO.read(url);
-            lblImage.setIcon(ImageResizing.ImageResizing(image, 227, 227));
+            lblImage.setIcon(ImageHelper.resizing(image, 227, 227));
         } catch (Exception ex) {
             lblImage.setIcon(null);
             ex.printStackTrace();

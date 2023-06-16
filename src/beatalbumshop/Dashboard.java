@@ -14,6 +14,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import javax.swing.JPanel;
 
+/**
+ * The Dashboard class represents the dashboard panel in the Beat Album Shop application.
+ * It displays various statistics and a chart for sales data.
+ */
 public class Dashboard extends javax.swing.JPanel {
     
     OrderDAO orderDAO = new OrderDAOImpl();
@@ -21,6 +25,10 @@ public class Dashboard extends javax.swing.JPanel {
     ArrayList<Double> lColValue = new ArrayList<>();
     ArrayList<Order> lOrder = new ArrayList<>();
 
+    /**
+     * Creates new form Dashboard.
+     * Initializes the components and displays the data.
+     */
     public Dashboard() {
         initComponents();
         
@@ -30,6 +38,9 @@ public class Dashboard extends javax.swing.JPanel {
     
     
     
+    /**
+     * Displays the statistics and chart on the dashboard.
+    */
     public void display() {
         
         Double totalSale = 0.0;
@@ -86,11 +97,17 @@ public class Dashboard extends javax.swing.JPanel {
     
     
     
-    public Double getTotalOneDay(String d) {
+    /**
+     * Gets the total sales for a specific day.
+     *
+     * @param day the date to get the total sales for
+     * @return the total sales for the specified day
+     */
+    public Double getTotalOneDay(String day) {
         Double total = 0.0;
         
         for(Order o : lOrder) {
-            if(o.getDate().equals(d)) {
+            if(o.getDate().equals(day)) {
                 total += o.getTotal();
             }
         }

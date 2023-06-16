@@ -3,6 +3,9 @@ package beatalbumshop.componment;
 import java.awt.*;
 import javax.swing.*;
 
+/**
+ * A custom radio button with a circular shape and customizable colors.
+ */
 public class MyRadioButton extends JRadioButton {
 
     private static final Color DEFAULT_COLOR = new Color(215, 215, 215);
@@ -10,6 +13,11 @@ public class MyRadioButton extends JRadioButton {
     private static final Color SELECTED_CIRCLE_COLOR = Color.WHITE;
     private static final int CIRCLE_SIZE = 6;
 
+    /**
+     * Creates a new instance of the MyRadioButton class.
+     * Sets the radio button to be transparent, sets the font to "Open Sans" with size 16,
+     * changes the cursor to a hand cursor, and customizes the appearance with an icon.
+     */
     public MyRadioButton() {
         setOpaque(false);
         setFont(new Font("Open Sans", 0, 16));
@@ -47,10 +55,25 @@ public class MyRadioButton extends JRadioButton {
         });
     }
 
+    /**
+     * Overrides the paintComponent method to customize the painting behavior of the radio button.
+     *
+     * @param g the Graphics object used for painting
+     */
+    @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
     }
 
+    /**
+     * Overrides the contains method to check if the specified coordinates are contained within the radio button's shape.
+     * In addition to the default behavior, this method considers the circular shape of the radio button.
+     *
+     * @param x the x-coordinate to be tested
+     * @param y the y-coordinate to be tested
+     * @return true if the specified coordinates are contained within the radio button's shape, false otherwise
+     */
+    @Override
     public boolean contains(int x, int y) {
         if (super.contains(x, y)) {
             return true;

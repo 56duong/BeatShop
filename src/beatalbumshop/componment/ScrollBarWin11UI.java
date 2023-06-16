@@ -23,6 +23,9 @@ import javax.swing.plaf.basic.BasicScrollBarUI;
 import org.jdesktop.animation.timing.Animator;
 import org.jdesktop.animation.timing.TimingTargetAdapter;
 
+/**
+ * Custom UI for a scroll bar inspired by the Windows 11 design.
+ */
 public class ScrollBarWin11UI extends BasicScrollBarUI {
 
     private Animator animator;
@@ -33,10 +36,19 @@ public class ScrollBarWin11UI extends BasicScrollBarUI {
     private final int scrollSize = 14;
     private final MouseAdapter mouseEvent;
 
+    /**
+     * Creates the UI for the given component.
+     *
+     * @param c The component for which to create the UI.
+     * @return The created ScrollBarWin11UI.
+     */
     public static ComponentUI createUI(JComponent c) {
         return new ScrollBarWin11UI();
     }
 
+    /**
+     * Creates a new instance of the ScrollBarWin11UI.
+     */
     public ScrollBarWin11UI() {
         mouseEvent = new MouseAdapter() {
             @Override
@@ -79,6 +91,11 @@ public class ScrollBarWin11UI extends BasicScrollBarUI {
         initAnimator();
     }
 
+    /**
+     * Starts the animation with the specified show parameter.
+     *
+     * @param show true if the animation should show, false otherwise
+     */
     private void start(boolean show) {
         if (animator.isRunning()) {
             float f = animator.getTimingFraction();
@@ -91,6 +108,9 @@ public class ScrollBarWin11UI extends BasicScrollBarUI {
         animator.start();
     }
 
+    /**
+     * Initializes the animator for the scrollbar.
+     */
     private void initAnimator() {
         animator = new Animator(350, new TimingTargetAdapter() {
             @Override
@@ -111,16 +131,35 @@ public class ScrollBarWin11UI extends BasicScrollBarUI {
         animator.setStartDelay(100);
     }
 
+    /**
+     * Creates and returns a custom scroll button with the specified orientation.
+     *
+     * @param orientation the orientation of the scroll button
+     * @return the created scroll button
+     */
     @Override
     protected JButton createIncreaseButton(int orientation) {
         return new ScrollButton(scrollbar.getOrientation(), true);
     }
 
+    /**
+     * Creates and returns a custom scroll button with the specified orientation.
+     *
+     * @param orientation the orientation of the scroll button
+     * @return the created scroll button
+     */
     @Override
     protected JButton createDecreaseButton(int orientation) {
         return new ScrollButton(scrollbar.getOrientation(), false);
     }
 
+    /**
+     * Paints the track of the scrollbar.
+     *
+     * @param g           the Graphics object to paint on
+     * @param c           the JComponent (scrollbar) being painted
+     * @param trackBounds the bounding rectangle of the track
+     */
     @Override
     protected void paintTrack(Graphics g, JComponent c, Rectangle trackBounds) {
         Graphics2D g2 = (Graphics2D) g.create();
@@ -131,6 +170,13 @@ public class ScrollBarWin11UI extends BasicScrollBarUI {
         g2.dispose();
     }
 
+    /**
+     * Paints the thumb of the scrollbar.
+     *
+     * @param g           the Graphics object to paint on
+     * @param c           the JComponent (scrollbar) being painted
+     * @param thumbBounds the bounding rectangle of the thumb
+     */
     @Override
     protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
         Graphics2D g2 = (Graphics2D) g.create();
@@ -152,6 +198,11 @@ public class ScrollBarWin11UI extends BasicScrollBarUI {
         g.dispose();
     }
 
+    
+    
+    /**
+     * Represents a custom scroll button for the scrollbar.
+     */
     private class ScrollButton extends JButton {
 
         private final int orientation;
@@ -160,6 +211,12 @@ public class ScrollBarWin11UI extends BasicScrollBarUI {
         private boolean mouseHover;
         private boolean mousePress;
 
+        /**
+         * Constructs a new ScrollButton.
+         *
+         * @param orientation the orientation of the scrollbar (JScrollBar.VERTICAL or JScrollBar.HORIZONTAL)
+         * @param isIncrease  true if the button represents the increase (down/right) direction, false otherwise
+         */
         public ScrollButton(int orientation, boolean isIncrease) {
             this.orientation = orientation;
             this.isIncrease = isIncrease;
@@ -214,6 +271,11 @@ public class ScrollBarWin11UI extends BasicScrollBarUI {
             });
         }
 
+        /**
+         * Paints the component, including the scroll button.
+         *
+         * @param g the Graphics object to paint on
+         */
         @Override
         protected void paintComponent(Graphics g) {
             Graphics2D g2 = (Graphics2D) g.create();

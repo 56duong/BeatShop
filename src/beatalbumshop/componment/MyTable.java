@@ -9,7 +9,15 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+/**
+ * A custom table component with modified styling.
+ */
 public class MyTable extends JTable {
+    
+    /**
+     * Creates a new instance of the MyTable class.
+     * Configures the table with default data, styling, and interactivity.
+     */
     public MyTable() {
         Object[][] data = {{"Row 1, Column 1", "Row 1, Column 2"}, {"Row 2, Column 1", "Row 2, Column 2"}};
         Object[] columnNames = {"Column 1", "Column 2"};

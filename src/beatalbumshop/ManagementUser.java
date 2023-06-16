@@ -18,6 +18,10 @@ import java.util.Date;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+/**
+ * The ManagementUser class handles the user management functionality within the Beat Album Shop application.
+ * It provides methods for adding and updating user information, as well as setting user status to inactive.
+ */
 public class ManagementUser extends javax.swing.JPanel {
 
     ArrayList<User> lUser = new ArrayList<>(); //List User
@@ -25,6 +29,9 @@ public class ManagementUser extends javax.swing.JPanel {
     UserDAO userDAO = new UserDAOImpl();
     int index = -1;
 
+    /**
+     * Creates new form ManagementUser.
+     */
     public ManagementUser() {
         initComponents();
         txtDateCreated.setEnabled(false);
@@ -58,6 +65,9 @@ public class ManagementUser extends javax.swing.JPanel {
 
     
     
+    /**
+     * Clear the form by resetting the index and clearing the selection and components.
+     */
     public void clearForm() {
         index = -1;
         tblUser.getSelectionModel().clearSelection(); //bo chon tren table
@@ -66,6 +76,10 @@ public class ManagementUser extends javax.swing.JPanel {
 
     
     
+    /**
+     * Select a row in the table and show its details.
+     * @param i The index of the row to be selected.
+     */
     public void selectRow(int i) {
         if (i >= 0 && tblUser.getRowCount() > 0) {
             index = i;
@@ -85,6 +99,11 @@ public class ManagementUser extends javax.swing.JPanel {
 
     
     
+    /**
+     * Find the index of a user in the list based on its ID.
+     * @param userID The ID of the user to find.
+     * @return The index of the user in the list, or -1 if not found.
+     */
     public Integer findUserIndex(long userID) {
         for (User user : lUser) {
             if ((user.getID() + "").equalsIgnoreCase(userID + "")) {
@@ -96,6 +115,9 @@ public class ManagementUser extends javax.swing.JPanel {
 
     
     
+    /**
+     * Show the details of the selected user.
+     */
     public void showDetail() {
         
         User user = new User();
@@ -127,6 +149,9 @@ public class ManagementUser extends javax.swing.JPanel {
 
     
     
+    /**
+     * Fill data from the user list to the table.
+     */
     public void fillToTable() {
         lUser = (ArrayList<User>) userDAO.getAll();
 
@@ -150,6 +175,11 @@ public class ManagementUser extends javax.swing.JPanel {
     
     
     
+    /**
+     * Checks if a user with the specified email already exists in the user list.
+     *
+     * @return {@code false} if a user with the same email exists, {@code true} otherwise.
+     */
     public boolean checkUser() {
         if (lUser != null) {
             for (User user : lUser) {

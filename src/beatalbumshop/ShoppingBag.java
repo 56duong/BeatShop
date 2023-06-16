@@ -17,6 +17,9 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * Represents the shopping bag GUI panel.
+ */
 public class ShoppingBag extends javax.swing.JPanel {
 
     AlbumDAO albumDAO = new AlbumDAOImpl();
@@ -25,6 +28,9 @@ public class ShoppingBag extends javax.swing.JPanel {
     Customer customer;
     double subtotal = 0;
     
+    /**
+     * Creates a new instance of the ShoppingBag class.
+     */
     public ShoppingBag() {
         initComponents();
     
@@ -35,12 +41,20 @@ public class ShoppingBag extends javax.swing.JPanel {
     
     
     
+    /**
+     * Returns the list of items in the shopping bag.
+     * 
+     * @return The list of items in the shopping bag.
+     */
     public ArrayList<Item> getlBagItem() {
         return lBagItem;
     }
     
     
     
+    /**
+     * Updates the shopping bag by refreshing the items and their details.
+     */
     public void updateBag() {
         subtotal = 0;
         pnlListBag.removeAll();

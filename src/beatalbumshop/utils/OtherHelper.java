@@ -9,8 +9,6 @@ import java.awt.print.PrinterException;
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -18,22 +16,43 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 
+/**
+ * Utility class providing helper methods for various operations.
+ */
 public class OtherHelper {
     
-    public static Main getMainFrame(Component c) {
-        Main f = (Main) SwingUtilities.getWindowAncestor(c);
+    /**
+     * Retrieves the main frame from a given component.
+     *
+     * @param component the component from which to retrieve the main frame
+     * @return the main frame of the application
+     */
+    public static Main getMainFrame(Component component) {
+        Main f = (Main) SwingUtilities.getWindowAncestor(component);
         return f;
     }
     
     
     
-    public static MainAdmin getMainAdminFrame(Component c) {
-        MainAdmin f = (MainAdmin) SwingUtilities.getWindowAncestor(c);
+    /**
+     * Retrieves the main admin frame from a given component.
+     *
+     * @param component the component from which to retrieve the main admin frame
+     * @return the main admin frame of the application
+     */
+    public static MainAdmin getMainAdminFrame(Component component) {
+        MainAdmin f = (MainAdmin) SwingUtilities.getWindowAncestor(component);
         return f;
     }
 
     
     
+    /**
+     * Converts a payment option value to its corresponding string representation.
+     *
+     * @param paymentOption the payment option value
+     * @return the string representation of the payment option
+     */
     public static String paymentOptionToString(long paymentOption) {
         String p = "";
         if(paymentOption == 0) p = "COD";

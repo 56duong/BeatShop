@@ -30,6 +30,9 @@ import java.util.Date;
 import javax.swing.BorderFactory;
 import javax.swing.JTextField;
 
+/**
+ * This class represents the Sign Up frame of the Beat Album Shop application.
+ */
 public class SignUp extends javax.swing.JFrame {
 
     ArrayList<User> listUser = new ArrayList<>();
@@ -37,6 +40,9 @@ public class SignUp extends javax.swing.JFrame {
     CustomerDAO customerDAO = new CustomerDAOImpl();
     int otp = -1;
 
+    /**
+     * Creates new form SignUp
+     */
     public SignUp() {
         initComponents();
         setLocationRelativeTo(null);
@@ -56,6 +62,13 @@ public class SignUp extends javax.swing.JFrame {
     
     
     
+    /**
+     * Adds a placeholder text to the specified text field.
+     * The placeholder text is displayed when the text field is empty and not in focus.
+     * 
+     * @param textField the text field to add the placeholder text to
+     * @param placeholderText the placeholder text to display
+     */
     private void addPlaceholderText(JTextField textField, String placeholderText) {
         // Save the default foreground color of the text field
         Color defaultColor = textField.getForeground();
@@ -85,6 +98,13 @@ public class SignUp extends javax.swing.JFrame {
     
     
     
+    /**
+     * Returns the maximum ID from the given collection reference and column name.
+     * 
+     * @param colRef the collection reference to query
+     * @param column the name of the column to get the maximum ID from
+     * @return the maximum ID from the collection reference and column name
+     */
     public static long getMaxID(CollectionReference colRef, String column) {
         try {
             // Create a query to order the documents by albumID in descending order
@@ -133,6 +153,12 @@ public class SignUp extends javax.swing.JFrame {
 
     
     
+    /**
+     * Checks if the given email address is valid.
+     *
+     * @param email the email address to check
+     * @return true if the email is valid, false otherwise
+     */
     public static boolean isValidEmail(String email) {
         String emailRegex = "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}$";
         return email.matches(emailRegex);
@@ -154,6 +180,14 @@ public class SignUp extends javax.swing.JFrame {
 
     
     
+    /**
+     * Validates the sign-up form.
+     * 
+     * @param email the email address entered by the user
+     * @param password the password entered by the user
+     * @param confirmPassword the confirm password entered by the user
+     * @return an error message if the form is invalid, or null if the form is valid
+     */
     public String validateFormSigup(String email, String password, String confirmPassword) {
         // Kiểm tra tính hợp lệ của email
         if (email.isEmpty()) {

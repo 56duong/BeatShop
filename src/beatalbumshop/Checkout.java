@@ -49,6 +49,10 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+/**
+ * The CheckoutPanel class represents a panel for the checkout process in an e-commerce application.
+ * It allows the user to provide shipping and payment information and complete the order.
+ */
 public class Checkout extends javax.swing.JPanel {
 
     AlbumDAO albumDAO = new AlbumDAOImpl();
@@ -61,6 +65,9 @@ public class Checkout extends javax.swing.JPanel {
     Component[] lCEvent;
     Main mainFrame = OtherHelper.getMainFrame(this);
     
+    /**
+     * Creates new form CheckoutPanel.
+     */
     public Checkout() {
         initComponents();
 
@@ -96,6 +103,10 @@ public class Checkout extends javax.swing.JPanel {
     
     
     
+    /**
+     * Enables or disables the text fields and text areas based on the given parameter.
+     * @param isEnable true to enable the fields, false to disable them
+     */
     public void enableField(boolean isEnable) {
         for(Component c : lC) {
             if (c instanceof MyTextField) {
@@ -119,6 +130,9 @@ public class Checkout extends javax.swing.JPanel {
     
     
     
+    /**
+     * Displays the check-out list with order summary and shipping information.
+     */
     public void displayCheckOutList() {
         subtotal = 0;
         int sumQuantity = 0;
@@ -262,6 +276,13 @@ public class Checkout extends javax.swing.JPanel {
     
     
     
+    /**
+     * Returns the maximum ID for a given collection reference and column name.
+     *
+     * @param colRef  the collection reference
+     * @param column  the column name to order the documents by
+     * @return the maximum ID value incremented by 1
+     */
     public static long getMaxID(CollectionReference colRef, String column) {
         try {
             // Create a query to order the documents by albumID in descending order
@@ -288,6 +309,11 @@ public class Checkout extends javax.swing.JPanel {
     
     
     
+    /**
+     * Event handler for the "Place Order" button.
+     *
+     * @param event the action event
+     */
     public void btnPlaceOrderActionPerformed(ActionEvent event) {
         Firestore db = Firebase.getFirestore("beat-75a88");
         CollectionReference colRef = db.collection("orders");

@@ -16,6 +16,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
+/**
+ * The SelectionProduct class represents a custom panel used for displaying album information and quantity selection.
+ * It provides functionality for updating the selected quantity and removing the item from the shopping bag.
+ */
 public class SelectionProduct extends javax.swing.JPanel {
     CustomerDAO customerDAO = new CustomerDAOImpl();
     Customer customer = (Customer) LoggedInUser.getCurrentUser();
@@ -23,6 +27,12 @@ public class SelectionProduct extends javax.swing.JPanel {
     double price;
     long quantity;
 
+    /**
+     * Creates new form SelectionProduct.
+     *
+     * @param album    the album to display
+     * @param quantity the quantity of the album
+     */
     public SelectionProduct(Album album, long quantity) {
         initComponents();
 
@@ -57,16 +67,31 @@ public class SelectionProduct extends javax.swing.JPanel {
     
     
     
+    /**
+     * Get the subtotal of the selected album.
+     *
+     * @return the subtotal
+     */
     public double getSubtotal() {
         return price * quantity;
     }
     
     
     
+    /**
+     * Get the remove button.
+     *
+     * @return the remove button
+     */
     public MyButton getBthRemove() {
         return btnRemove;
     }
     
+    /**
+     * Get the quantity combo box.
+     *
+     * @return the quantity combo box
+     */
     public MyComboBox getCboQuantity() {
         return cboQuantity;
     }

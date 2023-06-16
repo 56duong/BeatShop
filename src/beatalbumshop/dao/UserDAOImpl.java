@@ -15,6 +15,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The UserDAOImpl class provides implementation for accessing and manipulating user data.
+ */
 public class UserDAOImpl implements UserDAO{
     String projectId = Account.FIREBASE_PROJECT_ID;
     

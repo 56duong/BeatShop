@@ -23,10 +23,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+/**
+ * The AlbumDAOImpl class provides implementation for accessing and manipulating album data.
+ */
 public class AlbumDAOImpl implements AlbumDAO {
     String projectId = Account.FIREBASE_PROJECT_ID;
 
@@ -46,6 +47,8 @@ public class AlbumDAOImpl implements AlbumDAO {
         return false;
     }
 
+    
+    
     @Override
     public List<Album> getAll() {
         Firestore db = (Firestore) Firebase.getFirestore(projectId);
@@ -86,6 +89,8 @@ public class AlbumDAOImpl implements AlbumDAO {
         return null;
     }
 
+    
+    
     @Override
     public boolean add(Album album) {
         Firestore db = Firebase.getFirestore(projectId);
@@ -104,25 +109,15 @@ public class AlbumDAOImpl implements AlbumDAO {
         return false;
     }
 
+    
+    
     @Override
     public boolean updateByID(Album album) {
-//        try {
-//            Firestore db = (Firestore) Firebase.getFirestore(projectId);
-//            CollectionReference colRef = db.collection("album");
-//            DocumentReference docRef = colRef.document(album.getAlbumID() + "");
-//
-//            // (async) Update one field
-//            ApiFuture<WriteResult> result = docRef.set(new Album(album.getAlbumID(), album.getAlbumName(), album.getAlbumPrice(), album.getInStock()));
-//            
-//            System.out.println("Update time : " + result.get().getUpdateTime());
-//            return true;
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-        
-        return false;
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
+    
+    
     @Override
     public Album getByID(String albumID) {
         Firestore db = (Firestore) Firebase.getFirestore(projectId);
@@ -160,65 +155,7 @@ public class AlbumDAOImpl implements AlbumDAO {
     
     @Override
     public Album getDetailByID(String albumID) {
-//        try {
-//            // Set up API credentials
-//            String clientId = Account.SPOTIFY_CLIENT_ID;
-//            String clientSecret = Account.SPOTIFY_CLIENT_SECRET;
-//            
-//            AlbumSpotify albumSpotify = new AlbumSpotify();
-//            HashMap<String, String> mTracks = new HashMap<>();
-//            
-//            Album a = getByID(albumID);
-//
-//            // Set up search query
-//            String albumNameSearch = a.getAlbumName().replaceAll(" ", "");
-//
-//            // Get access token
-//            String accessToken = SpotifyApi.getAccessToken(clientId, clientSecret);
-//
-//            // Search for albums
-//            String searchEndpoint = "https://api.spotify.com/v1/search?type=album&q=" + albumNameSearch;
-//            JsonObject searchResponse = SpotifyApi.makeRequest(searchEndpoint, accessToken);
-//            JsonObject albums = searchResponse.getAsJsonObject("albums");
-//            JsonArray items = albums.getAsJsonArray("items");
-//
-//            if (items.size() > 0) {
-//                JsonObject album = items.get(0).getAsJsonObject(); // Get the first album
-//                String albumId = album.get("id").getAsString();
-//
-//                // Get album details
-//                String albumEndpoint = "https://api.spotify.com/v1/albums/" + albumId;
-//                JsonObject albumResponse = SpotifyApi.makeRequest(albumEndpoint, accessToken);
-//
-//                // Extract album information
-//                String artistName = albumResponse.getAsJsonArray("artists")
-//                        .get(0).getAsJsonObject().get("name").getAsString();
-//                String releaseDate = albumResponse.get("release_date").getAsString();
-//                
-//                // Get album tracks
-//                String tracksEndpoint = "https://api.spotify.com/v1/albums/" + albumId + "/tracks";
-//                JsonObject tracksResponse = SpotifyApi.makeRequest(tracksEndpoint, accessToken);
-//                JsonArray tracks = tracksResponse.getAsJsonArray("items");
-//
-//                // Process the tracks
-//                for (int i = 0; i < tracks.size(); i++) {
-//                    JsonObject track = tracks.get(i).getAsJsonObject();
-//                    String trackName = track.get("name").getAsString();
-//                    long trackDuration = Long.parseLong(track.get("duration_ms").getAsString());
-//                    long minutes = (trackDuration / 1000) / 60;
-//                    long seconds = (trackDuration / 1000) % 60;
-//                    
-//                    mTracks.put(trackName, minutes + ":" + seconds);
-//                }
-//                albumSpotify = new AlbumSpotify(artistName, releaseDate, mTracks, a.getAlbumID(), a.getAlbumName(), a.getAlbumPrice(), a.getInStock());
-//                
-//                return albumSpotify;
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-        
-        return null;
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     

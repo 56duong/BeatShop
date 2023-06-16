@@ -47,6 +47,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
+/**
+ * A panel that displays and manages the orders in the system.
+ */
 public class ManagementOrder extends javax.swing.JPanel {
 
     ArrayList<Order> lOrder = new ArrayList<>(); //List Order
@@ -63,6 +66,9 @@ public class ManagementOrder extends javax.swing.JPanel {
     int indexAssignToMe = -1;
     User user;
     
+    /**
+     * Creates new form ManagementOrder.
+     */
     public ManagementOrder() {
         initComponents();
         
@@ -135,6 +141,11 @@ public class ManagementOrder extends javax.swing.JPanel {
     
     //XAY DUNG CAC HAM
 
+    /**
+     * Selects the row at the specified index in the "Order Not Assigned" table.
+     *
+     * @param i The index of the row to select.
+     */
     public void selectRowNotAssigned(int i) {
         if(i >= 0 && tblOrderNotAssigned.getRowCount() > 0) {
             indexNotAssigned = i;
@@ -145,6 +156,11 @@ public class ManagementOrder extends javax.swing.JPanel {
         }
     } 
     
+    /**
+     * Selects the row at the specified index in the "Order Assign to Me" table.
+     *
+     * @param i The index of the row to select.
+     */
     public void selectRowAssignToMe(int i) {
         if(i >= 0 && tblOrderAssignToMe.getRowCount() > 0) {
             indexAssignToMe = i;
@@ -157,6 +173,9 @@ public class ManagementOrder extends javax.swing.JPanel {
     
     
     
+    /**
+     * Fills the "Order Not Assigned" table with the orders from the database.
+     */
     public void fillToTableNotAssigned() {
         lOrder = (ArrayList<Order>) orderDAO.getAll();
         
@@ -214,6 +233,9 @@ public class ManagementOrder extends javax.swing.JPanel {
     
     
     
+    /**
+     * Fills the "Order Assign to Me" table with the orders from the database.
+     */
     public void fillToTableAssignToMe() {
         lOrder = (ArrayList<Order>) orderDAO.getAll();
         
@@ -267,6 +289,12 @@ public class ManagementOrder extends javax.swing.JPanel {
     
     
     
+    /**
+     * Finds the index of the album with the given ID in the album list.
+     *
+     * @param albumID The ID of the album to find.
+     * @return The index of the album, or -1 if not found.
+     */
     public Integer findAlbumIndex(String albumID) {
         for(Album album : lAlbum) {
             if((album.getAlbumID()).equalsIgnoreCase(albumID)) {
@@ -278,6 +306,11 @@ public class ManagementOrder extends javax.swing.JPanel {
     
     
     
+    /**
+     * Shows the details of the order with the given ID in a separate panel.
+     *
+     * @param id The ID of the order to display.
+     */
     public void showDetail(long id) {
         if(id == -1) {
             MyDialog.display(1, "Vui lòng chọn dòng cần xem");

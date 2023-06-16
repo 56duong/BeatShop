@@ -29,10 +29,16 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+/**
+ * This class represents the login window of the BeatAlbumShop application.
+ */
 public class LogIn extends javax.swing.JFrame {
     UserDAO userDAO = new UserDAOImpl();
     CustomerDAO customerDAO = new CustomerDAOImpl();
 
+    /**
+    * Creates new form LogIn.
+     */
     public LogIn() {
         initComponents();
         setLocationRelativeTo(null);
@@ -50,6 +56,12 @@ public class LogIn extends javax.swing.JFrame {
     
     
     
+    /**
+     * Adds placeholder text to the specified text field.
+     *
+     * @param textField       the text field to add placeholder text to
+     * @param placeholderText the placeholder text to be displayed
+     */
     private void addPlaceholderText(JTextField textField, String placeholderText) {
         // Save the default foreground color of the text field
         Color defaultColor = textField.getForeground();
@@ -79,6 +91,12 @@ public class LogIn extends javax.swing.JFrame {
     
     
 
+    /**
+     * Checks if the given email address is valid.
+     *
+     * @param email the email address to check
+     * @return true if the email is valid, false otherwise
+     */
     public static boolean isValidEmail(String email) {
         String emailRegex = "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}$";
         return email.matches(emailRegex);
@@ -86,6 +104,13 @@ public class LogIn extends javax.swing.JFrame {
 
 
         
+    /**
+     * Validates the form data for signup.
+     * 
+     * @param email the email to be validated
+     * @param password the password to be validated
+     * @return an error message if the form data is invalid, null otherwise
+     */
     public String validateFormSigup(String email, String password) {
         // Kiểm tra tính hợp lệ của email
         if (email.isEmpty()) {

@@ -40,6 +40,10 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+/**
+ * The OrderDetail class represents the panel for displaying the details of an order.
+ * It provides functionality for editing and updating the order information.
+ */
 public class OrderDetail extends javax.swing.JPanel {
 
     OrderDAO orderDAO = new OrderDAOImpl();
@@ -53,6 +57,11 @@ public class OrderDetail extends javax.swing.JPanel {
     ArrayList<ItemInOrder> lItemInOrder = new ArrayList<>();
     List<Album> lProduct = new ArrayList<>();
     
+    /**
+     * Constructs a new OrderDetail panel with the specified order ID.
+     *
+     * @param id the ID of the order to display
+     */
     public OrderDetail(long id) {
         initComponents();
         
@@ -155,6 +164,11 @@ public class OrderDetail extends javax.swing.JPanel {
     
     
     
+    /**
+     * Enables or disables fields based on the provided flag.
+     *
+     * @param isEnable true to enable fields, false to disable fields
+     */
     public void enableField(boolean isEnable) {
         for(Component c : lC) {
             if(isEnable) {
@@ -214,6 +228,9 @@ public class OrderDetail extends javax.swing.JPanel {
     
     
     
+    /**
+     * Displays the items in the order.
+     */
     public void displayItemInOrder() {
         double subtotal = 0;
         pnlListOrderItem.removeAll();

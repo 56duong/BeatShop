@@ -10,12 +10,19 @@ import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.JButton;
 
+/**
+ * The MainAdmin class represents the main administration window of the Beat Album Shop application.
+ * It provides functionality to manage orders, albums, customers, users, and generate reports.
+ */
 public class MainAdmin extends javax.swing.JFrame {
     JButton [] btnMenuList;
     Color gray = new Color(50, 50, 50);
     public ManagementOrder managementOrder;
     public static String prevTab, curTab;
 
+    /**
+     * Creates a new instance of MainAdmin.
+     */
     public MainAdmin() {
         initComponents();
         
@@ -70,6 +77,11 @@ public class MainAdmin extends javax.swing.JFrame {
     
     
     
+    /**
+     * Shows the specified tab.
+     *
+     * @param newTab the name of the tab to be shown
+     */
     public static void showTab(String newTab) {
         prevTab = curTab;
         curTab = newTab;
@@ -79,10 +91,20 @@ public class MainAdmin extends javax.swing.JFrame {
 
     
     
+    /**
+     * Gets the order button.
+     *
+     * @return the order button
+     */
     public MyButton getBtnOrder() {
         return btnOrder;
     }
     
+    /**
+     * Gets the management order object.
+     *
+     * @return the management order object
+     */
     public ManagementOrder getManagementOrder() {
         return managementOrder;
     }
@@ -221,7 +243,12 @@ public class MainAdmin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        btnDashboard.doClick();
+        if(LoggedInUser.isStaff()) {
+            btnAlbum.doClick();
+        }
+        else {
+            btnDashboard.doClick();
+        }
     }//GEN-LAST:event_formWindowOpened
 
     /**
@@ -259,7 +286,7 @@ public class MainAdmin extends javax.swing.JFrame {
                 // Check login
                 if (!LoggedInUser.isAdmin()) {
                     new LogIn().setVisible(true);
-                    MyDialog.display(1, "Bạn phải đăng nhập đúng role để có thể tiếp tục truy cập chức năng này");
+                    new MyDialog(1, "Bạn phải đăng nhập đúng role để có thể tiếp tục truy cập chức năng này");
                 }
                 else {
                     new MainAdmin().setVisible(true);

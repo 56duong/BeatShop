@@ -26,11 +26,19 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
+/**
+ * The Shop class represents a custom panel used for displaying a list of albums.
+ * It provides functionality for searching, sorting, and displaying album cards.
+ */
 public class Shop extends javax.swing.JPanel {
     AlbumDAO albumDAO = new AlbumDAOImpl();
     ArrayList<Album> lAlbum = new ArrayList<>();
     int clickCount = 0;
     Border border = BorderFactory.createLineBorder(Color.BLACK);
+    
+    /**
+     * Creates a new Shop panel.
+     */
     public Shop() {
         initComponents();
         pnlListAlbum.setLayout(new GridLayout(0, 4, 20, 20)); // 1028
@@ -45,6 +53,12 @@ public class Shop extends javax.swing.JPanel {
     }
     
     
+    
+    /**
+     * Sorts the given list of albums by price in descending order.
+     *
+     * @param lAlbum the list of albums to sort
+     */
     public static void sortByPriceDescending(ArrayList<Album> lAlbum) {
         Collections.sort(lAlbum, new Comparator<Album>() {
             @Override
@@ -54,6 +68,11 @@ public class Shop extends javax.swing.JPanel {
         });
     }
     
+    /**
+     * Sorts the given list of albums by price in ascending order.
+     *
+     * @param lAlbum the list of albums to sort
+     */
     public static void sortByPriceAscending(ArrayList<Album> lAlbum) {
         Collections.sort(lAlbum, new Comparator<Album>() {
             @Override
@@ -64,6 +83,11 @@ public class Shop extends javax.swing.JPanel {
     }
     
     
+    /**
+     * Displays an album card for the given album.
+     *
+     * @param album the album to display
+     */
     public void showAlbumCard(Album album) {
         JPanel pnl = new JPanel();
         pnl.setLayout(new BoxLayout(pnl, BoxLayout.Y_AXIS));
@@ -103,6 +127,9 @@ public class Shop extends javax.swing.JPanel {
     
     
     
+    /**
+     * MouseAdapter implementation to handle the mouse click event on album panels.
+     */
     MouseAdapter showInfo = new MouseAdapter() {
         public void mouseClicked(MouseEvent e) {
             JPanel s = (JPanel) e.getSource();
@@ -118,6 +145,11 @@ public class Shop extends javax.swing.JPanel {
     
     
     
+    /**
+     * Searches the albums based on the given search string.
+     *
+     * @param search the search string
+     */
     public void search(String search) {
         // Xóa các panel hiện có trong pnlListAlbum
         pnlListAlbum.removeAll();

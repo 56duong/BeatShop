@@ -2,6 +2,9 @@ package beatalbumshop.utils;
 
 import com.lambdaworks.crypto.SCryptUtil;
 
+/**
+ * The TextHelper class provides utility methods for working with passwords.
+ */
 public class TextHelper {
     
     /**

@@ -26,6 +26,11 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
+/**
+ * The AlbumDetail class represents a panel that displays the details of an album.
+ * It includes information such as the album's name, artist, release date, price, and track list.
+ * Users can also interact with the panel by adding the album to their shopping bag or buying it.
+*/
 public class AlbumDetail extends javax.swing.JPanel {
 
     AlbumDAO albumDAO = new AlbumDAOImpl();
@@ -33,6 +38,10 @@ public class AlbumDetail extends javax.swing.JPanel {
     String albumID;
     Album album;
     
+    /**
+     * Creates a new instance of the AlbumDetail panel with the specified album ID.
+     * @param id the ID of the album to display
+    */
     public AlbumDetail(String id) {
         initComponents();
         

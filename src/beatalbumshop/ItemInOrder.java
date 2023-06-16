@@ -19,6 +19,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
+/**
+ * Represents an item in an order.
+ * This class extends javax.swing.JPanel and provides functionality to display information about the item,
+ * modify quantity, and remove the item from the order.
+ */
 public class ItemInOrder extends javax.swing.JPanel {
     CustomerDAO customerDAO = new CustomerDAOImpl();
     OrderDAO orderDAO = new OrderDAOImpl();
@@ -29,6 +34,14 @@ public class ItemInOrder extends javax.swing.JPanel {
     Order order;
     OrderDetail orderDetail;
 
+    /**
+     * Constructs an ItemInOrder object.
+     *
+     * @param orderDetail The OrderDetail object that contains the item.
+     * @param order The Order object that the item belongs to.
+     * @param album The Album object representing the item.
+     * @param quantity The quantity of the item.
+     */
     public ItemInOrder(OrderDetail orderDetail, Order order, Album album, long quantity) {
         initComponents();
 
@@ -65,16 +78,31 @@ public class ItemInOrder extends javax.swing.JPanel {
     
     
     
+    /**
+     * Gets the subtotal of the item.
+     *
+     * @return The subtotal of the item.
+     */
     public double getSubtotal() {
         return price * quantity;
     }
     
     
     
+    /**
+     * Gets the remove button.
+     *
+     * @return The remove button.
+     */
     public MyButton getBtnRemove() {
         return btnRemove;
     }
     
+    /**
+     * Gets the quantity combo box.
+     *
+     * @return The quantity combo box.
+     */
     public MyComboBox getCboQuantity() {
         return cboQuantity;
     }
