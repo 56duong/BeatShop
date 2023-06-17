@@ -397,7 +397,7 @@ public class Forgot extends javax.swing.JFrame {
                 }
             
                 //sau khi gui => chuyen sang xac nhan otp
-                lblNote.setText("<html><p style='text-align: center'>If your username matches an existing account we will send a password reset email within a few minutes.If you have not received an email check your spam folder.</p></html>");
+                lblNote.setText("<html><p style='text-align: center'>If your username matches an existing account we will send a password reset email within a few minutes. If you have not received an email check your spam folder.</p><p style='text-align: center'>Your OTP will expire when you close the app.</p></html>");
                 txtEmail.setEnabled(false);
                 txtOTP.setVisible(true);
                 txtOTP.requestFocus();
