@@ -78,8 +78,6 @@ Beat Shop is a Java desktop application that brings the experience of a music an
 
 ![Screenshot 8](https://github.com/56duong/BeatShop/blob/master/src/beatalbumshop/resources/images/readme/beatshop-project-8.png)
 
-![Screenshot 9](https://github.com/56duong/BeatShop/blob/master/src/beatalbumshop/resources/images/readme/beatshop-project-9.png)
-
 ## Contributors
 
 Special thanks to the team members who contributed to this project:
