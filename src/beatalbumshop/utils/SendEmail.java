@@ -23,7 +23,7 @@ public class SendEmail {
      */
     public static boolean send(String toRecipient, String recipientName, String subject, String body) {
         String url = "https://api.elasticemail.com/v2/email/send";
-        String apiKey = "FEE7C772E79AA83098363CEB89509257DE0C13DE3DE0D6E627CAA04E1F0FBB47494CE49E178799D17AB2E0BFA61B1BB9";
+        String apiKey = "YOUR_EMAIL_API_KEY"; // Update this with your actual email API key
 //        String to = "56duong@gmail.com";
 //        String subject = "Test email";
         String from = "nguyenduong07122003@gmail.com";
@@ -77,7 +77,7 @@ public class SendEmail {
      */
     public static boolean sendOrderStatusEmail(String toRecipient, String recipientName, String subject, String content) {
         String url = "https://api.elasticemail.com/v2/email/send";
-        String apiKey = "FEE7C772E79AA83098363CEB89509257DE0C13DE3DE0D6E627CAA04E1F0FBB47494CE49E178799D17AB2E0BFA61B1BB9";
+        String apiKey = "YOUR_EMAIL_API_KEY"; // Update this with your actual email API key
 //        String to = "56duong@gmail.com";
 //        String subject = "Test email";
         String from = "nguyenduong07122003@gmail.com";
@@ -241,7 +241,7 @@ public class SendEmail {
      */
     public static boolean sendFormat(String toRecipient, String recipientName, String subject, String content) {
         String url = "https://api.elasticemail.com/v2/email/send";
-        String apiKey = "FEE7C772E79AA83098363CEB89509257DE0C13DE3DE0D6E627CAA04E1F0FBB47494CE49E178799D17AB2E0BFA61B1BB9";
+        String apiKey = "YOUR_EMAIL_API_KEY"; // Update this with your actual email API key
         String from = "nguyenduong07122003@gmail.com";
         String senderName = "Beat";
         String body = "<html>\n" +
