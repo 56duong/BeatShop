@@ -55,7 +55,7 @@ Beat Shop is a Java desktop application that brings the experience of a music an
    git clone https://github.com/56duong/BeatShop.git
 
 - **Firebase, Spotify API Reminder and Email API key:**
-- Before using the project, remember to update the Firebas Project ID and Spotify API credentials in the `Account.java` file located at [src/beatalbumshop/config/Account.java](https://github.com/56duong/BeatShop/blob/master/src/beatalbumshop/config/Account.java)
+- Before using the project, remember to update the Firebase Project ID and Spotify API credentials in the `Account.java` file located at [src/beatalbumshop/config/Account.java](https://github.com/56duong/BeatShop/blob/master/src/beatalbumshop/config/Account.java)
 - Update the Firebase service account configuration in the `serviceAccountKey.json` file located at [src/beatalbumshop/config/Account.java](https://github.com/56duong/BeatShop/blob/master/src/beatalbumshop/config/serviceAccountKey.json)
 - If you intend to use the email sending feature in your project, make sure to update the email API key in the `SendEmail.java` file located at [src/beatalbumshop/utils
 /SendEmail.java](https://github.com/56duong/BeatShop/blob/master/src/beatalbumshop/utils/SendEmail.java)
